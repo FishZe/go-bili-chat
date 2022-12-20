@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"compress/zlib"
 	"encoding/json"
-	"fmt"
 	"github.com/andybalholm/brotli"
 	"io"
 	"log"
@@ -23,7 +22,7 @@ func (msgHandler *MsgHandler) CmdHandler(wsHeader *WsHeader, msg []byte) {
 		return
 	}
 	msgHandler.CmdChan <- cmdJson
-	fmt.Println(string(msg[wsHeader.HeaderLen:wsHeader.PackageLen]))
+	//fmt.Println(string(msg[wsHeader.HeaderLen:wsHeader.PackageLen]))
 	//fmt.Println(cmdJson["cmd"])
 }
 

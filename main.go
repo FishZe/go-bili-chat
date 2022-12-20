@@ -1,27 +1,17 @@
 package main
 
 import (
+	"Go-BiliChat-Core/Handler"
 	"Go-BiliChat-Core/client"
 	"fmt"
-	"time"
 )
 
 func main() {
-	c := client.Client{RoomId: 5169315}
+	c := client.Client{RoomId: 23805029}
 	msgHandler, err := c.BiliChat()
 	if err != nil {
 		fmt.Println(err)
 	}
-	for {
-		select {
-		case _, ok := <-msgHandler.CmdChan:
-			if ok {
-				continue
-			}
-		default:
-			time.Sleep(10 * time.Microsecond)
-			continue
-		}
-
-	}
+	h := Handler.Handler{CmdChan: msgHandler.CmdChan}
+	h.CmdHandler()
 }
