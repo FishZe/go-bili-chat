@@ -9,6 +9,7 @@ const (
 )
 
 const (
+	OpError          = 1
 	OpHeartBeat      = 2
 	OpHeartBeatReply = 3
 	OpCmd            = 5

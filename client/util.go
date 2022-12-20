@@ -49,6 +49,9 @@ func byte4ToUint32(bytesNum []byte) uint32 {
 }
 
 func WsHeaderDecoder(headerBytes []byte) WsHeader {
+	if len(headerBytes) < 16 {
+		return WsHeader{OpCode: OpError}
+	}
 	var wsHeader WsHeader
 	wsHeader.PackageLen = byte4ToUint32(headerBytes[0:4])
 	wsHeader.HeaderLen = byte2ToUint16(headerBytes[4:6])

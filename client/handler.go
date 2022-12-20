@@ -21,9 +21,8 @@ func (msgHandler *MsgHandler) CmdHandler(wsHeader *WsHeader, msg []byte) {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return
 	}
+	cmdJson["RoomId"] = msgHandler.RoomId
 	msgHandler.CmdChan <- cmdJson
-	//fmt.Println(string(msg[wsHeader.HeaderLen:wsHeader.PackageLen]))
-	//fmt.Println(cmdJson["cmd"])
 }
 
 func (msgHandler *MsgHandler) CmdBrotliProtoDecoder(wsHeader *WsHeader, msg []byte) []byte {
@@ -58,7 +57,6 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 	case OpHeartBeatReply:
 		wsHeartBeatReply := WsHeartBeatReply{}
 		wsHeartBeatReply.SetPackage(wsHeader, msg)
-		//fmt.Printf("Heartbeat: %v\n", wsHeartBeatReply.Hot)
 	case OpCmd:
 		msgBody := msg
 		cmdHeader := wsHeader
@@ -84,6 +82,6 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 	case OpAuthReply:
 		wsAuthReplyMessage := WsAuthReplyMessage{}
 		wsAuthReplyMessage.SetPackage(wsHeader, msg)
-		//fmt.Printf("Auth: %v\b", wsAuthReplyMessage.Body.Code)
+	case OpError:
 	}
 }

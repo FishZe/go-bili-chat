@@ -16,7 +16,6 @@ type Client struct {
 }
 
 func (c *Client) biliChatConnect(url string) error {
-	//fmt.Println(url)
 	err := errors.New("")
 	c.connect, _, err = websocket.DefaultDialer.Dial(url, nil)
 	if nil != err {
@@ -41,7 +40,7 @@ func (c *Client) receiveWsMsg() {
 		_, message, err := c.connect.ReadMessage()
 		if err != nil {
 			log.Println("read:", err)
-			return
+			c.connectLoop()
 		}
 		c.revMsg <- message
 	}
@@ -73,12 +72,12 @@ func (c *Client) revHandler(handler MsgHandler) {
 	}
 }
 
-func (c *Client) BiliChat() (MsgHandler, error) {
+func (c *Client) sendConnect() error {
 	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{UID: 0, Roomid: c.RoomId, Protover: 3, Platform: "web", Type: 2}}
 	apiLiveAuth, err := GetLiveRoomAuth(c.RoomId)
-	if err != nil {
+	if err != nil || apiLiveAuth.Code != 0 {
 		log.Printf("Get live room auth failed, not use key")
-		return MsgHandler{}, err
+		return err
 	}
 	wsAuthMsg.Body.Key = apiLiveAuth.Data.Token
 	for nowSum, i := range apiLiveAuth.Data.HostList {
@@ -87,23 +86,39 @@ func (c *Client) BiliChat() (MsgHandler, error) {
 		if err != nil {
 			if nowSum == 2 {
 				log.Println("Connect to all server failed")
-				return MsgHandler{}, err
+				return err
 			}
 			log.Println("Connect to bili chat failed, i'll try again")
 		} else {
 			break
 		}
 	}
-	c.revMsg = make(chan []byte, 1)
 	err = c.sendAuthMsg(wsAuthMsg)
 	if err != nil {
 		log.Println("Send auth msg failed")
-		return MsgHandler{}, err
+		return err
 	}
-	cmdChan := make(chan map[string]interface{}, 1)
-	handler := MsgHandler{RoomId: c.RoomId, CmdChan: cmdChan}
+	return nil
+}
+
+func (c *Client) connectLoop() {
+	for {
+		err := c.sendConnect()
+		if err != nil {
+			log.Println("Send connect failed")
+			time.Sleep(5 * time.Second)
+		} else {
+			break
+		}
+	}
+}
+
+func (c *Client) BiliChat(CmdChan chan map[string]interface{}) error {
+	c.connectLoop()
+	c.revMsg = make(chan []byte, 1)
+	handler := MsgHandler{RoomId: c.RoomId, CmdChan: CmdChan}
 	go c.revHandler(handler)
 	go c.receiveWsMsg()
 	go c.heartBeat()
-	return handler, nil
+	return nil
 }

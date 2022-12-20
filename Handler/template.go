@@ -18,12 +18,57 @@ const (
 	CmdRoomRealTimeMessageUpdate = "ROOM_REAL_TIME_MESSAGE_UPDATE"
 	CmdWidgetBanner              = "WIDGET_BANNER"
 	CmdHotRankChangedV2          = "HOT_RANK_CHANGED_V2"
+	CmdGuardHonorThousand        = "GUARD_HONOR_THOUSAND"
+	CmdLive                      = "LIVE"
+	CmdRoomChange                = "ROOM_CHANGE"
+	CmdRoomBlockMsg              = "ROOM_BLOCK_MSG"
+	CmdFullScreenSpecialEffect   = "FULL_SCREEN_SPECIAL_EFFECT"
+	CmdCommonNoticeDanmaku       = "COMMON_NOTICE_DANMAKU"
+	CmdTradingScore              = "TRADING_SCORE"
+	CmdPreparing                 = "PREPARING"
+	CmdGuardBuy                  = "GUARD_BUY"
+	CmdGiftStarProcess           = "GIFT_STAR_PROCESS"
+	CmdRoomSkinMsg               = "ROOM_SKIN_MSG"
+	CmdEnterEffect               = "ENTRY_EFFECT"
 )
 
-type User struct {
-	Uid    int64
-	Name   string
-	RoomId int64
+type MsgEvent struct {
+	Cmd                       string
+	RoomId                    int
+	DanMuMsg                  DanMuMsg
+	SuperChatMessage          SuperChatMessage
+	WatchedChange             WatchedChange
+	SendGift                  SendGift
+	OnlineRankCount           OnlineRankCount
+	OnlineRankV2              OnlineRankV2
+	OnlineRankTop3            OnlineRankTop3
+	LikeInfoV3Click           LikeInfoV3Click
+	InteractWord              InteractWord
+	StopLiveRoomList          StopLiveRoomList
+	LikeInfoV3Update          LikeInfoV3Update
+	HotRankChange             HotRankChange
+	NoticeMsg                 NoticeMsg
+	RoomRealTimeMessageUpdate RoomRealTimeMessageUpdate
+	WidgetBanner              WidgetBanner
+	HotRankChangedV2          HotRankChangedV2
+	GuardHonorThousand        GuardHonorThousand
+	Live                      Live
+	RoomChange                RoomChange
+	RoomBlockMsg              RoomBlockMsg
+	FullScreenSpecialEffect   FullScreenSpecialEffect
+	CommonNoticeDanmaku       CommonNoticeDanmaku
+	TradingScore              TradingScore
+	Preparing                 Preparing
+	GuardBuy                  GuardBuy
+	GiftStarProcess           GiftStarProcess
+	RoomSkinMsg               RoomSkinMsg
+	EnterEffect               EnterEffect
+}
+
+type Options struct {
+	RoomId []int
+	Cmd    string
+	DoFunc func(event MsgEvent)
 }
 
 type FansMedal struct {
@@ -45,7 +90,11 @@ type FansMedal struct {
 type DanMuMsg struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
-		Sender                   User
+		Sender struct {
+			Uid    int64
+			Name   string
+			RoomId int64
+		}
 		Medal                    FansMedal
 		Content                  string
 		SendTimeStamp            int
@@ -374,5 +423,198 @@ type HotRankChangedV2 struct {
 		Icon        string `json:"icon"`
 		AreaName    string `json:"area_name"`
 		RankDesc    string `json:"rank_desc"`
+	} `json:"data"`
+}
+
+type GuardHonorThousand struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Add []interface{} `json:"add"`
+		Del []int         `json:"del"`
+	} `json:"data"`
+}
+
+type Live struct {
+	Cmd             string `json:"cmd"`
+	LiveKey         string `json:"live_key"`
+	VoiceBackground string `json:"voice_background"`
+	SubSessionKey   string `json:"sub_session_key"`
+	LivePlatform    string `json:"live_platform"`
+	LiveModel       int    `json:"live_model"`
+	LiveTime        int    `json:"live_time"`
+	Roomid          int    `json:"roomid"`
+}
+
+type RoomChange struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Title          string `json:"title"`
+		AreaID         int    `json:"area_id"`
+		ParentAreaID   int    `json:"parent_area_id"`
+		AreaName       string `json:"area_name"`
+		ParentAreaName string `json:"parent_area_name"`
+		LiveKey        string `json:"live_key"`
+		SubSessionKey  string `json:"sub_session_key"`
+	} `json:"data"`
+}
+
+type RoomBlockMsg struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Dmscore  int    `json:"dmscore"`
+		Operator int    `json:"operator"`
+		UID      int64  `json:"uid"`
+		Uname    string `json:"uname"`
+	} `json:"data"`
+	UID  string `json:"uid"`
+	Name string `json:"uname"`
+}
+
+type FullScreenSpecialEffect struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Type       int   `json:"type"`
+		Ids        []int `json:"ids"`
+		Queue      int   `json:"queue"`
+		PlatformIn []int `json:"platform_in"`
+	} `json:"data"`
+}
+
+type CommonNoticeDanmaku struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ContentSegments []struct {
+			FontColor              string `json:"font_color"`
+			FontColorDark          string `json:"font_color_dark"`
+			HighlightFontColor     string `json:"highlight_font_color"`
+			HighlightFontColorDark string `json:"highlight_font_color_dark"`
+			Text                   string `json:"text"`
+			Type                   int    `json:"type"`
+		} `json:"content_segments"`
+		Dmscore   int   `json:"dmscore"`
+		Terminals []int `json:"terminals"`
+	} `json:"data"`
+}
+
+type TradingScore struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		BubbleShowTime int `json:"bubble_show_time"`
+		Num            int `json:"num"`
+		ScoreID        int `json:"score_id"`
+		UID            int `json:"uid"`
+		UpdateTime     int `json:"update_time"`
+		UpdateType     int `json:"update_type"`
+	} `json:"data"`
+}
+
+type Preparing struct {
+	Cmd    string `json:"cmd"`
+	RoomId string `json:"roomid"`
+}
+
+type GuardBuy struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		UID        int    `json:"uid"`
+		Username   string `json:"username"`
+		GuardLevel int    `json:"guard_level"`
+		Num        int    `json:"num"`
+		Price      int    `json:"price"`
+		GiftID     int    `json:"gift_id"`
+		GiftName   string `json:"gift_name"`
+		StartTime  int    `json:"start_time"`
+		EndTime    int    `json:"end_time"`
+	} `json:"data"`
+}
+
+type GiftStarProcess struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Status int    `json:"status"`
+		Tip    string `json:"tip"`
+	} `json:"data"`
+}
+
+type RoomSkinMsg struct {
+	Cmd         string `json:"cmd"`
+	SkinID      int    `json:"skin_id"`
+	Status      int    `json:"status"`
+	EndTime     int    `json:"end_time"`
+	CurrentTime int    `json:"current_time"`
+	OnlyLocal   bool   `json:"only_local"`
+	Scatter     struct {
+		Min int `json:"min"`
+		Max int `json:"max"`
+	} `json:"scatter"`
+	SkinConfig struct {
+		Android struct {
+			Num1 struct {
+				Zip string `json:"zip"`
+				Md5 string `json:"md5"`
+			} `json:"1"`
+		} `json:"android"`
+		Ios struct {
+			Num1 struct {
+				Zip string `json:"zip"`
+				Md5 string `json:"md5"`
+			} `json:"1"`
+		} `json:"ios"`
+		Ipad struct {
+			Num1 struct {
+				Zip string `json:"zip"`
+				Md5 string `json:"md5"`
+			} `json:"1"`
+		} `json:"ipad"`
+		Web struct {
+			Num1 struct {
+				Zip              string `json:"zip"`
+				Md5              string `json:"md5"`
+				Platform         string `json:"platform"`
+				Version          string `json:"version"`
+				HeadInfoBgPic    string `json:"headInfoBgPic"`
+				GiftControlBgPic string `json:"giftControlBgPic"`
+				RankListBgPic    string `json:"rankListBgPic"`
+				MainText         string `json:"mainText"`
+				NormalText       string `json:"normalText"`
+				HighlightContent string `json:"highlightContent"`
+				Border           string `json:"border"`
+				ButtonText       string `json:"buttonText"`
+			} `json:"1"`
+		} `json:"web"`
+	} `json:"skin_config"`
+}
+
+type EnterEffect struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ID                   int           `json:"id"`
+		UID                  int           `json:"uid"`
+		TargetID             int           `json:"target_id"`
+		MockEffect           int           `json:"mock_effect"`
+		Face                 string        `json:"face"`
+		PrivilegeType        int           `json:"privilege_type"`
+		CopyWriting          string        `json:"copy_writing"`
+		CopyColor            string        `json:"copy_color"`
+		HighlightColor       string        `json:"highlight_color"`
+		Priority             int           `json:"priority"`
+		BasemapURL           string        `json:"basemap_url"`
+		ShowAvatar           int           `json:"show_avatar"`
+		EffectiveTime        int           `json:"effective_time"`
+		WebBasemapURL        string        `json:"web_basemap_url"`
+		WebEffectiveTime     int           `json:"web_effective_time"`
+		WebEffectClose       int           `json:"web_effect_close"`
+		WebCloseTime         int           `json:"web_close_time"`
+		Business             int           `json:"business"`
+		CopyWritingV2        string        `json:"copy_writing_v2"`
+		IconList             []interface{} `json:"icon_list"`
+		MaxDelayTime         int           `json:"max_delay_time"`
+		TriggerTime          int64         `json:"trigger_time"`
+		Identities           int           `json:"identities"`
+		EffectSilentTime     int           `json:"effect_silent_time"`
+		EffectiveTimeNew     int           `json:"effective_time_new"`
+		WebDynamicURLWebp    string        `json:"web_dynamic_url_webp"`
+		WebDynamicURLApng    string        `json:"web_dynamic_url_apng"`
+		MobileDynamicURLWebp string        `json:"mobile_dynamic_url_webp"`
 	} `json:"data"`
 }
