@@ -1,4 +1,4 @@
-module Go-BiliChat-Core
+module github.com/FishZe/go_bilichat_core
 
 go 1.19
 

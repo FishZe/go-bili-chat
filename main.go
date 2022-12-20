@@ -1,10 +1,9 @@
-package main
+package go_bilichat_core
 
 import (
-	"Go-BiliChat-Core/Handler"
-	"Go-BiliChat-Core/client"
 	"fmt"
-	"time"
+	"github.com/FishZe/go_bilichat_core/Handler"
+	"github.com/FishZe/go_bilichat_core/client"
 )
 
 const (
@@ -86,24 +85,4 @@ func (handle *Handle) Run() {
 	}
 	h := Handler.Handler{Options: options, CmdChan: handle.cmdChan}
 	go h.CmdHandler()
-}
-
-func main() {
-	h := GetNewHandler()
-	h.New(CmdDanmuMsg, 5169315, PrintDanmuMsg)
-	h.New(CmdDanmuMsg, 22155943, PrintDanmuMsg)
-	err := h.Binding(LiveRoom{RoomId: 5169315})
-	err = h.Binding(LiveRoom{RoomId: 22155943})
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	h.Run()
-	for {
-		time.Sleep(30 * time.Second)
-	}
-}
-
-func PrintDanmuMsg(event Handler.MsgEvent) {
-	fmt.Printf("%v: %v\n", event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
 }
