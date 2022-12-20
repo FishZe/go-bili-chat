@@ -113,12 +113,11 @@ func (c *Client) connectLoop() {
 	}
 }
 
-func (c *Client) BiliChat(CmdChan chan map[string]interface{}) error {
+func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
 	c.connectLoop()
 	c.revMsg = make(chan []byte, 1)
 	handler := MsgHandler{RoomId: c.RoomId, CmdChan: CmdChan}
 	go c.revHandler(handler)
 	go c.receiveWsMsg()
 	go c.heartBeat()
-	return nil
 }

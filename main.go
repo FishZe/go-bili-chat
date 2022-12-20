@@ -1,9 +1,9 @@
 package go_bilichat_core
 
 import (
-	"fmt"
 	"github.com/FishZe/go_bilichat_core/Handler"
 	"github.com/FishZe/go_bilichat_core/client"
+	"log"
 )
 
 const (
@@ -66,16 +66,13 @@ func (handle *Handle) New(Cmd string, RoomId int, DoFunc func(event Handler.MsgE
 	handle.Options = append(handle.Options, option{Cmd: Cmd, RoomId: RoomId, DoFunc: DoFunc})
 }
 
-func (handle *Handle) Binding(room LiveRoom) error {
+func (handle *Handle) Binding(room LiveRoom) {
 	room.client.RoomId = room.RoomId
 	if room.client.RoomId == 0 {
-		return fmt.Errorf("room id is 0")
+		log.Printf("room id is 0")
+		return
 	}
-	err := room.client.BiliChat(handle.cmdChan)
-	if err != nil {
-		return err
-	}
-	return nil
+	room.client.BiliChat(handle.cmdChan)
 }
 
 func (handle *Handle) Run() {
