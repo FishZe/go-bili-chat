@@ -30,8 +30,8 @@ func main() {
 	// 将直播间号为15152878礼物消息交由PrintGift处理
 	h.New(go_bilichat_core.CmdDanmuMsg, 48743, PrintDanmuMsg)
 	// 将直播间绑定到消息处理器
-	h.Binding(go_bilichat_core.LiveRoom{RoomId: 5169315})
-	h.Binding(go_bilichat_core.LiveRoom{RoomId: 22155943})
+	h.Binding(go_bilichat_core.LiveRoom{RoomId: 15152878})
+	h.Binding(go_bilichat_core.LiveRoom{RoomId: 48743})
 	// 开始处理消息
 	h.Run()
 	for {
