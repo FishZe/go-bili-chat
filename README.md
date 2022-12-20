@@ -133,3 +133,31 @@ type DanMuMsg struct {
 因为30个实在是太多了, 所以我就不一一列出来了...
 
 ## 在弹幕消息中, 我还没有完全明白每个参数的含义, 强烈欢迎各位PR完善
+
+### 抽象画
+
+```text
++============================+   +=================+
+|        LiveRoom 1          |   |                 |
+| goroutine heart beat       |   |                 → → goroutine your function
+| goroutine receive msg → → ↓|   |                 |
+| goroutine msg handler ← ← ←|   |                 → → goroutine your function
++================|↓|=========+   _                 |
+                  → → → → → → → →    goroutine     → → goroutine your function
++============================+   _                 |
+|        LiveRoom 1          |   |  msg distribute → → goroutine your function
+| goroutine heart beat       |   |                 |
+| goroutine receive msg → → ↓|   |                 → → goroutine your function
+| goroutine msg handler ← ← ←|   |                 |
++================|↓|=========+   _                 → → goroutine your function
+                  → → → → → → → →                  |
+                                 _                 → → goroutine your function
+                                 +======|↑|========+
+                                         ↑
+                                         ↑
+                                +=======|↑|========+
+                                |                  | 
+                                |  main goroutine  |
+                                |                  |
+                                +==================+
+```
