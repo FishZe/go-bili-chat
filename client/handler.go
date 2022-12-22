@@ -15,6 +15,7 @@ type MsgHandler struct {
 }
 
 func (msgHandler *MsgHandler) CmdHandler(wsHeader *WsHeader, msg []byte) {
+	//TODO: 这里解压后, 命令处理还要压缩回去重复解压, 复杂度高, 考虑这里手搓json解压
 	cmdJson := map[string]interface{}{}
 	err := json.Unmarshal(msg[wsHeader.HeaderLen:wsHeader.PackageLen], &cmdJson)
 	if err != nil {

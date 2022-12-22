@@ -243,7 +243,7 @@ type SendGift struct {
 		IsFirst           bool        `json:"is_first"`
 		IsNaming          bool        `json:"is_naming"`
 		IsSpecialBatch    int         `json:"is_special_batch"`
-		Magnification     int         `json:"magnification"`
+		Magnification     float64     `json:"magnification"`
 		Num               int         `json:"num"`
 		OriginalGiftName  string      `json:"original_gift_name"`
 		Price             int         `json:"price"`
@@ -267,46 +267,55 @@ type SendGift struct {
 }
 
 type SuperChatMessage struct {
-	Cmd  string `json:"cmd"`
-	Data struct {
-		Ts                    int       `json:"ts"`
-		ID                    string    `json:"id"`
-		UID                   string    `json:"uid"`
-		Price                 int       `json:"price"`
-		Rate                  int       `json:"rate"`
-		Time                  int       `json:"time"`
-		StartTime             int       `json:"start_time"`
-		EndTime               int       `json:"end_time"`
-		Token                 string    `json:"token"`
-		Message               string    `json:"message"`
-		MessageJpn            string    `json:"message_jpn"`
-		IsRanked              int       `json:"is_ranked"`
-		BackgroundImage       string    `json:"background_image"`
-		BackgroundColor       string    `json:"background_color"`
-		BackgroundIcon        string    `json:"background_icon"`
-		BackgroundPriceColor  string    `json:"background_price_color"`
-		BackgroundBottomColor string    `json:"background_bottom_color"`
-		FansMedal             FansMedal `json:"medal_info"`
-		UserInfo              struct {
-			Uname      string `json:"uname"`
+	RoomID int    `json:"RoomId"`
+	Cmd    string `json:"cmd"`
+	Data   struct {
+		BackgroundBottomColor string `json:"background_bottom_color"`
+		BackgroundColor       string `json:"background_color"`
+		BackgroundIcon        string `json:"background_icon"`
+		BackgroundImage       string `json:"background_image"`
+		BackgroundPriceColor  string `json:"background_price_color"`
+		EndTime               int    `json:"end_time"`
+		Gift                  struct {
+			GiftID   int    `json:"gift_id"`
+			GiftName string `json:"gift_name"`
+			Num      int    `json:"num"`
+		} `json:"gift"`
+		ID        string `json:"id"`
+		IsRanked  int    `json:"is_ranked"`
+		MedalInfo struct {
+			AnchorRoomid int    `json:"anchor_roomid"`
+			AnchorUname  string `json:"anchor_uname"`
+			IconID       int    `json:"icon_id"`
+			MedalColor   string `json:"medal_color"`
+			MedalLevel   int    `json:"medal_level"`
+			MedalName    string `json:"medal_name"`
+			Special      string `json:"special"`
+			TargetID     int    `json:"target_id"`
+		} `json:"medal_info"`
+		Message    string `json:"message"`
+		MessageJpn string `json:"message_jpn"`
+		Price      int    `json:"price"`
+		Rate       int    `json:"rate"`
+		StartTime  int    `json:"start_time"`
+		Time       int    `json:"time"`
+		Token      string `json:"token"`
+		Ts         int    `json:"ts"`
+		UID        string `json:"uid"`
+		UserInfo   struct {
 			Face       string `json:"face"`
 			FaceFrame  string `json:"face_frame"`
 			GuardLevel int    `json:"guard_level"`
-			UserLevel  int    `json:"user_level"`
-			LevelColor string `json:"level_color"`
-			IsVip      int    `json:"is_vip"`
-			IsSvip     int    `json:"is_svip"`
 			IsMainVip  int    `json:"is_main_vip"`
-			Title      string `json:"title"`
+			IsSvip     int    `json:"is_svip"`
+			IsVip      int    `json:"is_vip"`
+			LevelColor string `json:"level_color"`
 			Manager    int    `json:"manager"`
+			Title      string `json:"title"`
+			Uname      string `json:"uname"`
+			UserLevel  int    `json:"user_level"`
 		} `json:"user_info"`
-		Gift struct {
-			Num      int    `json:"num"`
-			GiftID   int    `json:"gift_id"`
-			GiftName string `json:"gift_name"`
-		} `json:"gift"`
 	} `json:"data"`
-	Roomid string `json:"roomid"`
 }
 
 type LikeInfoV3Update struct {
@@ -363,9 +372,10 @@ type NoticeMsg struct {
 		Color      string `json:"color"`
 		Highlight  string `json:"highlight"`
 		Border     string `json:"border"`
+		Time       int    `json:"time"`
 	} `json:"side"`
 	Roomid     int    `json:"roomid"`
-	RealRoomid int    `json:"real_roomid"`
+	RealRoomid string `json:"real_roomid"`
 	MsgCommon  string `json:"msg_common"`
 	MsgSelf    string `json:"msg_self"`
 	LinkURL    string `json:"link_url"`
@@ -612,7 +622,7 @@ type EnterEffect struct {
 		TriggerTime          int64         `json:"trigger_time"`
 		Identities           int           `json:"identities"`
 		EffectSilentTime     int           `json:"effect_silent_time"`
-		EffectiveTimeNew     int           `json:"effective_time_new"`
+		EffectiveTimeNew     float64       `json:"effective_time_new"`
 		WebDynamicURLWebp    string        `json:"web_dynamic_url_webp"`
 		WebDynamicURLApng    string        `json:"web_dynamic_url_apng"`
 		MobileDynamicURLWebp string        `json:"mobile_dynamic_url_webp"`

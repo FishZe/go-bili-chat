@@ -71,6 +71,12 @@ func SetWatchedChange(msg map[string]interface{}) MsgEvent {
 
 func SetNoticeMsg(msg map[string]interface{}) MsgEvent {
 	noticeMsg := NoticeMsg{}
+	switch msg["real_roomid"].(type) {
+	case float64:
+		msg["real_roomid"] = strconv.FormatFloat(msg["real_roomid"].(float64), 'f', -1, 64)
+	case int:
+		msg["real_roomid"] = strconv.Itoa(msg["real_roomid"].(int))
+	}
 	dataJson, err := json.Marshal(msg)
 	if err != nil {
 		log.Printf("Marshal cmd json failed: %v", err)
@@ -86,6 +92,19 @@ func SetNoticeMsg(msg map[string]interface{}) MsgEvent {
 func SetSuperChatMessage(msg map[string]interface{}) MsgEvent {
 	superChatMsg := SuperChatMessage{}
 	superChatMsg.Cmd = CmdSuperChatMessage
+	switch msg["data"].(map[string]interface{})["id"].(type) {
+	case float64:
+		msg["data"].(map[string]interface{})["id"] = strconv.FormatFloat(msg["data"].(map[string]interface{})["id"].(float64), 'f', -1, 64)
+	case int:
+		msg["data"].(map[string]interface{})["id"] = strconv.Itoa(msg["data"].(map[string]interface{})["id"].(int))
+	}
+	switch msg["data"].(map[string]interface{})["uid"].(type) {
+	case float64:
+		msg["data"].(map[string]interface{})["uid"] = strconv.FormatFloat(msg["data"].(map[string]interface{})["uid"].(float64), 'f', -1, 64)
+	case int:
+		msg["data"].(map[string]interface{})["uid"] = strconv.Itoa(msg["data"].(map[string]interface{})["uid"].(int))
+	}
+
 	dataJson, err := json.Marshal(msg["data"])
 	if err != nil {
 		log.Printf("Marshal cmd json failed: %v", err)
@@ -304,8 +323,12 @@ func SetRoomBlockMsg(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	roomBlockMsg.UID = msg["uid"].(string)
-	roomBlockMsg.Name = msg["name"].(string)
+	if _, ok := msg["uid"]; ok {
+		roomBlockMsg.UID = msg["uid"].(string)
+	}
+	if _, ok := msg["name"]; ok {
+		roomBlockMsg.Name = msg["name"].(string)
+	}
 	return MsgEvent{Cmd: CmdRoomBlockMsg, RoomBlockMsg: roomBlockMsg, RoomId: msg["RoomId"].(int)}
 }
 

@@ -10,9 +10,10 @@ import (
 import "github.com/gorilla/websocket"
 
 type Client struct {
-	RoomId  int
-	connect *websocket.Conn
-	revMsg  chan []byte
+	RoomId    int
+	Connected bool
+	connect   *websocket.Conn
+	revMsg    chan []byte
 }
 
 func (c *Client) biliChatConnect(url string) error {
@@ -40,6 +41,7 @@ func (c *Client) receiveWsMsg() {
 		_, message, err := c.connect.ReadMessage()
 		if err != nil {
 			log.Println("read:", err)
+			c.Connected = false
 			c.connectLoop()
 		}
 		c.revMsg <- message
@@ -103,11 +105,13 @@ func (c *Client) sendConnect() error {
 
 func (c *Client) connectLoop() {
 	for {
+		c.Connected = false
 		err := c.sendConnect()
 		if err != nil {
 			log.Println("Send connect failed")
 			time.Sleep(5 * time.Second)
 		} else {
+			c.Connected = true
 			break
 		}
 	}
