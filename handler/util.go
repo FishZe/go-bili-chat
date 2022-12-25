@@ -6,78 +6,95 @@ import (
 	"strconv"
 )
 
-func (_ *Handler) SetDanMuMsg(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetDanMuMsg(msg map[string]string) MsgEvent {
 	danMu := DanMuMsg{}
 	danMu.Cmd = CmdDanmuMsg
-	danMu.Data.Content = msg["info"].([]interface{})[1].(string)
-	danMu.Data.SendTimeStamp = int(msg["info"].([]interface{})[9].(map[string]interface{})["ts"].(float64))
-	danMu.Data.SenderEnterRoomTimeStamp = int(msg["info"].([]interface{})[0].([]interface{})[4].(float64))
-	danMu.Data.SendMillionTimeStamp = int64(msg["info"].([]interface{})[0].([]interface{})[5].(float64))
-	danMu.Data.Sender.Uid = int64(msg["info"].([]interface{})[2].([]interface{})[0].(float64))
-	danMu.Data.Sender.Name = msg["info"].([]interface{})[2].([]interface{})[1].(string)
-	if len(msg["info"].([]interface{})[3].([]interface{})) != 0 {
-		danMu.Data.Medal.GuardLevel = int(msg["info"].([]interface{})[3].([]interface{})[0].(float64))
-		danMu.Data.Medal.MedalName = msg["info"].([]interface{})[3].([]interface{})[1].(string)
-		danMu.Data.Medal.TargetID = int(msg["info"].([]interface{})[3].([]interface{})[11].(float64))
-		danMu.Data.Medal.AnchorRoomId = int(msg["info"].([]interface{})[3].([]interface{})[3].(float64))
+	danMuMsg := make(map[string]interface{}, 0)
+	err := json.Unmarshal([]byte(msg["msg"]), &danMuMsg)
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdDanmuMsg, DanMuMsg: &danMu, RoomId: msg["RoomId"].(int)}
+	danMu.Data.Content = danMuMsg["info"].([]interface{})[1].(string)
+	danMu.Data.SendTimeStamp = int(danMuMsg["info"].([]interface{})[9].(map[string]interface{})["ts"].(float64))
+	danMu.Data.SenderEnterRoomTimeStamp = int(danMuMsg["info"].([]interface{})[0].([]interface{})[4].(float64))
+	danMu.Data.SendMillionTimeStamp = int64(danMuMsg["info"].([]interface{})[0].([]interface{})[5].(float64))
+	danMu.Data.Sender.Uid = int64(danMuMsg["info"].([]interface{})[2].([]interface{})[0].(float64))
+	danMu.Data.Sender.Name = danMuMsg["info"].([]interface{})[2].([]interface{})[1].(string)
+	if len(danMuMsg["info"].([]interface{})[3].([]interface{})) != 0 {
+		danMu.Data.Medal.GuardLevel = int(danMuMsg["info"].([]interface{})[3].([]interface{})[0].(float64))
+		danMu.Data.Medal.MedalName = danMuMsg["info"].([]interface{})[3].([]interface{})[1].(string)
+		danMu.Data.Medal.TargetID = int(danMuMsg["info"].([]interface{})[3].([]interface{})[11].(float64))
+		danMu.Data.Medal.AnchorRoomId = int(danMuMsg["info"].([]interface{})[3].([]interface{})[3].(float64))
+	}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdDanmuMsg, DanMuMsg: &danMu, RoomId: roomId}
 }
 
-func (_ *Handler) SetInteractWord(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetInteractWord(msg map[string]string) MsgEvent {
 	interactMsg := InteractWord{}
-	interactMsg.Cmd = CmdInteractWord
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &interactMsg.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &interactMsg)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdInteractWord, InteractWord: &interactMsg, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdInteractWord, InteractWord: &interactMsg, RoomId: roomId}
 }
 
-func (_ *Handler) SetOnlineRankCount(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetOnlineRankCount(msg map[string]string) MsgEvent {
 	onlineRankCount := OnlineRankCount{}
-	onlineRankCount.Cmd = CmdOnlineRankCount
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &onlineRankCount.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &onlineRankCount)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdOnlineRankCount, OnlineRankCount: &onlineRankCount, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdOnlineRankCount, OnlineRankCount: &onlineRankCount, RoomId: roomId}
 }
 
-func (_ *Handler) SetWatchedChange(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetWatchedChange(msg map[string]string) MsgEvent {
 	watchedChange := WatchedChange{}
-	watchedChange.Cmd = CmdWatchedChange
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &watchedChange.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &watchedChange)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdWatchedChange, WatchedChange: &watchedChange, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdWatchedChange, WatchedChange: &watchedChange, RoomId: roomId}
 }
 
-func (_ *Handler) SetNoticeMsg(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetNoticeMsg(msg map[string]string) MsgEvent {
 	noticeMsg := NoticeMsg{}
-	switch msg["real_roomid"].(type) {
-	case float64:
-		msg["real_roomid"] = strconv.FormatFloat(msg["real_roomid"].(float64), 'f', -1, 64)
-	case int:
-		msg["real_roomid"] = strconv.Itoa(msg["real_roomid"].(int))
+	notice := make(map[string]interface{}, 0)
+	err := json.Unmarshal([]byte(msg["msg"]), &notice)
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
 	}
-	dataJson, err := json.Marshal(msg)
+	switch notice["real_roomid"].(type) {
+	case float64:
+		notice["real_roomid"] = strconv.FormatFloat(notice["real_roomid"].(float64), 'f', -1, 64)
+	case int:
+		notice["real_roomid"] = strconv.Itoa(notice["real_roomid"].(int))
+	}
+	dataJson, err := json.Marshal(notice)
 	if err != nil {
 		log.Printf("Marshal cmd json failed: %v", err)
 	}
@@ -86,26 +103,36 @@ func (_ *Handler) SetNoticeMsg(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdNoticeMsg, NoticeMsg: &noticeMsg, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdNoticeMsg, NoticeMsg: &noticeMsg, RoomId: roomId}
 }
 
-func (_ *Handler) SetSuperChatMessage(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetSuperChatMessage(msg map[string]string) MsgEvent {
 	superChatMsg := SuperChatMessage{}
 	superChatMsg.Cmd = CmdSuperChatMessage
-	switch msg["data"].(map[string]interface{})["id"].(type) {
-	case float64:
-		msg["data"].(map[string]interface{})["id"] = strconv.FormatFloat(msg["data"].(map[string]interface{})["id"].(float64), 'f', -1, 64)
-	case int:
-		msg["data"].(map[string]interface{})["id"] = strconv.Itoa(msg["data"].(map[string]interface{})["id"].(int))
+	sc := make(map[string]interface{}, 0)
+	err := json.Unmarshal([]byte(msg["msg"]), &sc)
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
 	}
-	switch msg["data"].(map[string]interface{})["uid"].(type) {
+	switch sc["data"].(map[string]interface{})["id"].(type) {
 	case float64:
-		msg["data"].(map[string]interface{})["uid"] = strconv.FormatFloat(msg["data"].(map[string]interface{})["uid"].(float64), 'f', -1, 64)
+		sc["data"].(map[string]interface{})["id"] = strconv.FormatFloat(sc["data"].(map[string]interface{})["id"].(float64), 'f', -1, 64)
 	case int:
-		msg["data"].(map[string]interface{})["uid"] = strconv.Itoa(msg["data"].(map[string]interface{})["uid"].(int))
+		sc["data"].(map[string]interface{})["id"] = strconv.Itoa(sc["data"].(map[string]interface{})["id"].(int))
 	}
-
-	dataJson, err := json.Marshal(msg["data"])
+	switch sc["data"].(map[string]interface{})["uid"].(type) {
+	case float64:
+		sc["data"].(map[string]interface{})["uid"] = strconv.FormatFloat(sc["data"].(map[string]interface{})["uid"].(float64), 'f', -1, 64)
+	case int:
+		sc["data"].(map[string]interface{})["uid"] = strconv.Itoa(sc["data"].(map[string]interface{})["uid"].(int))
+	}
+	dataJson, err := json.Marshal(sc["data"])
 	if err != nil {
 		log.Printf("Marshal cmd json failed: %v", err)
 	}
@@ -114,331 +141,351 @@ func (_ *Handler) SetSuperChatMessage(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdSuperChatMessage, SuperChatMessage: &superChatMsg, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdSuperChatMessage, SuperChatMessage: &superChatMsg, RoomId: roomId}
 }
 
-func (_ *Handler) SetSendGift(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetSendGift(msg map[string]string) MsgEvent {
 	sendGift := SendGift{}
-	sendGift.Cmd = CmdSendGift
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &sendGift.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &sendGift)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdSendGift, SendGift: &sendGift, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdSendGift, SendGift: &sendGift, RoomId: roomId}
 }
 
-func (_ *Handler) SetOnlineRankV2(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetOnlineRankV2(msg map[string]string) MsgEvent {
 	onlineRankV2 := OnlineRankV2{}
-	onlineRankV2.Cmd = CmdOnlineRankV2
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &onlineRankV2.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &onlineRankV2)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdOnlineRankV2, OnlineRankV2: &onlineRankV2, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdOnlineRankV2, OnlineRankV2: &onlineRankV2, RoomId: roomId}
 }
 
-func (_ *Handler) SetOnlineRankTop3(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetOnlineRankTop3(msg map[string]string) MsgEvent {
 	onlineRankTop3 := OnlineRankTop3{}
-	onlineRankTop3.Cmd = CmdOnlineRankTop3
-	dataJson, err := json.Marshal(msg["data"])
+	err := json.Unmarshal([]byte(msg["msg"]), &onlineRankTop3)
 	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+
 	}
-	err = json.Unmarshal(dataJson, &onlineRankTop3.Data)
+	roomId, err := strconv.Atoi(msg["RoomId"])
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdOnlineRankTop3, OnlineRankTop3: &onlineRankTop3, RoomId: msg["RoomId"].(int)}
+	return MsgEvent{Cmd: CmdOnlineRankTop3, OnlineRankTop3: &onlineRankTop3, RoomId: roomId}
 }
 
-func (_ *Handler) SetLikeInfoV3Click(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetLikeInfoV3Click(msg map[string]string) MsgEvent {
 	likeInfoV3Click := LikeInfoV3Click{}
-	likeInfoV3Click.Cmd = CmdLikeInfoV3Click
-	dataJson, err := json.Marshal(msg["data"])
+	err := json.Unmarshal([]byte(msg["msg"]), &likeInfoV3Click)
 	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+
 	}
-	err = json.Unmarshal(dataJson, &likeInfoV3Click.Data)
+	roomId, err := strconv.Atoi(msg["RoomId"])
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdLikeInfoV3Click, LikeInfoV3Click: &likeInfoV3Click, RoomId: msg["RoomId"].(int)}
+	return MsgEvent{Cmd: CmdLikeInfoV3Click, LikeInfoV3Click: &likeInfoV3Click, RoomId: roomId}
 }
 
-func (_ *Handler) SetStopLiveRoomList(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetStopLiveRoomList(msg map[string]string) MsgEvent {
 	stopLiveRoomList := StopLiveRoomList{}
-	stopLiveRoomList.Cmd = CmdStopLiveRoomList
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &stopLiveRoomList.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &stopLiveRoomList)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
+
 	}
-	return MsgEvent{Cmd: CmdStopLiveRoomList, StopLiveRoomList: &stopLiveRoomList, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+
+	}
+	return MsgEvent{Cmd: CmdStopLiveRoomList, StopLiveRoomList: &stopLiveRoomList, RoomId: roomId}
 }
 
-func (_ *Handler) SetLikeInfoV3Update(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetLikeInfoV3Update(msg map[string]string) MsgEvent {
 	likeInfoV3Update := LikeInfoV3Update{}
-	likeInfoV3Update.Cmd = CmdLikeInfoV3Update
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &likeInfoV3Update.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &likeInfoV3Update)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
+
 	}
-	return MsgEvent{Cmd: CmdLikeInfoV3Update, LikeInfoV3Update: &likeInfoV3Update, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+
+	}
+	return MsgEvent{Cmd: CmdLikeInfoV3Update, LikeInfoV3Update: &likeInfoV3Update, RoomId: roomId}
 }
 
-func (_ *Handler) SetHotRankChange(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetHotRankChange(msg map[string]string) MsgEvent {
 	hotRankChange := HotRankChange{}
-	hotRankChange.Cmd = CmdHotRankChange
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &hotRankChange.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &hotRankChange)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdHotRankChange, HotRankChange: &hotRankChange, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdHotRankChange, HotRankChange: &hotRankChange, RoomId: roomId}
 }
 
-func (_ *Handler) SetRoomRealTimeMessageUpdate(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetRoomRealTimeMessageUpdate(msg map[string]string) MsgEvent {
 	roomRealTimeMessageUpdate := RoomRealTimeMessageUpdate{}
-	roomRealTimeMessageUpdate.Cmd = CmdRoomRealTimeMessageUpdate
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &roomRealTimeMessageUpdate.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &roomRealTimeMessageUpdate)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
+
 	}
-	return MsgEvent{Cmd: CmdRoomRealTimeMessageUpdate, RoomRealTimeMessageUpdate: &roomRealTimeMessageUpdate, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+
+	}
+	return MsgEvent{Cmd: CmdRoomRealTimeMessageUpdate, RoomRealTimeMessageUpdate: &roomRealTimeMessageUpdate, RoomId: roomId}
 }
 
-func (_ *Handler) SetWidgetBanner(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetWidgetBanner(msg map[string]string) MsgEvent {
 	widgetBanner := WidgetBanner{}
-	widgetBanner.Cmd = CmdWidgetBanner
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &widgetBanner.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &widgetBanner)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdWidgetBanner, WidgetBanner: &widgetBanner, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdWidgetBanner, WidgetBanner: &widgetBanner, RoomId: roomId}
 }
 
-func (_ *Handler) SetHotRankChangedV2(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetHotRankChangedV2(msg map[string]string) MsgEvent {
 	hotRankChangedV2 := HotRankChangedV2{}
-	hotRankChangedV2.Cmd = CmdHotRankChangedV2
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &hotRankChangedV2.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &hotRankChangedV2)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdHotRankChangedV2, HotRankChangedV2: &hotRankChangedV2, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdHotRankChangedV2, HotRankChangedV2: &hotRankChangedV2, RoomId: roomId}
 }
 
-func (_ *Handler) SetGuardHonorThousand(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetGuardHonorThousand(msg map[string]string) MsgEvent {
 	guardHonorThousand := GuardHonorThousand{}
-	guardHonorThousand.Cmd = CmdGuardHonorThousand
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &guardHonorThousand.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &guardHonorThousand)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdGuardHonorThousand, GuardHonorThousand: &guardHonorThousand, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdGuardHonorThousand, GuardHonorThousand: &guardHonorThousand, RoomId: roomId}
 }
 
-func (_ *Handler) SetLive(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetLive(msg map[string]string) MsgEvent {
 	live := Live{}
-	dataJson, err := json.Marshal(msg)
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &live)
+	err := json.Unmarshal([]byte(msg["msg"]), &live)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdLive, Live: &live, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdLive, Live: &live, RoomId: roomId}
 }
 
-func (_ *Handler) SetRoomChange(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetRoomChange(msg map[string]string) MsgEvent {
 	roomChange := RoomChange{}
-	roomChange.Cmd = CmdRoomChange
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &roomChange.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &roomChange)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdRoomChange, RoomChange: &roomChange, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdRoomChange, RoomChange: &roomChange, RoomId: roomId}
 }
 
-func (_ *Handler) SetRoomBlockMsg(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetRoomBlockMsg(msg map[string]string) MsgEvent {
 	roomBlockMsg := RoomBlockMsg{}
-	roomBlockMsg.Cmd = CmdRoomBlockMsg
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &roomBlockMsg.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &roomBlockMsg)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	if _, ok := msg["uid"]; ok {
-		roomBlockMsg.UID = msg["uid"].(string)
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
 	}
-	if _, ok := msg["name"]; ok {
-		roomBlockMsg.Name = msg["name"].(string)
-	}
-	return MsgEvent{Cmd: CmdRoomBlockMsg, RoomBlockMsg: &roomBlockMsg, RoomId: msg["RoomId"].(int)}
+	return MsgEvent{Cmd: CmdRoomBlockMsg, RoomBlockMsg: &roomBlockMsg, RoomId: roomId}
 }
 
-func (_ *Handler) SetFullScreenSpecialEffect(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetFullScreenSpecialEffect(msg map[string]string) MsgEvent {
 	fullScreenSpecialEffect := FullScreenSpecialEffect{}
-	fullScreenSpecialEffect.Cmd = CmdFullScreenSpecialEffect
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &fullScreenSpecialEffect.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &fullScreenSpecialEffect)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdFullScreenSpecialEffect, FullScreenSpecialEffect: &fullScreenSpecialEffect, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdFullScreenSpecialEffect, FullScreenSpecialEffect: &fullScreenSpecialEffect, RoomId: roomId}
 }
 
-func (_ *Handler) SetCommonNoticeDanmaku(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetCommonNoticeDanmaku(msg map[string]string) MsgEvent {
 	commonNoticeDanmaku := CommonNoticeDanmaku{}
-	commonNoticeDanmaku.Cmd = CmdCommonNoticeDanmaku
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &commonNoticeDanmaku.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &commonNoticeDanmaku)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdCommonNoticeDanmaku, CommonNoticeDanmaku: &commonNoticeDanmaku, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdCommonNoticeDanmaku, CommonNoticeDanmaku: &commonNoticeDanmaku, RoomId: roomId}
 }
 
-func (_ *Handler) SetTradingScore(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetTradingScore(msg map[string]string) MsgEvent {
 	tradingScore := TradingScore{}
-	tradingScore.Cmd = CmdTradingScore
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &tradingScore.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &tradingScore)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdTradingScore, TradingScore: &tradingScore, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdTradingScore, TradingScore: &tradingScore, RoomId: roomId}
 }
 
-func (_ *Handler) SetPreparing(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetPreparing(msg map[string]string) MsgEvent {
 	preparing := Preparing{}
 	preparing.Cmd = CmdPreparing
-	preparing.RoomId = strconv.Itoa(msg["RoomId"].(int))
-	return MsgEvent{Cmd: CmdPreparing, Preparing: &preparing, RoomId: msg["RoomId"].(int)}
+	tmp := make(map[string]interface{})
+	err := json.Unmarshal([]byte(msg["msg"]), &tmp)
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	preparing.RoomId = msg["RoomId"]
+	return MsgEvent{Cmd: CmdPreparing, Preparing: &preparing, RoomId: roomId}
 }
 
-func (_ *Handler) SetGuardBuy(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetGuardBuy(msg map[string]string) MsgEvent {
 	guardBuy := GuardBuy{}
-	guardBuy.Cmd = CmdGuardBuy
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &guardBuy.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &guardBuy)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdGuardBuy, GuardBuy: &guardBuy, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdGuardBuy, GuardBuy: &guardBuy, RoomId: roomId}
 }
 
-func (_ *Handler) SetGiftStarProcess(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetGiftStarProcess(msg map[string]string) MsgEvent {
 	giftStarProcess := GiftStarProcess{}
-	giftStarProcess.Cmd = CmdGiftStarProcess
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &giftStarProcess.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &giftStarProcess)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdGiftStarProcess, GiftStarProcess: &giftStarProcess, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdGiftStarProcess, GiftStarProcess: &giftStarProcess, RoomId: roomId}
 }
 
-func (_ *Handler) SetRoomSkinMsg(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetRoomSkinMsg(msg map[string]string) MsgEvent {
 	roomSkinMsg := RoomSkinMsg{}
-	dataJson, err := json.Marshal(msg)
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &roomSkinMsg)
+	err := json.Unmarshal([]byte(msg["msg"]), &roomSkinMsg)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdRoomSkinMsg, RoomSkinMsg: &roomSkinMsg, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdRoomSkinMsg, RoomSkinMsg: &roomSkinMsg, RoomId: roomId}
 }
 
-func (_ *Handler) SetEntryEffect(msg map[string]interface{}) MsgEvent {
+func (_ *Handler) SetEntryEffect(msg map[string]string) MsgEvent {
 	enterEffect := EntryEffect{}
-	enterEffect.Cmd = CmdEntryEffect
-	dataJson, err := json.Marshal(msg["data"])
-	if err != nil {
-		log.Printf("Marshal cmd json failed: %v", err)
-	}
-	err = json.Unmarshal(dataJson, &enterEffect.Data)
+	err := json.Unmarshal([]byte(msg["msg"]), &enterEffect)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-	return MsgEvent{Cmd: CmdEntryEffect, EnterEffect: &enterEffect, RoomId: msg["RoomId"].(int)}
+	roomId, err := strconv.Atoi(msg["RoomId"])
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdEntryEffect, EntryEffect: &enterEffect, RoomId: roomId}
 }

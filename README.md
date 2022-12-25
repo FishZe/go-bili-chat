@@ -30,9 +30,6 @@ func main() {
 	h.Run()
 }
 
-func PrintDanmuMsg(event Handler.MsgEvent) {
-	fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
-}
 ```
 **关于为什么在处理绑定函数时, 多一个直播间号的参数, 因为考虑到可能会有根据不同的直播间分发处理消息的需求**
 

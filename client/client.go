@@ -117,7 +117,7 @@ func (c *Client) connectLoop() {
 	}
 }
 
-func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
+func (c *Client) BiliChat(CmdChan chan map[string]string) {
 	c.connectLoop()
 	c.revMsg = make(chan []byte, 1)
 	handler := MsgHandler{RoomId: c.RoomId, CmdChan: CmdChan}

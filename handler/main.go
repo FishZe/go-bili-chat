@@ -6,7 +6,7 @@ import (
 )
 
 type Handler struct {
-	CmdChan chan map[string]interface{}
+	CmdChan chan map[string]string
 	DoFunc  map[string]map[int][]func(event MsgEvent)
 }
 
@@ -25,14 +25,14 @@ func (handler *Handler) CmdHandler() {
 		select {
 		case msg, ok := <-handler.CmdChan:
 			if ok {
-				setFunc := reflect.ValueOf(&Handler{}).MethodByName("Set" + CmdName[msg["cmd"].(string)])
+				setFunc := reflect.ValueOf(&Handler{}).MethodByName("Set" + CmdName[msg["cmd"]])
 				if setFunc.IsValid() {
 					res := setFunc.Call([]reflect.Value{reflect.ValueOf(msg)})
 					msgEvent := res[0].Interface().(MsgEvent)
 					if !(msgEvent.Cmd == "" || msgEvent.RoomId == 0) {
-						if _, ok := handler.DoFunc[msg["cmd"].(string)]; ok {
-							if _, ok := handler.DoFunc[msg["cmd"].(string)][msgEvent.RoomId]; ok {
-								for _, v := range handler.DoFunc[msg["cmd"].(string)][msgEvent.RoomId] {
+						if _, ok := handler.DoFunc[msg["cmd"]]; ok {
+							if _, ok := handler.DoFunc[msg["cmd"]][msgEvent.RoomId]; ok {
+								for _, v := range handler.DoFunc[msg["cmd"]][msgEvent.RoomId] {
 									go v(msgEvent)
 								}
 							}

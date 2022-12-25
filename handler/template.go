@@ -94,7 +94,7 @@ type MsgEvent struct {
 	GuardBuy                  *GuardBuy
 	GiftStarProcess           *GiftStarProcess
 	RoomSkinMsg               *RoomSkinMsg
-	EnterEffect               *EntryEffect
+	EntryEffect               *EntryEffect
 }
 
 type FansMedal struct {
