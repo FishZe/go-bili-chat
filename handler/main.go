@@ -20,6 +20,14 @@ func (handler *Handler) AddOption(Cmd string, RoomId int, Do func(event MsgEvent
 	handler.DoFunc[Cmd][RoomId] = append(handler.DoFunc[Cmd][RoomId], Do)
 }
 
+func (handler *Handler) DelRoomOption(roomId int) {
+	for k, v := range handler.DoFunc {
+		if _, ok := v[roomId]; ok {
+			delete(handler.DoFunc[k], roomId)
+		}
+	}
+}
+
 func (handler *Handler) CmdHandler() {
 	for {
 		select {

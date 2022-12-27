@@ -12,8 +12,8 @@ func uint32ToByte4(num uint32) []byte {
 	}
 	var bytesNum = make([]byte, 4)
 	for i := 3; i >= 0; i-- {
-		bytesNum[i] = byte(num % 256)
-		num /= 256
+		bytesNum[i] = byte(num & 255)
+		num >>= 8
 	}
 	return bytesNum
 }
@@ -24,8 +24,8 @@ func uint16ToByte2(num uint16) []byte {
 	}
 	var bytesNum = make([]byte, 2)
 	for i := 1; i >= 0; i-- {
-		bytesNum[i] = byte(num % 256)
-		num /= 256
+		bytesNum[i] = byte(num & 255)
+		num >>= 8
 	}
 	return bytesNum
 }
@@ -33,7 +33,7 @@ func uint16ToByte2(num uint16) []byte {
 func byte2ToUint16(bytesNum []byte) uint16 {
 	var num uint16
 	for i := 0; i < 2; i++ {
-		num *= 256
+		num <<= 8
 		num += uint16(bytesNum[i])
 	}
 	return num
@@ -42,7 +42,7 @@ func byte2ToUint16(bytesNum []byte) uint16 {
 func byte4ToUint32(bytesNum []byte) uint32 {
 	var num uint32
 	for i := 0; i < 4; i++ {
-		num *= 256
+		num <<= 8
 		num += uint32(bytesNum[i])
 	}
 	return num

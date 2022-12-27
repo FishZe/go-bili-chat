@@ -1,12 +1,14 @@
-package go_bilichat_core
+package main
 
 import (
+	"fmt"
 	"github.com/FishZe/go_bilichat_core/client"
 	"github.com/FishZe/go_bilichat_core/handler"
 )
 
 type Handler struct {
 	Handler handler.Handler
+	rooms   map[int]LiveRoom
 }
 
 type LiveRoom struct {
@@ -16,6 +18,7 @@ type LiveRoom struct {
 
 func GetNewHandler() Handler {
 	h := Handler{}
+	h.rooms = make(map[int]LiveRoom)
 	h.Handler.DoFunc = make(map[string]map[int][]func(event handler.MsgEvent), 0)
 	h.Handler.CmdChan = make(chan map[string]interface{}, 100)
 	return h
@@ -25,11 +28,36 @@ func (h *Handler) AddOption(Cmd string, RoomId int, Do func(event handler.MsgEve
 	h.Handler.AddOption(Cmd, RoomId, Do)
 }
 
-func (h *Handler) AddRoom(room LiveRoom) {
+func (h *Handler) AddRoom(roomId int) {
+	if _, ok := h.rooms[roomId]; ok {
+		return
+	}
+	room := LiveRoom{}
+	room.RoomId = roomId
 	room.Client.RoomId = room.RoomId
 	room.Client.BiliChat(h.Handler.CmdChan)
+	h.rooms[room.RoomId] = room
+}
+
+func (h *Handler) DelRoom(RoomId int) {
+	if _, ok := h.rooms[RoomId]; !ok {
+		return
+	}
+	h.Handler.DelRoomOption(RoomId)
+	c := h.rooms[RoomId].Client
+	c.Close()
+	delete(h.rooms, RoomId)
 }
 
 func (h *Handler) Run() {
 	h.Handler.CmdHandler()
+}
+
+func main() {
+	h := GetNewHandler()
+	h.AddOption("DANMU_MSG", 264788, func(event handler.MsgEvent) {
+		fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
+	})
+	h.AddRoom(264788)
+	h.Run()
 }
