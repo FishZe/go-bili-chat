@@ -3,7 +3,6 @@ package client
 import (
 	"bytes"
 	"compress/zlib"
-	"encoding/json"
 	"github.com/andybalholm/brotli"
 	"io"
 	"log"
@@ -14,16 +13,39 @@ type MsgHandler struct {
 	CmdChan chan map[string]interface{}
 }
 
+func getCmd(msg []byte) string {
+	var layer = 0
+	for i, v := range msg {
+		if v == '{' || v == '[' {
+			layer++
+		} else if v == '}' || v == ']' {
+			layer--
+		} else if layer == 1 && v == '"' {
+			if i+7 < len(msg) && msg[i+1] == 'c' && msg[i+2] == 'm' && msg[i+3] == 'd' && msg[i+4] == '"' {
+				var from = i + 7
+				var to int
+				for to = from + 1; to < len(msg); to++ {
+					if msg[to] == '"' {
+						break
+					}
+				}
+				return string(msg[from:to])
+			}
+		}
+	}
+	return ""
+}
+
 func (msgHandler *MsgHandler) CmdHandler(wsHeader *WsHeader, msg []byte) {
-	//TODO: 这里解压后, 命令处理还要压缩回去重复解压, 复杂度高, 考虑这里手搓json解压
-	cmdJson := map[string]interface{}{}
-	err := json.Unmarshal(msg[wsHeader.HeaderLen:wsHeader.PackageLen], &cmdJson)
-	if err != nil {
-		log.Printf("Unmarshal cmd json failed: %v", err)
+	cmd := getCmd(msg[wsHeader.HeaderLen:wsHeader.PackageLen])
+	if cmd == "" {
 		return
 	}
-	cmdJson["RoomId"] = msgHandler.RoomId
-	msgHandler.CmdChan <- cmdJson
+	rev := make(map[string]interface{})
+	rev["cmd"] = cmd
+	rev["msg"] = string(msg[wsHeader.HeaderLen:wsHeader.PackageLen])
+	rev["RoomId"] = msgHandler.RoomId
+	msgHandler.CmdChan <- rev
 }
 
 func (msgHandler *MsgHandler) CmdBrotliProtoDecoder(wsHeader *WsHeader, msg []byte) []byte {

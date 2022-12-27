@@ -18,30 +18,18 @@ package main
 import (
 	"fmt"
 	"github.com/FishZe/go_bilichat_core"
-	"github.com/FishZe/go_bilichat_core/Handler"
-	"time"
+	"github.com/FishZe/go_bilichat_core/handler"
 )
 
 func main() {
-	// 创建一个新的消息处理器
 	h := go_bilichat_core.GetNewHandler()
-	// 将直播间号为15152878弹幕消息交由PrintDanmu处理
-	h.New(go_bilichat_core.CmdDanmuMsg, 15152878, PrintDanmuMsg)
-	// 将直播间号为15152878礼物消息交由PrintGift处理
-	h.New(go_bilichat_core.CmdDanmuMsg, 48743, PrintDanmuMsg)
-	// 将直播间绑定到消息处理器
-	h.Binding(go_bilichat_core.LiveRoom{RoomId: 15152878})
-	h.Binding(go_bilichat_core.LiveRoom{RoomId: 48743})
-	// 开始处理消息
+	h.AddOption(go_bilichat_core.handler.CmdDanmuMsg, 26097368, func(event handler.MsgEvent) {
+		fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
+	})
+	h.AddRoom(go_bilichat_core.LiveRoom{RoomId: 26097368})
 	h.Run()
-	for {
-		time.Sleep(30 * time.Second)
-	}
 }
 
-func PrintDanmuMsg(event Handler.MsgEvent) {
-	fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
-}
 ```
 **关于为什么在处理绑定函数时, 多一个直播间号的参数, 因为考虑到可能会有根据不同的直播间分发处理消息的需求**
 
@@ -107,6 +95,7 @@ type MsgEvent struct {
     DanMuMsg DanMuMsg
 	SuperChatMessage SuperChatMessage
     // 下同, 可参考上方的消息类型, 取消Cmd即为结构体名称...
+	...
 }
 ```
 

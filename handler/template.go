@@ -1,4 +1,4 @@
-package Handler
+package handler
 
 const (
 	CmdDanmuMsg                  = "DANMU_MSG"
@@ -29,46 +29,72 @@ const (
 	CmdGuardBuy                  = "GUARD_BUY"
 	CmdGiftStarProcess           = "GIFT_STAR_PROCESS"
 	CmdRoomSkinMsg               = "ROOM_SKIN_MSG"
-	CmdEnterEffect               = "ENTRY_EFFECT"
+	CmdEntryEffect               = "ENTRY_EFFECT"
 )
+
+var CmdName = map[string]string{
+	"DANMU_MSG":                     "DanMuMsg",
+	"SUPER_CHAT_MESSAGE":            "SuperChatMessage",
+	"SUPER_CHAT_MESSAGE_JPN":        "SuperChatMessage",
+	"WATCHED_CHANGE":                "WatchedChange",
+	"SEND_GIFT":                     "SendGift",
+	"ONLINE_RANK_COUNT":             "OnlineRankCount",
+	"ONLINE_RANK_V2":                "OnlineRankV2",
+	"ONLINE_RANK_TOP3":              "OnlineRankTop3",
+	"LIKE_INFO_V3_CLICK":            "LikeInfoV3Click",
+	"INTERACT_WORD":                 "InteractWord",
+	"STOP_LIVE_ROOM_LIST":           "StopLiveRoomList",
+	"LIKE_INFO_V3_UPDATE":           "LikeInfoV3Update",
+	"HOT_RANK_CHANGED":              "HotRankChanged",
+	"NOTICE_MSG":                    "NoticeMsg",
+	"ROOM_REAL_TIME_MESSAGE_UPDATE": "RoomRealTimeMessageUpdate",
+	"WIDGET_BANNER":                 "WidgetBanner",
+	"HOT_RANK_CHANGED_V2":           "HotRankChangedV2",
+	"GUARD_HONOR_THOUSAND":          "GuardHonorThousand",
+	"LIVE":                          "Live",
+	"ROOM_CHANGE":                   "RoomChange",
+	"ROOM_BLOCK_MSG":                "RoomBlockMsg",
+	"FULL_SCREEN_SPECIAL_EFFECT":    "FullScreenSpecialEffect",
+	"COMMON_NOTICE_DANMAKU":         "CommonNoticeDanmaku",
+	"TRADING_SCORE":                 "TradingScore",
+	"PREPARING":                     "Preparing",
+	"GUARD_BUY":                     "GuardBuy",
+	"GIFT_STAR_PROCESS":             "GiftStarProcess",
+	"ROOM_SKIN_MSG":                 "RoomSkinMsg",
+	"ENTRY_EFFECT":                  "EntryEffect",
+}
 
 type MsgEvent struct {
 	Cmd                       string
 	RoomId                    int
-	DanMuMsg                  DanMuMsg
-	SuperChatMessage          SuperChatMessage
-	WatchedChange             WatchedChange
-	SendGift                  SendGift
-	OnlineRankCount           OnlineRankCount
-	OnlineRankV2              OnlineRankV2
-	OnlineRankTop3            OnlineRankTop3
-	LikeInfoV3Click           LikeInfoV3Click
-	InteractWord              InteractWord
-	StopLiveRoomList          StopLiveRoomList
-	LikeInfoV3Update          LikeInfoV3Update
-	HotRankChange             HotRankChange
-	NoticeMsg                 NoticeMsg
-	RoomRealTimeMessageUpdate RoomRealTimeMessageUpdate
-	WidgetBanner              WidgetBanner
-	HotRankChangedV2          HotRankChangedV2
-	GuardHonorThousand        GuardHonorThousand
-	Live                      Live
-	RoomChange                RoomChange
-	RoomBlockMsg              RoomBlockMsg
-	FullScreenSpecialEffect   FullScreenSpecialEffect
-	CommonNoticeDanmaku       CommonNoticeDanmaku
-	TradingScore              TradingScore
-	Preparing                 Preparing
-	GuardBuy                  GuardBuy
-	GiftStarProcess           GiftStarProcess
-	RoomSkinMsg               RoomSkinMsg
-	EnterEffect               EnterEffect
-}
-
-type Options struct {
-	RoomId []int
-	Cmd    string
-	DoFunc func(event MsgEvent)
+	DanMuMsg                  *DanMuMsg
+	SuperChatMessage          *SuperChatMessage
+	WatchedChange             *WatchedChange
+	SendGift                  *SendGift
+	OnlineRankCount           *OnlineRankCount
+	OnlineRankV2              *OnlineRankV2
+	OnlineRankTop3            *OnlineRankTop3
+	LikeInfoV3Click           *LikeInfoV3Click
+	InteractWord              *InteractWord
+	StopLiveRoomList          *StopLiveRoomList
+	LikeInfoV3Update          *LikeInfoV3Update
+	HotRankChange             *HotRankChange
+	NoticeMsg                 *NoticeMsg
+	RoomRealTimeMessageUpdate *RoomRealTimeMessageUpdate
+	WidgetBanner              *WidgetBanner
+	HotRankChangedV2          *HotRankChangedV2
+	GuardHonorThousand        *GuardHonorThousand
+	Live                      *Live
+	RoomChange                *RoomChange
+	RoomBlockMsg              *RoomBlockMsg
+	FullScreenSpecialEffect   *FullScreenSpecialEffect
+	CommonNoticeDanmaku       *CommonNoticeDanmaku
+	TradingScore              *TradingScore
+	Preparing                 *Preparing
+	GuardBuy                  *GuardBuy
+	GiftStarProcess           *GiftStarProcess
+	RoomSkinMsg               *RoomSkinMsg
+	EntryEffect               *EntryEffect
 }
 
 type FansMedal struct {
@@ -595,7 +621,7 @@ type RoomSkinMsg struct {
 	} `json:"skin_config"`
 }
 
-type EnterEffect struct {
+type EntryEffect struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		ID                   int           `json:"id"`
