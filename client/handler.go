@@ -6,12 +6,11 @@ import (
 	"github.com/andybalholm/brotli"
 	"io"
 	"log"
-	"strconv"
 )
 
 type MsgHandler struct {
 	RoomId  int
-	CmdChan chan map[string]string
+	CmdChan chan map[string]interface{}
 }
 
 func getCmd(msg []byte) string {
@@ -42,12 +41,11 @@ func (msgHandler *MsgHandler) CmdHandler(wsHeader *WsHeader, msg []byte) {
 	if cmd == "" {
 		return
 	}
-	rev := make(map[string]string)
+	rev := make(map[string]interface{})
 	rev["cmd"] = cmd
 	rev["msg"] = string(msg[wsHeader.HeaderLen:wsHeader.PackageLen])
-	rev["RoomId"] = strconv.Itoa(msgHandler.RoomId)
+	rev["RoomId"] = msgHandler.RoomId
 	msgHandler.CmdChan <- rev
-	//fmt.Print("sent")
 }
 
 func (msgHandler *MsgHandler) CmdBrotliProtoDecoder(wsHeader *WsHeader, msg []byte) []byte {
