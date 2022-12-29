@@ -6,6 +6,8 @@ import (
 	"strconv"
 )
 
+// SetDanMuMsg 设置弹幕消息
+// 该消息为list结构, 部分字段含义未知, 因此目前只有部分内容
 func (_ *Handler) SetDanMuMsg(msg map[string]interface{}) MsgEvent {
 	danMu := DanMuMsg{}
 	danMu.Cmd = CmdDanmuMsg
@@ -21,6 +23,7 @@ func (_ *Handler) SetDanMuMsg(msg map[string]interface{}) MsgEvent {
 	danMu.Data.SendMillionTimeStamp = int64(danMuMsg["info"].([]interface{})[0].([]interface{})[5].(float64))
 	danMu.Data.Sender.Uid = int64(danMuMsg["info"].([]interface{})[2].([]interface{})[0].(float64))
 	danMu.Data.Sender.Name = danMuMsg["info"].([]interface{})[2].([]interface{})[1].(string)
+	// 部分情况下, 弹幕发送者未佩戴牌子, 需要判断
 	if len(danMuMsg["info"].([]interface{})[3].([]interface{})) != 0 {
 		danMu.Data.Medal.GuardLevel = int(danMuMsg["info"].([]interface{})[3].([]interface{})[0].(float64))
 		danMu.Data.Medal.MedalName = danMuMsg["info"].([]interface{})[3].([]interface{})[1].(string)
@@ -30,6 +33,7 @@ func (_ *Handler) SetDanMuMsg(msg map[string]interface{}) MsgEvent {
 	return MsgEvent{Cmd: CmdDanmuMsg, DanMuMsg: &danMu, RoomId: msg["RoomId"].(int)}
 }
 
+// SetInteractWord 设置欢迎消息
 func (_ *Handler) SetInteractWord(msg map[string]interface{}) MsgEvent {
 	interactMsg := InteractWord{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &interactMsg)
@@ -40,6 +44,7 @@ func (_ *Handler) SetInteractWord(msg map[string]interface{}) MsgEvent {
 	return MsgEvent{Cmd: CmdInteractWord, InteractWord: &interactMsg, RoomId: msg["RoomId"].(int)}
 }
 
+// SetOnlineRankCount 暂时未知
 func (_ *Handler) SetOnlineRankCount(msg map[string]interface{}) MsgEvent {
 	onlineRankCount := OnlineRankCount{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &onlineRankCount)
@@ -47,10 +52,10 @@ func (_ *Handler) SetOnlineRankCount(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdOnlineRankCount, OnlineRankCount: &onlineRankCount, RoomId: msg["RoomId"].(int)}
 }
 
+// SetWatchedChange 暂时未知
 func (_ *Handler) SetWatchedChange(msg map[string]interface{}) MsgEvent {
 	watchedChange := WatchedChange{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &watchedChange)
@@ -58,10 +63,11 @@ func (_ *Handler) SetWatchedChange(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdWatchedChange, WatchedChange: &watchedChange, RoomId: msg["RoomId"].(int)}
 }
 
+// SetNoticeMsg 可能为系统消息
+// TODO: 尝试优化
 func (_ *Handler) SetNoticeMsg(msg map[string]interface{}) MsgEvent {
 	noticeMsg := NoticeMsg{}
 	notice := make(map[string]interface{}, 0)
@@ -70,6 +76,7 @@ func (_ *Handler) SetNoticeMsg(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
+	// 这个字段很奇怪, 类型不确定, 需要特判
 	switch notice["real_roomid"].(type) {
 	case float64:
 		notice["real_roomid"] = strconv.FormatFloat(notice["real_roomid"].(float64), 'f', -1, 64)
@@ -85,10 +92,11 @@ func (_ *Handler) SetNoticeMsg(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdNoticeMsg, NoticeMsg: &noticeMsg, RoomId: msg["RoomId"].(int)}
 }
 
+// SetSuperChatMessage 超级留言
+// TODO: 尝试优化
 func (_ *Handler) SetSuperChatMessage(msg map[string]interface{}) MsgEvent {
 	superChatMsg := SuperChatMessage{}
 	superChatMsg.Cmd = CmdSuperChatMessage
@@ -98,6 +106,7 @@ func (_ *Handler) SetSuperChatMessage(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
+	// id 和 uid 类型不确定, 需要特判
 	switch sc["data"].(map[string]interface{})["id"].(type) {
 	case float64:
 		sc["data"].(map[string]interface{})["id"] = strconv.FormatFloat(sc["data"].(map[string]interface{})["id"].(float64), 'f', -1, 64)
@@ -119,10 +128,10 @@ func (_ *Handler) SetSuperChatMessage(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdSuperChatMessage, SuperChatMessage: &superChatMsg, RoomId: msg["RoomId"].(int)}
 }
 
+// SetSendGift 赠送礼物
 func (_ *Handler) SetSendGift(msg map[string]interface{}) MsgEvent {
 	sendGift := SendGift{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &sendGift)
@@ -130,10 +139,10 @@ func (_ *Handler) SetSendGift(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdSendGift, SendGift: &sendGift, RoomId: msg["RoomId"].(int)}
 }
 
+// SetOnlineRankV2 未知
 func (_ *Handler) SetOnlineRankV2(msg map[string]interface{}) MsgEvent {
 	onlineRankV2 := OnlineRankV2{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &onlineRankV2)
@@ -141,56 +150,54 @@ func (_ *Handler) SetOnlineRankV2(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdOnlineRankV2, OnlineRankV2: &onlineRankV2, RoomId: msg["RoomId"].(int)}
 }
 
+// SetOnlineRankTop3 未知
 func (_ *Handler) SetOnlineRankTop3(msg map[string]interface{}) MsgEvent {
 	onlineRankTop3 := OnlineRankTop3{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &onlineRankTop3)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
-
 	}
-
 	return MsgEvent{Cmd: CmdOnlineRankTop3, OnlineRankTop3: &onlineRankTop3, RoomId: msg["RoomId"].(int)}
 }
 
+// SetLikeInfoV3Click 可能为点赞
 func (_ *Handler) SetLikeInfoV3Click(msg map[string]interface{}) MsgEvent {
 	likeInfoV3Click := LikeInfoV3Click{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &likeInfoV3Click)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
-
 	}
-
 	return MsgEvent{Cmd: CmdLikeInfoV3Click, LikeInfoV3Click: &likeInfoV3Click, RoomId: msg["RoomId"].(int)}
 }
 
+// SetStopLiveRoomList 未知
 func (_ *Handler) SetStopLiveRoomList(msg map[string]interface{}) MsgEvent {
 	stopLiveRoomList := StopLiveRoomList{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &stopLiveRoomList)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
-
 	}
 	return MsgEvent{Cmd: CmdStopLiveRoomList, StopLiveRoomList: &stopLiveRoomList, RoomId: msg["RoomId"].(int)}
 }
 
+// SetLikeInfoV3Update 未知
 func (_ *Handler) SetLikeInfoV3Update(msg map[string]interface{}) MsgEvent {
 	likeInfoV3Update := LikeInfoV3Update{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &likeInfoV3Update)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
-
 	}
 	return MsgEvent{Cmd: CmdLikeInfoV3Update, LikeInfoV3Update: &likeInfoV3Update, RoomId: msg["RoomId"].(int)}
 }
 
+// SetHotRankChange 未知
 func (_ *Handler) SetHotRankChange(msg map[string]interface{}) MsgEvent {
 	hotRankChange := HotRankChange{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &hotRankChange)
@@ -198,21 +205,21 @@ func (_ *Handler) SetHotRankChange(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdHotRankChange, HotRankChange: &hotRankChange, RoomId: msg["RoomId"].(int)}
 }
 
+// SetRoomRealTimeMessageUpdate 未知
 func (_ *Handler) SetRoomRealTimeMessageUpdate(msg map[string]interface{}) MsgEvent {
 	roomRealTimeMessageUpdate := RoomRealTimeMessageUpdate{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &roomRealTimeMessageUpdate)
 	if err != nil {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
-
 	}
 	return MsgEvent{Cmd: CmdRoomRealTimeMessageUpdate, RoomRealTimeMessageUpdate: &roomRealTimeMessageUpdate, RoomId: msg["RoomId"].(int)}
 }
 
+// SetWidgetBanner 未知
 func (_ *Handler) SetWidgetBanner(msg map[string]interface{}) MsgEvent {
 	widgetBanner := WidgetBanner{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &widgetBanner)
@@ -220,10 +227,10 @@ func (_ *Handler) SetWidgetBanner(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdWidgetBanner, WidgetBanner: &widgetBanner, RoomId: msg["RoomId"].(int)}
 }
 
+// SetHotRankChangedV2 未知
 func (_ *Handler) SetHotRankChangedV2(msg map[string]interface{}) MsgEvent {
 	hotRankChangedV2 := HotRankChangedV2{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &hotRankChangedV2)
@@ -231,10 +238,10 @@ func (_ *Handler) SetHotRankChangedV2(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdHotRankChangedV2, HotRankChangedV2: &hotRankChangedV2, RoomId: msg["RoomId"].(int)}
 }
 
+// SetGuardHonorThousand 未知
 func (_ *Handler) SetGuardHonorThousand(msg map[string]interface{}) MsgEvent {
 	guardHonorThousand := GuardHonorThousand{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &guardHonorThousand)
@@ -242,10 +249,10 @@ func (_ *Handler) SetGuardHonorThousand(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdGuardHonorThousand, GuardHonorThousand: &guardHonorThousand, RoomId: msg["RoomId"].(int)}
 }
 
+// SetLive 开始直播
 func (_ *Handler) SetLive(msg map[string]interface{}) MsgEvent {
 	live := Live{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &live)
@@ -253,10 +260,10 @@ func (_ *Handler) SetLive(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdLive, Live: &live, RoomId: msg["RoomId"].(int)}
 }
 
+// SetRoomChange 未知
 func (_ *Handler) SetRoomChange(msg map[string]interface{}) MsgEvent {
 	roomChange := RoomChange{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &roomChange)
@@ -264,10 +271,10 @@ func (_ *Handler) SetRoomChange(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdRoomChange, RoomChange: &roomChange, RoomId: msg["RoomId"].(int)}
 }
 
+// SetRoomBlockMsg 未知
 func (_ *Handler) SetRoomBlockMsg(msg map[string]interface{}) MsgEvent {
 	roomBlockMsg := RoomBlockMsg{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &roomBlockMsg)
@@ -275,10 +282,10 @@ func (_ *Handler) SetRoomBlockMsg(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdRoomBlockMsg, RoomBlockMsg: &roomBlockMsg, RoomId: msg["RoomId"].(int)}
 }
 
+// SetFullScreenSpecialEffect 可能为礼物特效
 func (_ *Handler) SetFullScreenSpecialEffect(msg map[string]interface{}) MsgEvent {
 	fullScreenSpecialEffect := FullScreenSpecialEffect{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &fullScreenSpecialEffect)
@@ -286,10 +293,10 @@ func (_ *Handler) SetFullScreenSpecialEffect(msg map[string]interface{}) MsgEven
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdFullScreenSpecialEffect, FullScreenSpecialEffect: &fullScreenSpecialEffect, RoomId: msg["RoomId"].(int)}
 }
 
+// SetCommonNoticeDanmaku 未知
 func (_ *Handler) SetCommonNoticeDanmaku(msg map[string]interface{}) MsgEvent {
 	commonNoticeDanmaku := CommonNoticeDanmaku{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &commonNoticeDanmaku)
@@ -297,10 +304,10 @@ func (_ *Handler) SetCommonNoticeDanmaku(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdCommonNoticeDanmaku, CommonNoticeDanmaku: &commonNoticeDanmaku, RoomId: msg["RoomId"].(int)}
 }
 
+// SetTradingScore 未知
 func (_ *Handler) SetTradingScore(msg map[string]interface{}) MsgEvent {
 	tradingScore := TradingScore{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &tradingScore)
@@ -308,10 +315,10 @@ func (_ *Handler) SetTradingScore(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdTradingScore, TradingScore: &tradingScore, RoomId: msg["RoomId"].(int)}
 }
 
+// SetPreparing 开始准备
 func (_ *Handler) SetPreparing(msg map[string]interface{}) MsgEvent {
 	preparing := Preparing{}
 	preparing.Cmd = CmdPreparing
@@ -321,11 +328,11 @@ func (_ *Handler) SetPreparing(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	preparing.RoomId = msg["RoomId"].(string)
 	return MsgEvent{Cmd: CmdPreparing, Preparing: &preparing, RoomId: msg["RoomId"].(int)}
 }
 
+// SetGuardBuy 大航海购买
 func (_ *Handler) SetGuardBuy(msg map[string]interface{}) MsgEvent {
 	guardBuy := GuardBuy{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &guardBuy)
@@ -333,10 +340,10 @@ func (_ *Handler) SetGuardBuy(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdGuardBuy, GuardBuy: &guardBuy, RoomId: msg["RoomId"].(int)}
 }
 
+// SetGiftStarProcess 未知
 func (_ *Handler) SetGiftStarProcess(msg map[string]interface{}) MsgEvent {
 	giftStarProcess := GiftStarProcess{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &giftStarProcess)
@@ -344,10 +351,10 @@ func (_ *Handler) SetGiftStarProcess(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdGiftStarProcess, GiftStarProcess: &giftStarProcess, RoomId: msg["RoomId"].(int)}
 }
 
+// SetRoomSkinMsg 未知
 func (_ *Handler) SetRoomSkinMsg(msg map[string]interface{}) MsgEvent {
 	roomSkinMsg := RoomSkinMsg{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &roomSkinMsg)
@@ -355,10 +362,10 @@ func (_ *Handler) SetRoomSkinMsg(msg map[string]interface{}) MsgEvent {
 		log.Printf("Unmarshal cmd json failed: %v", err)
 		return MsgEvent{}
 	}
-
 	return MsgEvent{Cmd: CmdRoomSkinMsg, RoomSkinMsg: &roomSkinMsg, RoomId: msg["RoomId"].(int)}
 }
 
+// SetEntryEffect 未知
 func (_ *Handler) SetEntryEffect(msg map[string]interface{}) MsgEvent {
 	enterEffect := EntryEffect{}
 	err := json.Unmarshal([]byte(msg["msg"].(string)), &enterEffect)

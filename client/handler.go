@@ -59,6 +59,7 @@ func (msgHandler *MsgHandler) CmdBrotliProtoDecoder(wsHeader *WsHeader, msg []by
 }
 
 func (msgHandler *MsgHandler) CmdZlibProtoDecoder(wsHeader *WsHeader, msg []byte) []byte {
+	// 这段还没测试过, 没遇到过Zlib的压缩方式
 	var resp bytes.Buffer
 	w := zlib.NewWriter(&resp)
 	_, err := w.Write(msg[wsHeader.HeaderLen:wsHeader.PackageLen])
@@ -75,6 +76,7 @@ func (msgHandler *MsgHandler) CmdZlibProtoDecoder(wsHeader *WsHeader, msg []byte
 }
 
 func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
+	// TODO: 我好像还没写心跳包和认证包回复的处理
 	wsHeader := WsHeaderDecoder(msg)
 	switch wsHeader.OpCode {
 	case OpHeartBeatReply:

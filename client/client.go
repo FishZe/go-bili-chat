@@ -1,7 +1,9 @@
 package client
 
 import (
+	"context"
 	"errors"
+	"fmt"
 	"log"
 	"net/url"
 	"strconv"
@@ -12,6 +14,8 @@ import "github.com/gorilla/websocket"
 type Client struct {
 	RoomId    int
 	Connected bool
+	ctx       context.Context
+	cancel    context.CancelFunc
 	connect   *websocket.Conn
 	revMsg    chan []byte
 }
@@ -20,7 +24,7 @@ func (c *Client) biliChatConnect(url string) error {
 	err := errors.New("")
 	c.connect, _, err = websocket.DefaultDialer.Dial(url, nil)
 	if nil != err {
-		log.Println("")
+		log.Println("Connect to bili chat failed")
 		return err
 	}
 	return nil
@@ -38,39 +42,65 @@ func (c *Client) sendAuthMsg(wsAuthMsg WsAuthMessage) error {
 
 func (c *Client) receiveWsMsg() {
 	for {
-		_, message, err := c.connect.ReadMessage()
-		if err != nil {
-			log.Println("read:", err)
-			c.Connected = false
-			c.connectLoop()
+		select {
+		case <-c.ctx.Done():
+			err := c.connect.Close()
+			if err != nil {
+				log.Println("Close connect failed")
+			}
+			fmt.Print("Close connect1111")
+			return
+		default:
+			if c.connect == nil {
+				continue
+			}
+			_, message, err := c.connect.ReadMessage()
+			if err != nil {
+				log.Println("read:", err)
+				c.Connected = false
+				c.connectLoop()
+			}
+			c.revMsg <- message
 		}
-		c.revMsg <- message
 	}
 }
 
 func (c *Client) heartBeat() {
 	for {
-		heartBeatPackage := WsHeartBeatMessage{Body: []byte{}}
-		err := c.connect.WriteMessage(websocket.TextMessage, heartBeatPackage.GetPackage())
-		if err != nil {
-			log.Printf("Send heart beat failed %v", err)
+		select {
+		case <-c.ctx.Done():
+			err := c.connect.Close()
+			if err != nil {
+				log.Println("Close connect failed")
+			}
+			return
+		default:
+			if !c.Connected || c.connect == nil {
+				continue
+			}
+			heartBeatPackage := WsHeartBeatMessage{Body: []byte{}}
+			err := c.connect.WriteMessage(websocket.TextMessage, heartBeatPackage.GetPackage())
+			if err != nil {
+				log.Printf("Send heart beat failed %v", err)
+			}
+			time.Sleep(30 * time.Second)
 		}
-		time.Sleep(30 * time.Second)
 	}
 }
 
 func (c *Client) revHandler(handler MsgHandler) {
 	for {
 		select {
+		case <-c.ctx.Done():
+			c.revMsg = nil
+			return
 		case msg, ok := <-c.revMsg:
 			if ok {
 				handler.MsgHandler(msg)
 			}
 		default:
 			time.Sleep(10 * time.Microsecond)
-			continue
 		}
-
 	}
 }
 
@@ -117,10 +147,20 @@ func (c *Client) connectLoop() {
 	}
 }
 
+func (c *Client) Close() {
+	c.cancel()
+}
+
 func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("run time panic: %v", err)
+		}
+	}()
 	c.connectLoop()
-	c.revMsg = make(chan []byte, 1)
+	c.revMsg = make(chan []byte, 1000)
 	handler := MsgHandler{RoomId: c.RoomId, CmdChan: CmdChan}
+	c.ctx, c.cancel = context.WithCancel(context.Background())
 	go c.revHandler(handler)
 	go c.receiveWsMsg()
 	go c.heartBeat()
