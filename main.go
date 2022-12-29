@@ -1,7 +1,6 @@
-package main
+package go_bilichat_core
 
 import (
-	"fmt"
 	"github.com/FishZe/go_bilichat_core/client"
 	"github.com/FishZe/go_bilichat_core/handler"
 )
@@ -20,7 +19,7 @@ func GetNewHandler() Handler {
 	h := Handler{}
 	h.rooms = make(map[int]LiveRoom)
 	h.Handler.DoFunc = make(map[string]map[int][]func(event handler.MsgEvent), 0)
-	h.Handler.CmdChan = make(chan map[string]interface{}, 100)
+	h.Handler.CmdChan = make(chan map[string]interface{}, 100000)
 	return h
 }
 
@@ -51,13 +50,4 @@ func (h *Handler) DelRoom(RoomId int) {
 
 func (h *Handler) Run() {
 	h.Handler.CmdHandler()
-}
-
-func main() {
-	h := GetNewHandler()
-	h.AddOption("DANMU_MSG", 264788, func(event handler.MsgEvent) {
-		fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
-	})
-	h.AddRoom(264788)
-	h.Run()
 }

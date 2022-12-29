@@ -27,6 +27,10 @@ func getReq(data url.Values, getUrl string, cookies string) ([]byte, string, err
 	u.RawQuery = data.Encode()
 	client := http.Client{}
 	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		log.Printf("Error orrured when creating the request: %v", err)
+		return nil, "", err
+	}
 	req.Header = http.Header{
 		"User-Agent": {UserAgent},
 		"cookie":     {cookies},

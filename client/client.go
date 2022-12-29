@@ -51,6 +51,9 @@ func (c *Client) receiveWsMsg() {
 			fmt.Print("Close connect1111")
 			return
 		default:
+			if c.connect == nil {
+				continue
+			}
 			_, message, err := c.connect.ReadMessage()
 			if err != nil {
 				log.Println("read:", err)
@@ -72,6 +75,9 @@ func (c *Client) heartBeat() {
 			}
 			return
 		default:
+			if !c.Connected || c.connect == nil {
+				continue
+			}
 			heartBeatPackage := WsHeartBeatMessage{Body: []byte{}}
 			err := c.connect.WriteMessage(websocket.TextMessage, heartBeatPackage.GetPackage())
 			if err != nil {
@@ -146,8 +152,13 @@ func (c *Client) Close() {
 }
 
 func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("run time panic: %v", err)
+		}
+	}()
 	c.connectLoop()
-	c.revMsg = make(chan []byte, 1)
+	c.revMsg = make(chan []byte, 1000)
 	handler := MsgHandler{RoomId: c.RoomId, CmdChan: CmdChan}
 	c.ctx, c.cancel = context.WithCancel(context.Background())
 	go c.revHandler(handler)

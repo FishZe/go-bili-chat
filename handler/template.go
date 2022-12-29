@@ -3,7 +3,6 @@ package handler
 const (
 	CmdDanmuMsg                  = "DANMU_MSG"
 	CmdSuperChatMessage          = "SUPER_CHAT_MESSAGE"
-	CmdSuperChatMessageJpn       = "SUPER_CHAT_MESSAGE_JPN"
 	CmdWatchedChange             = "WATCHED_CHANGE"
 	CmdSendGift                  = "SEND_GIFT"
 	CmdOnlineRankCount           = "ONLINE_RANK_COUNT"
