@@ -17,20 +17,54 @@ package main
 
 import (
 	"fmt"
-	"github.com/FishZe/go_bilichat_core"
-	"github.com/FishZe/go_bilichat_core/handler"
+	bili "github.com/FishZe/go_bilichat_core"
+	handle "github.com/FishZe/go_bilichat_core/handler"
 )
 
 func main() {
-	h := go_bilichat_core.GetNewHandler()
-	h.AddOption(go_bilichat_core.handler.CmdDanmuMsg, 26097368, func(event handler.MsgEvent) {
+	// 新建一个命令处理器
+	h := bili.GetNewHandler()
+	// 注册一个处理，将该直播间的弹幕消息绑定到这个函数
+	h.AddOption(handle.CmdDanmuMsg, 26097368, func(event handle.MsgEvent) {
+		// 打印出弹幕消息
 		fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
 	})
-	h.AddRoom(go_bilichat_core.LiveRoom{RoomId: 26097368})
+	// 连接到直播间
+	h.AddRoom(26097368)
+	// 启动处理器
 	h.Run()
 }
 
 ```
+当开启多个房间时，也可以先运行命令处理器，再添加房间：
+
+```go
+func main() {
+	h := bili.GetNewHandler()
+	go h.Run()
+	h.AddOption(handle.CmdDanmuMsg, 26097368, func(event handle.MsgEvent) {
+		fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
+	})
+	h.AddRoom(26097368)
+	for {
+		time.Sleep(time.Second)
+    }
+}
+```
+当然了，也可以删除房间：
+
+```go
+func main() {
+	h := bili.GetNewHandler()
+	h.AddOption(handle.CmdDanmuMsg, 26097368, func(event handle.MsgEvent) {
+		fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
+	})
+	h.AddRoom(26097368)
+	h.DelRoom(26097368)
+	h.Run()
+}
+```
+
 **关于为什么在处理绑定函数时, 多一个直播间号的参数, 因为考虑到可能会有根据不同的直播间分发处理消息的需求**
 
 
