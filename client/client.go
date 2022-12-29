@@ -3,7 +3,6 @@ package client
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	"net/url"
 	"strconv"
@@ -48,7 +47,6 @@ func (c *Client) receiveWsMsg() {
 			if err != nil {
 				log.Println("Close connect failed")
 			}
-			fmt.Print("Close connect1111")
 			return
 		default:
 			if c.connect == nil {
