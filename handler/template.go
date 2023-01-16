@@ -29,6 +29,7 @@ const (
 	CmdGiftStarProcess           = "GIFT_STAR_PROCESS"
 	CmdRoomSkinMsg               = "ROOM_SKIN_MSG"
 	CmdEntryEffect               = "ENTRY_EFFECT"
+	CmdUserToastMsg              = "USER_TOAST_MSG"
 )
 
 var CmdName = map[string]string{
@@ -61,6 +62,7 @@ var CmdName = map[string]string{
 	"GIFT_STAR_PROCESS":             "GiftStarProcess",
 	"ROOM_SKIN_MSG":                 "RoomSkinMsg",
 	"ENTRY_EFFECT":                  "EntryEffect",
+	"USER_TOAST_MSG":                "UserToastMsg",
 }
 
 type MsgEvent struct {
@@ -94,6 +96,7 @@ type MsgEvent struct {
 	GiftStarProcess           *GiftStarProcess
 	RoomSkinMsg               *RoomSkinMsg
 	EntryEffect               *EntryEffect
+	UserToastMsg              *UserToastMsg
 }
 
 type FansMedal struct {
@@ -651,5 +654,34 @@ type EntryEffect struct {
 		WebDynamicURLWebp    string        `json:"web_dynamic_url_webp"`
 		WebDynamicURLApng    string        `json:"web_dynamic_url_apng"`
 		MobileDynamicURLWebp string        `json:"mobile_dynamic_url_webp"`
+	} `json:"data"`
+}
+
+type UserToastMsg struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		AnchorShow       bool   `json:"anchor_show"`
+		Color            string `json:"color"`
+		Dmscore          int    `json:"dmscore"`
+		EffectID         int    `json:"effect_id"`
+		EndTime          int    `json:"end_time"`
+		FaceEffectID     int    `json:"face_effect_id"`
+		GiftID           int    `json:"gift_id"`
+		GuardLevel       int    `json:"guard_level"`
+		IsShow           int    `json:"is_show"`
+		Num              int    `json:"num"`
+		OpType           int    `json:"op_type"`
+		PayflowID        string `json:"payflow_id"`
+		Price            int    `json:"price"`
+		RoleName         string `json:"role_name"`
+		RoomEffectID     int    `json:"room_effect_id"`
+		StartTime        int    `json:"start_time"`
+		SvgaBlock        int    `json:"svga_block"`
+		TargetGuardCount int    `json:"target_guard_count"`
+		ToastMsg         string `json:"toast_msg"`
+		UID              int64  `json:"uid"`
+		Unit             string `json:"unit"`
+		UserShow         bool   `json:"user_show"`
+		Username         string `json:"username"`
 	} `json:"data"`
 }

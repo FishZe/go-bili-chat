@@ -376,3 +376,13 @@ func (_ *Handler) SetEntryEffect(msg map[string]interface{}) MsgEvent {
 
 	return MsgEvent{Cmd: CmdEntryEffect, EntryEffect: &enterEffect, RoomId: msg["RoomId"].(int)}
 }
+
+func (_ *Handler) SetUserToastMsg(msg map[string]interface{}) MsgEvent {
+	userToastMsg := UserToastMsg{}
+	err := json.Unmarshal([]byte(msg["msg"].(string)), &userToastMsg)
+	if err != nil {
+		log.Printf("Unmarshal cmd json failed: %v", err)
+		return MsgEvent{}
+	}
+	return MsgEvent{Cmd: CmdUserToastMsg, UserToastMsg: &userToastMsg, RoomId: msg["RoomId"].(int)}
+}
