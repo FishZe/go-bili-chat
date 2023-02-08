@@ -3,7 +3,6 @@ package client
 import (
 	"bytes"
 	"encoding/json"
-	"log"
 )
 
 func uint32ToByte4(num uint32) []byte {
@@ -85,7 +84,6 @@ func (wsAuth *WsAuthMessage) GetPackage() []byte {
 func (wsAuth *WsAuthBody) getAuthBytes() []byte {
 	authBody, err := json.Marshal(wsAuth)
 	if err != nil {
-		log.Printf("Marshal auth body failed: %v", err)
 		return []byte{}
 	}
 	return authBody
@@ -104,12 +102,9 @@ func (wsHeartBeat *WsHeartBeatMessage) GetPackage() []byte {
 func (wsAuthReplyMessage *WsAuthReplyMessage) SetPackage(header WsHeader, msg []byte) {
 	wsAuthReplyMessage.WsHeader = header
 	authBody := WsAuthReplyBody{}
-	err := json.Unmarshal(msg[header.HeaderLen:], &authBody)
-	if err != nil {
-		log.Printf("Unmarshal auth body failed: %v", err)
-		return
+	if err := json.Unmarshal(msg[header.HeaderLen:], &authBody); err == nil {
+		wsAuthReplyMessage.Body = authBody
 	}
-	wsAuthReplyMessage.Body = authBody
 }
 
 func (wsHeartBeatReply *WsHeartBeatReply) SetPackage(header WsHeader, msg []byte) {

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"reflect"
-	"time"
 )
 
 type Handler struct {
@@ -36,7 +35,9 @@ func (handler *Handler) CmdHandler() {
 				// 处理命令存在
 				if _, ok = handler.DoFunc[msg["cmd"].(string)]; ok {
 					// 处理房间存在
-					if _, ok := handler.DoFunc[msg["cmd"].(string)][msg["RoomId"].(int)]; ok {
+					_, ok1 := handler.DoFunc[msg["cmd"].(string)][msg["RoomId"].(int)]
+					_, ok2 := handler.DoFunc[msg["cmd"].(string)][0]
+					if ok1 || ok2 {
 						setFunc := reflect.ValueOf(&Handler{}).MethodByName("Set" + CmdName[msg["cmd"].(string)])
 						if setFunc.IsValid() {
 							res := setFunc.Call([]reflect.Value{reflect.ValueOf(msg)})
@@ -52,9 +53,6 @@ func (handler *Handler) CmdHandler() {
 				}
 			}
 		default:
-			time.Sleep(10 * time.Microsecond)
-			continue
 		}
-
 	}
 }

@@ -41,10 +41,7 @@ func (c *Client) receiveWsMsg() {
 	for {
 		select {
 		case <-c.ctx.Done():
-			err := c.connect.Close()
-			if err != nil {
-				log.Println("Close connect failed")
-			}
+			_ = c.connect.Close()
 			return
 		default:
 			if c.connect != nil && c.Connected {
@@ -64,18 +61,12 @@ func (c *Client) heartBeat() {
 	for {
 		select {
 		case <-c.ctx.Done():
-			err := c.connect.Close()
-			if err != nil {
-				log.Println("Close connect failed")
-			}
+			_ = c.connect.Close()
 			return
 		default:
 			if c.Connected && c.connect != nil {
 				heartBeatPackage := WsHeartBeatMessage{Body: []byte{}}
-				err := c.connect.WriteMessage(websocket.TextMessage, heartBeatPackage.GetPackage())
-				if err != nil {
-					log.Printf("Send heart beat failed %v", err)
-				}
+				_ = c.connect.WriteMessage(websocket.TextMessage, heartBeatPackage.GetPackage())
 				time.Sleep(30 * time.Second)
 			}
 		}
@@ -93,7 +84,6 @@ func (c *Client) revHandler(handler MsgHandler) {
 				handler.MsgHandler(msg)
 			}
 		default:
-			time.Sleep(10 * time.Microsecond)
 		}
 	}
 }
@@ -101,8 +91,10 @@ func (c *Client) revHandler(handler MsgHandler) {
 func (c *Client) sendConnect() error {
 	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{UID: 0, Roomid: c.RoomId, Protover: 3, Platform: "web", Type: 2}}
 	apiLiveAuth, err := GetLiveRoomAuth(c.RoomId)
-	if err != nil || apiLiveAuth.Code != 0 {
+	if err != nil {
 		return err
+	} else if apiLiveAuth.Code != 0 {
+		return RespCodeNotError
 	}
 	wsAuthMsg.Body.Key = apiLiveAuth.Data.Token
 	for nowSum, i := range apiLiveAuth.Data.HostList {

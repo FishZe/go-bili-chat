@@ -1,13 +1,14 @@
-package go_bilichat_core
+package Go_BiliChat
 
 import (
-	"github.com/FishZe/go_bilichat_core/client"
-	"github.com/FishZe/go_bilichat_core/handler"
+	"github.com/FishZe/Go-BiliChat/client"
+	"github.com/FishZe/Go-BiliChat/handler"
+	"sync"
 )
 
 type Handler struct {
 	Handler handler.Handler
-	rooms   map[int]LiveRoom
+	rooms   sync.Map
 }
 
 type LiveRoom struct {
@@ -17,7 +18,6 @@ type LiveRoom struct {
 
 func GetNewHandler() Handler {
 	h := Handler{}
-	h.rooms = make(map[int]LiveRoom)
 	h.Handler.DoFunc = make(map[string]map[int][]func(event handler.MsgEvent), 0)
 	h.Handler.CmdChan = make(chan map[string]interface{}, 100000)
 	return h
@@ -28,24 +28,26 @@ func (h *Handler) AddOption(Cmd string, RoomId int, Do func(event handler.MsgEve
 }
 
 func (h *Handler) AddRoom(roomId int) {
-	if _, ok := h.rooms[roomId]; ok {
+	if _, ok := h.rooms.Load(roomId); ok {
 		return
 	}
 	room := LiveRoom{}
 	room.RoomId = roomId
 	room.Client.RoomId = room.RoomId
 	room.Client.BiliChat(h.Handler.CmdChan)
-	h.rooms[room.RoomId] = room
+	h.rooms.Store(room.RoomId, room)
 }
 
 func (h *Handler) DelRoom(RoomId int) {
-	if _, ok := h.rooms[RoomId]; !ok {
+	if _, ok := h.rooms.Load(RoomId); !ok {
 		return
 	}
 	h.Handler.DelRoomOption(RoomId)
-	c := h.rooms[RoomId].Client
-	c.Close()
-	delete(h.rooms, RoomId)
+	if c, ok := h.rooms.Load(RoomId); ok {
+		cl := c.(LiveRoom).Client
+		cl.Close()
+		h.rooms.Delete(RoomId)
+	}
 }
 
 func (h *Handler) Run() {

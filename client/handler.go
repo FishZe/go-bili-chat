@@ -5,7 +5,6 @@ import (
 	"compress/zlib"
 	"github.com/andybalholm/brotli"
 	"io"
-	"log"
 )
 
 type MsgHandler struct {
@@ -52,7 +51,6 @@ func (msgHandler *MsgHandler) CmdBrotliProtoDecoder(wsHeader *WsHeader, msg []by
 	reader := brotli.NewReader(bytes.NewReader(msg[wsHeader.HeaderLen:wsHeader.PackageLen]))
 	resp, err := io.ReadAll(reader)
 	if err != nil {
-		log.Println("Brotli decode failed: ", err)
 		return []byte{}
 	}
 	return resp
@@ -64,12 +62,10 @@ func (msgHandler *MsgHandler) CmdZlibProtoDecoder(wsHeader *WsHeader, msg []byte
 	w := zlib.NewWriter(&resp)
 	_, err := w.Write(msg[wsHeader.HeaderLen:wsHeader.PackageLen])
 	if err != nil {
-		log.Println("Zlib decode failed: ", err)
 		return []byte{}
 	}
 	err = w.Close()
 	if err != nil {
-		log.Println("Zlib decode failed: ", err)
 		return nil
 	}
 	return resp.Bytes()

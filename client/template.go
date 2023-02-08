@@ -1,5 +1,7 @@
 package client
 
+import "errors"
+
 const (
 	CmdProto       = 0
 	AuthProto      = 1
@@ -16,6 +18,8 @@ const (
 	OpAuth           = 7
 	OpAuthReply      = 8
 )
+
+var RespCodeNotError = errors.New("resp code not 0")
 
 type ApiLiveAuth struct {
 	Code    int    `json:"code"`
