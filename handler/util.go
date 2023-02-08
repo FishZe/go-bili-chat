@@ -25,6 +25,7 @@ func (_ *Handler) SetDanMuMsg(msg map[string]interface{}) (m MsgEvent) {
 			danMu.Data.Medal.TargetID = int(danMuMsg["info"].([]interface{})[3].([]interface{})[11].(float64))
 			danMu.Data.Medal.AnchorRoomId = int(danMuMsg["info"].([]interface{})[3].([]interface{})[3].(float64))
 		}
+		m = MsgEvent{Cmd: CmdDanmuMsg, DanMuMsg: &danMu, RoomId: msg["RoomId"].(int)}
 	}
 	return
 }

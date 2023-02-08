@@ -19,7 +19,7 @@ type LiveRoom struct {
 func GetNewHandler() Handler {
 	h := Handler{}
 	h.Handler.DoFunc = make(map[string]map[int][]func(event handler.MsgEvent), 0)
-	h.Handler.CmdChan = make(chan map[string]interface{}, 100000)
+	h.Handler.CmdChan = make(chan map[string]interface{}, 10)
 	return h
 }
 
