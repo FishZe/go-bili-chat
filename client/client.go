@@ -84,6 +84,7 @@ func (c *Client) revHandler(handler MsgHandler) {
 				handler.MsgHandler(msg)
 			}
 		default:
+			time.Sleep(10 * time.Microsecond)
 		}
 	}
 }
@@ -140,7 +141,7 @@ func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
 		}
 	}()
 	c.connectLoop()
-	c.revMsg = make(chan []byte, 1000)
+	c.revMsg = make(chan []byte, 10)
 	handler := MsgHandler{RoomId: c.RoomId, CmdChan: CmdChan}
 	c.ctx, c.cancel = context.WithCancel(context.Background())
 	go c.revHandler(handler)

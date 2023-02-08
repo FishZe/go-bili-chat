@@ -2,6 +2,7 @@ package handler
 
 import (
 	"reflect"
+	"time"
 )
 
 type Handler struct {
@@ -44,8 +45,10 @@ func (handler *Handler) CmdHandler() {
 							msgEvent := res[0].Interface().(MsgEvent)
 							// 执行函数
 							if !(msgEvent.Cmd == "" || msgEvent.RoomId == 0) {
-								for _, v := range handler.DoFunc[msg["cmd"].(string)][msgEvent.RoomId] {
-									go v(msgEvent)
+								for _, k := range []int{msgEvent.RoomId, 0} {
+									for _, v := range handler.DoFunc[msg["cmd"].(string)][k] {
+										go v(msgEvent)
+									}
 								}
 							}
 						}
@@ -53,6 +56,7 @@ func (handler *Handler) CmdHandler() {
 				}
 			}
 		default:
+			time.Sleep(10 * time.Microsecond)
 		}
 	}
 }
