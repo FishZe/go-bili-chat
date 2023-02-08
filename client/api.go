@@ -2,9 +2,7 @@ package client
 
 import (
 	"encoding/json"
-	"errors"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -21,14 +19,12 @@ var cookies = ""
 func getReq(data url.Values, getUrl string, cookies string) ([]byte, string, error) {
 	u, err := url.ParseRequestURI(getUrl)
 	if err != nil {
-		log.Printf("Error orrured when parsing the url: %v", err)
 		return nil, "", err
 	}
 	u.RawQuery = data.Encode()
 	client := http.Client{}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
-		log.Printf("Error orrured when creating the request: %v", err)
 		return nil, "", err
 	}
 	req.Header = http.Header{
@@ -37,18 +33,13 @@ func getReq(data url.Values, getUrl string, cookies string) ([]byte, string, err
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Printf("Error orrured when sending the request: %v", err)
 		return nil, "", err
 	}
 	defer func(Body io.ReadCloser) {
-		err = Body.Close()
-		if err != nil {
-			log.Printf("Error orrured when closing the session: %v", err)
-		}
+		_ = Body.Close()
 	}(resp.Body)
 	if resp.StatusCode != 200 {
-		log.Printf("Status code is not 200: %v", resp.StatusCode)
-		return nil, "", errors.New("status code error: " + strconv.Itoa(resp.StatusCode) + " " + resp.Status)
+		return nil, "", RespCodeNotError
 	}
 	if resp.Header.Get("Set-Cookie") != "" {
 		cookies = ""
@@ -60,7 +51,6 @@ func getReq(data url.Values, getUrl string, cookies string) ([]byte, string, err
 	}
 	s, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("Error orrured when reading the response: %v", err)
 		return nil, "", err
 	}
 	return s, cookies, nil
@@ -91,7 +81,6 @@ func GetLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
 	var jBA ApiLiveAuth
 	err = json.Unmarshal(s, &jBA)
 	if err != nil {
-		log.Println(err)
 		return ApiLiveAuth{}, err
 	}
 	return jBA, nil

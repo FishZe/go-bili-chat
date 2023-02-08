@@ -1,4 +1,4 @@
-## `Bilibili` 直播间信息流处理内核
+## `Bilibili` 直播间信息流处理库
 
 `golang`的b站信息流处理
 
@@ -10,6 +10,10 @@ b站直播间信息流以`Websocket`传输并加密, 含有几十个不同的命
 
 ### 快速使用
 
+信息流处理流程为: 客户端收到信息 -> 解析后由处理器进行分发
+
+因此, 你需要先将命令处理函数绑定到处理器, 再开启直播间进行处理,
+
 一个简单的使用示例:
 
 ```go
@@ -17,8 +21,8 @@ package main
 
 import (
 	"fmt"
-	bili "github.com/FishZe/go_bilichat_core"
-	handle "github.com/FishZe/go_bilichat_core/handler"
+	bili "github.com/FishZe/Go-BiliChat"
+	handle "github.com/FishZe/Go-BiliChat/handler"
 )
 
 func main() {
@@ -36,11 +40,23 @@ func main() {
 }
 
 ```
-当开启多个房间时，也可以先运行命令处理器，再添加房间：
+特殊地, 绑定函数的直播间号为0时，绑定所有房间
+
+也可以先运行命令处理器，再添加房间：
 
 ```go
+package main
+
+import (
+	"fmt"
+	bili "github.com/FishZe/Go-BiliChat"
+	handle "github.com/FishZe/Go-BiliChat/handler"
+	"time"
+)
+
 func main() {
 	h := bili.GetNewHandler()
+	// 运行处理器
 	go h.Run()
 	h.AddOption(handle.CmdDanmuMsg, 26097368, func(event handle.MsgEvent) {
 		fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
@@ -54,6 +70,14 @@ func main() {
 当然了，也可以删除房间：
 
 ```go
+package main
+
+import (
+	"fmt"
+	bili "github.com/FishZe/Go-BiliChat"
+	handle "github.com/FishZe/Go-BiliChat/handler"
+)
+
 func main() {
 	h := bili.GetNewHandler()
 	h.AddOption(handle.CmdDanmuMsg, 26097368, func(event handle.MsgEvent) {
@@ -101,7 +125,7 @@ CmdGuardBuy                     "GUARD_BUY"
 CmdGiftStarProcess              "GIFT_STAR_PROCESS"
 CmdRoomSkinMsg                  "ROOM_SKIN_MSG"
 CmdEnterEffect                  "ENTER_EFFECT"
-
+CmdUserToastMsg                 "USER_TOAST_MSG"
 ```
 
 由于我也不是很明白b站的命令, 所以这里只是列出了我知道的命令, 如果有人知道更多的命令, 请在issue中提出, 我会及时更新。
@@ -114,7 +138,7 @@ CmdEnterEffect                  "ENTER_EFFECT"
 消息处理函数的原型为:
 
 ```go
-func someFunc(event MsgEvent) {}
+func someFunc(event MsgEvent)
 ```
 
 其中`MsgEvent`的定义为:
