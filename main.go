@@ -3,6 +3,8 @@ package Go_BiliChat
 import (
 	"github.com/FishZe/Go-BiliChat/client"
 	"github.com/FishZe/Go-BiliChat/handler"
+	log "github.com/sirupsen/logrus"
+	easy "github.com/t-tomalak/logrus-easy-formatter"
 	"sync"
 )
 
@@ -16,15 +18,28 @@ type LiveRoom struct {
 	Client client.Client
 }
 
+func init() {
+	log.SetFormatter(&easy.Formatter{
+		TimestampFormat: "01-02 15:04:05",
+		LogFormat:       "[bili_live][%time%][%lvl%]: %msg% \n",
+	})
+	ChangeLogLevel(log.ErrorLevel)
+}
+
+func ChangeLogLevel(level log.Level) {
+	log.SetLevel(level)
+}
+
 func GetNewHandler() Handler {
 	h := Handler{}
 	h.Handler.DoFunc = make(map[string]map[int][]func(event handler.MsgEvent), 0)
 	h.Handler.CmdChan = make(chan map[string]interface{}, 10)
+	h.Handler.Init()
 	return h
 }
 
-func (h *Handler) AddOption(Cmd string, RoomId int, Do func(event handler.MsgEvent)) {
-	h.Handler.AddOption(Cmd, RoomId, Do)
+func (h *Handler) AddOption(Cmd string, RoomId int, Do func(event handler.MsgEvent), funcName ...string) {
+	h.Handler.AddOption(Cmd, RoomId, Do, funcName...)
 }
 
 func (h *Handler) AddRoom(roomId int) {
