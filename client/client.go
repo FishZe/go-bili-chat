@@ -2,8 +2,7 @@ package client
 
 import (
 	"context"
-	"errors"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"net/url"
 	"strconv"
 	"time"
@@ -20,7 +19,7 @@ type Client struct {
 }
 
 func (c *Client) biliChatConnect(url string) error {
-	err := errors.New("")
+	var err error
 	c.connect, _, err = websocket.DefaultDialer.Dial(url, nil)
 	if nil != err {
 		return err
@@ -34,6 +33,7 @@ func (c *Client) sendAuthMsg(wsAuthMsg WsAuthMessage) error {
 	if err != nil {
 		return err
 	}
+	log.Debug("send auth msg to blive success")
 	return nil
 }
 
@@ -41,13 +41,14 @@ func (c *Client) receiveWsMsg() {
 	for {
 		select {
 		case <-c.ctx.Done():
+			log.Debug("receiveWsMsg exit...")
 			_ = c.connect.Close()
 			return
 		default:
 			if c.connect != nil && c.Connected {
 				_, message, err := c.connect.ReadMessage()
 				if err != nil {
-					log.Println("read:", err)
+					log.Warnf("read blive websocket msg error: %v", err)
 					c.Connected = false
 					c.connectLoop()
 				}
@@ -61,11 +62,13 @@ func (c *Client) heartBeat() {
 	for {
 		select {
 		case <-c.ctx.Done():
+			log.Debug("heartBeat exit...")
 			_ = c.connect.Close()
 			return
 		default:
 			if c.Connected && c.connect != nil {
 				heartBeatPackage := WsHeartBeatMessage{Body: []byte{}}
+				log.Debug("send heart beat to blive...")
 				_ = c.connect.WriteMessage(websocket.TextMessage, heartBeatPackage.GetPackage())
 				time.Sleep(30 * time.Second)
 			}
@@ -77,6 +80,7 @@ func (c *Client) revHandler(handler MsgHandler) {
 	for {
 		select {
 		case <-c.ctx.Done():
+			log.Debug("revHandler exit...")
 			c.revMsg = nil
 			return
 		case msg, ok := <-c.revMsg:
@@ -95,23 +99,28 @@ func (c *Client) sendConnect() error {
 	if err != nil {
 		return err
 	} else if apiLiveAuth.Code != 0 {
+		log.Warnf("get live room info error: %v", apiLiveAuth.Message)
 		return RespCodeNotError
 	}
 	wsAuthMsg.Body.Key = apiLiveAuth.Data.Token
 	for nowSum, i := range apiLiveAuth.Data.HostList {
 		u := url.URL{Scheme: "wss", Host: i.Host + ":" + strconv.Itoa(i.WssPort), Path: "/sub"}
+		log.Debug("connect to blive websocket: ", u.String())
 		err = c.biliChatConnect(u.String())
 		if err != nil {
+			log.Warnf("connect to blive websocket error for %d time: %v\n", nowSum, err)
 			if nowSum == 2 {
 				return err
 			}
 		} else {
+			log.Debug("connect to blive websocket success")
 			break
 		}
-		time.Sleep(5 * time.Second)
+		time.Sleep(1 * time.Second)
 	}
 	err = c.sendAuthMsg(wsAuthMsg)
 	if err != nil {
+		log.Warn("send auth msg to websocket error: ", err)
 		return err
 	}
 	return nil
@@ -122,8 +131,10 @@ func (c *Client) connectLoop() {
 		c.Connected = false
 		err := c.sendConnect()
 		if err != nil {
+			log.Warn("connect to blive error: ", err)
 			time.Sleep(5 * time.Second)
 		} else {
+			log.Info("connected to blive success: ", c.RoomId)
 			c.Connected = true
 			break
 		}
@@ -137,7 +148,7 @@ func (c *Client) Close() {
 func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Printf("run time panic: %v", err)
+			log.Warnf("start blive panic: %v", err)
 		}
 	}()
 	c.connectLoop()

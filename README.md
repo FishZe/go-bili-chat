@@ -4,7 +4,7 @@
 
 ### 介绍
 
-`go_bilichat` 是一个用于处理 `Bilibili` 直播间信息流的内核，可以用于开发自己的 `Bilibili` 直播间信息流处理程序。
+`Go-BiliChat` 是一个用于处理 `Bilibili` 直播间信息流库，可以用于开发自己的 `Bilibili` 直播间信息流处理程序。
 
 b站直播间信息流以`Websocket`传输并加密, 含有几十个不同的命令, 本项目对其进行了解析, 并提供了一些简单的处理方法, 以便于开发者快速开发自己的程序。
 
@@ -91,9 +91,28 @@ func main() {
 
 **关于为什么在处理绑定函数时, 多一个直播间号的参数, 因为考虑到可能会有根据不同的直播间分发处理消息的需求**
 
+具体的示例代码可以查看`example/main.gp`
+
+对于需要查看`DEBUG`日志的情况, 可以修改日志等级
+```go
+bili.ChangeLogLevel(log.DebugLevel)
+```
+
+开启`DEBUG`日志后, 可以看到所有的数据包和分发过程, 如果想要直观的看到分发到的函数名称, 可以在`AddOption`中写明该函数的备注名
+```go
+h.AddOption(handle.CmdDanmuMsg, 21545805, func(event handle.MsgEvent) {
+    fmt.Printf("[%v][弹幕] %v (%v): %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Medal.MedalName, event.DanMuMsg.Data.Content)
+}, "弹幕处理")
+````
+
+控制台会显示类似如下的日志
+
+```text
+[bili_live][02-21 16:42:55][DEBUG]: distribute DANMU_MSG cmd to 弹幕处理
+```
 
 #### 所有的消息类型:
-这些常量请填入`go_bilichat_core.GetNewHandler().New()`的第一个参数
+这些常量请填入`Go_BiliChat.GetNewHandler().AddOption()`的第一个参数
 ```go
 常量名                            原始命令
 CmdDanmuMsg                     "DANMU_MSG"
@@ -145,12 +164,12 @@ func someFunc(event MsgEvent)
 
 ```go
 type MsgEvent struct {
-	//原始命令
+	//原始命令 
 	Cmd    string
-	//直播间号
-    RoomId int
-    // 以下为不同的消息类型
-    DanMuMsg DanMuMsg
+	//直播间号 
+	RoomId int
+    // 以下为不同的消息类型 
+	DanMuMsg DanMuMsg
 	SuperChatMessage SuperChatMessage
     // 下同, 可参考上方的消息类型, 取消Cmd即为结构体名称...
 	...
