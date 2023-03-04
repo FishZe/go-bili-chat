@@ -1,8 +1,8 @@
-package Go_BiliChat
+package go_bili_chat
 
 import (
-	"github.com/FishZe/Go-BiliChat/client"
-	"github.com/FishZe/Go-BiliChat/handler"
+	"github.com/FishZe/go_bili_chat/client"
+	"github.com/FishZe/go_bili_chat/handler"
 	log "github.com/sirupsen/logrus"
 	easy "github.com/t-tomalak/logrus-easy-formatter"
 	"sync"

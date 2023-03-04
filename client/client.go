@@ -85,7 +85,7 @@ func (c *Client) revHandler(handler MsgHandler) {
 			return
 		case msg, ok := <-c.revMsg:
 			if ok {
-				handler.MsgHandler(msg)
+				go handler.MsgHandler(msg)
 			}
 		default:
 			time.Sleep(10 * time.Microsecond)

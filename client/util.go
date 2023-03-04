@@ -7,7 +7,7 @@ import (
 
 func uint32ToByte4(num uint32) []byte {
 	if num > 4294967295 {
-		return nil
+		return []byte{}
 	}
 	var bytesNum = make([]byte, 4)
 	for i := 3; i >= 0; i-- {
@@ -19,7 +19,7 @@ func uint32ToByte4(num uint32) []byte {
 
 func uint16ToByte2(num uint16) []byte {
 	if num > 65535 {
-		return nil
+		return []byte{}
 	}
 	var bytesNum = make([]byte, 2)
 	for i := 1; i >= 0; i-- {
@@ -60,13 +60,13 @@ func WsHeaderDecoder(headerBytes []byte) WsHeader {
 	return wsHeader
 }
 
-func (wsHeaer *WsHeader) HeaderEncoder(bodyLen uint32) []byte {
+func (wsHeader *WsHeader) HeaderEncoder(bodyLen uint32) []byte {
 	var buffer bytes.Buffer
 	buffer.Write(uint32ToByte4(bodyLen + 16))
 	buffer.Write(uint16ToByte2(16))
-	buffer.Write(uint16ToByte2(wsHeaer.ProtoVer))
-	buffer.Write(uint32ToByte4(wsHeaer.OpCode))
-	buffer.Write(uint32ToByte4(wsHeaer.Sequence))
+	buffer.Write(uint16ToByte2(wsHeader.ProtoVer))
+	buffer.Write(uint32ToByte4(wsHeader.OpCode))
+	buffer.Write(uint32ToByte4(wsHeader.Sequence))
 	return buffer.Bytes()
 }
 

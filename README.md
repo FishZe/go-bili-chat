@@ -4,9 +4,9 @@
 
 ### 介绍
 
-`Go-BiliChat` 是一个用于处理 `Bilibili` 直播间信息流库，可以用于开发自己的 `Bilibili` 直播间信息流处理程序。
+`go_bili_chat` 是一个用于处理 Bilibili 直播间信息流库，可以用于开发自己的 Bilibili 直播间信息流处理程序。
 
-b站直播间信息流以`Websocket`传输并加密, 含有几十个不同的命令, 本项目对其进行了解析, 并提供了一些简单的处理方法, 以便于开发者快速开发自己的程序。
+b站直播间信息流以Websocket传输并加密, 含有几十个不同的命令, 本项目对其进行了解析, 并提供了一些简单的处理方法, 以便于开发者快速开发自己的程序。
 
 ### 快速使用
 
@@ -21,8 +21,8 @@ package main
 
 import (
 	"fmt"
-	bili "github.com/FishZe/Go-BiliChat"
-	handle "github.com/FishZe/Go-BiliChat/handler"
+	bili "github.com/FishZe/go_bili_chat"
+	handle "github.com/FishZe/go_bili_chat/handler"
 )
 
 func main() {
@@ -49,8 +49,8 @@ package main
 
 import (
 	"fmt"
-	bili "github.com/FishZe/Go-BiliChat"
-	handle "github.com/FishZe/Go-BiliChat/handler"
+	bili "github.com/FishZe/go_bili_chat"
+	handle "github.com/FishZe/go_bili_chat/handler"
 	"time"
 )
 
@@ -74,8 +74,8 @@ package main
 
 import (
 	"fmt"
-	bili "github.com/FishZe/Go-BiliChat"
-	handle "github.com/FishZe/Go-BiliChat/handler"
+	bili "github.com/FishZe/go_bili_chat"
+	handle "github.com/FishZe/go_bili_chat/handler"
 )
 
 func main() {
@@ -112,7 +112,7 @@ h.AddOption(handle.CmdDanmuMsg, 21545805, func(event handle.MsgEvent) {
 ```
 
 #### 所有的消息类型:
-这些常量请填入`Go_BiliChat.GetNewHandler().AddOption()`的第一个参数
+这些常量请填入`go_bili_chat.GetNewHandler().AddOption()`的第一个参数
 ```go
 常量名                            原始命令
 CmdDanmuMsg                     "DANMU_MSG"
@@ -195,7 +195,7 @@ type DanMuMsg struct {
 	}
 }
 ```
-结构体内容, 请参考`go_bilichat_core/Handler/template.go`中的定义
+结构体内容, 请参考`go_bili_chat/Handler/template.go`中的定义
 因为30个实在是太多了, 所以我就不一一列出来了...
 
 ## 在弹幕消息中, 我还没有完全明白每个参数的含义, 强烈欢迎各位PR完善
