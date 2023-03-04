@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"compress/zlib"
 	"github.com/andybalholm/brotli"
-	log "github.com/sirupsen/logrus"
 	"io"
 )
 
@@ -78,7 +77,6 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 	wsHeader := WsHeaderDecoder(msg)
 	switch wsHeader.OpCode {
 	case OpHeartBeatReply:
-		log.Debug("recv heartbeat reply")
 		wsHeartBeatReply := WsHeartBeatReply{}
 		wsHeartBeatReply.SetPackage(wsHeader, msg)
 	case OpCmd:
@@ -86,12 +84,10 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 		cmdHeader := wsHeader
 		switch wsHeader.ProtoVer {
 		case CmdZlibProto:
-			log.Debug("recv zlib proto msg")
 			msgBody = msgHandler.CmdZlibProtoDecoder(&wsHeader, msg)
 			cmdHeader = WsHeaderDecoder(msgBody)
 			fallthrough
 		case CmdBrotliProto:
-			log.Debug("recv brotli proto msg")
 			msgBody = msgHandler.CmdBrotliProtoDecoder(&wsHeader, msg)
 			cmdHeader = WsHeaderDecoder(msgBody)
 			fallthrough
@@ -106,7 +102,6 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 			}
 		}
 	case OpAuthReply:
-		log.Debug("recv auth reply")
 		wsAuthReplyMessage := WsAuthReplyMessage{}
 		wsAuthReplyMessage.SetPackage(wsHeader, msg)
 	case OpError:

@@ -8,6 +8,7 @@ import (
 )
 
 type Handler struct {
+	funcId    int
 	CmdChan   chan map[string]interface{}
 	DoFunc    map[string]map[int][]func(event MsgEvent)
 	funcNames map[string]string
@@ -26,8 +27,11 @@ func (handler *Handler) AddOption(Cmd string, RoomId int, Do func(event MsgEvent
 	}
 	handler.DoFunc[Cmd][RoomId] = append(handler.DoFunc[Cmd][RoomId], Do)
 	log.Debug("Add Option: ", Cmd, RoomId, funcName)
+	handler.funcId++
 	if len(funcName) > 0 {
 		handler.funcNames[fmt.Sprintf("%p", Do)] = funcName[0]
+	} else {
+		handler.funcNames[fmt.Sprintf("%p", Do)] = fmt.Sprintf("#%d", handler.funcId)
 	}
 }
 
