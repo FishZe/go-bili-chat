@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	bili "github.com/FishZe/Go-BiliChat"
-	handle "github.com/FishZe/Go-BiliChat/handler"
+	bili "github.com/FishZe/go_bili_chat"
+	handle "github.com/FishZe/go_bili_chat/handler"
 	// log "github.com/sirupsen/logrus" // 日志
 )
 

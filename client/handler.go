@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"compress/zlib"
 	"github.com/andybalholm/brotli"
+	log "github.com/sirupsen/logrus"
 	"io"
 )
 
@@ -13,6 +14,7 @@ type MsgHandler struct {
 }
 
 func getCmd(msg []byte) string {
+	// 反正只需要一个cmd进行分发, 就不需要json解析整个数据了
 	var layer = 0
 	for i, v := range msg {
 		if v == '{' || v == '[' {
@@ -77,8 +79,8 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 	wsHeader := WsHeaderDecoder(msg)
 	switch wsHeader.OpCode {
 	case OpHeartBeatReply:
-		wsHeartBeatReply := WsHeartBeatReply{}
-		wsHeartBeatReply.SetPackage(wsHeader, msg)
+		// wsHeartBeatReply := WsHeartBeatReply{}
+		// wsHeartBeatReply.SetPackage(wsHeader, msg)
 	case OpCmd:
 		msgBody := msg
 		cmdHeader := wsHeader
@@ -102,8 +104,8 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 			}
 		}
 	case OpAuthReply:
-		wsAuthReplyMessage := WsAuthReplyMessage{}
-		wsAuthReplyMessage.SetPackage(wsHeader, msg)
+		// wsAuthReplyMessage := WsAuthReplyMessage{}
+		// wsAuthReplyMessage.SetPackage(wsHeader, msg)
 	case OpError:
 		log.Warnf("recv error msg: %s", string(msg[wsHeader.HeaderLen:wsHeader.PackageLen]))
 	}

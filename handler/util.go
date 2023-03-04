@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"encoding/json"
+	"github.com/bytedance/sonic"
 	"strconv"
 )
 
@@ -11,7 +11,7 @@ func (_ *Handler) SetDanMuMsg(msg map[string]interface{}) (m MsgEvent) {
 	danMu := DanMuMsg{}
 	danMu.Cmd = CmdDanmuMsg
 	danMuMsg := make(map[string]interface{}, 0)
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &danMuMsg); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &danMuMsg); err == nil {
 		danMu.Data.Content = danMuMsg["info"].([]interface{})[1].(string)
 		danMu.Data.SendTimeStamp = int(danMuMsg["info"].([]interface{})[9].(map[string]interface{})["ts"].(float64))
 		danMu.Data.SenderEnterRoomTimeStamp = int(danMuMsg["info"].([]interface{})[0].([]interface{})[4].(float64))
@@ -33,7 +33,7 @@ func (_ *Handler) SetDanMuMsg(msg map[string]interface{}) (m MsgEvent) {
 // SetInteractWord 设置欢迎消息
 func (_ *Handler) SetInteractWord(msg map[string]interface{}) (m MsgEvent) {
 	interactMsg := InteractWord{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &interactMsg); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &interactMsg); err == nil {
 		m = MsgEvent{Cmd: CmdInteractWord, InteractWord: &interactMsg, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -42,7 +42,7 @@ func (_ *Handler) SetInteractWord(msg map[string]interface{}) (m MsgEvent) {
 // SetOnlineRankCount 暂时未知
 func (_ *Handler) SetOnlineRankCount(msg map[string]interface{}) (m MsgEvent) {
 	onlineRankCount := OnlineRankCount{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &onlineRankCount); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &onlineRankCount); err == nil {
 		m = MsgEvent{Cmd: CmdOnlineRankCount, OnlineRankCount: &onlineRankCount, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -51,7 +51,7 @@ func (_ *Handler) SetOnlineRankCount(msg map[string]interface{}) (m MsgEvent) {
 // SetWatchedChange 暂时未知
 func (_ *Handler) SetWatchedChange(msg map[string]interface{}) (m MsgEvent) {
 	watchedChange := WatchedChange{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &watchedChange); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &watchedChange); err == nil {
 		m = MsgEvent{Cmd: CmdWatchedChange, WatchedChange: &watchedChange, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -62,7 +62,7 @@ func (_ *Handler) SetWatchedChange(msg map[string]interface{}) (m MsgEvent) {
 func (_ *Handler) SetNoticeMsg(msg map[string]interface{}) (m MsgEvent) {
 	noticeMsg := NoticeMsg{}
 	notice := make(map[string]interface{}, 0)
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &notice); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &notice); err == nil {
 		// 这个字段很奇怪, 类型不确定, 需要特判
 		switch notice["real_roomid"].(type) {
 		case float64:
@@ -70,8 +70,8 @@ func (_ *Handler) SetNoticeMsg(msg map[string]interface{}) (m MsgEvent) {
 		case int:
 			notice["real_roomid"] = strconv.Itoa(notice["real_roomid"].(int))
 		}
-		if dataJson, err := json.Marshal(notice); err == nil {
-			if err = json.Unmarshal(dataJson, &noticeMsg); err == nil {
+		if dataJson, err := sonic.Marshal(notice); err == nil {
+			if err = sonic.Unmarshal(dataJson, &noticeMsg); err == nil {
 				m = MsgEvent{Cmd: CmdNoticeMsg, NoticeMsg: &noticeMsg, RoomId: msg["RoomId"].(int)}
 			}
 		}
@@ -85,7 +85,7 @@ func (_ *Handler) SetSuperChatMessage(msg map[string]interface{}) (m MsgEvent) {
 	superChatMsg := SuperChatMessage{}
 	superChatMsg.Cmd = CmdSuperChatMessage
 	sc := make(map[string]interface{}, 0)
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &sc); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &sc); err == nil {
 		// id 和 uid 类型不确定, 需要特判
 		switch sc["data"].(map[string]interface{})["id"].(type) {
 		case float64:
@@ -99,8 +99,8 @@ func (_ *Handler) SetSuperChatMessage(msg map[string]interface{}) (m MsgEvent) {
 		case int:
 			sc["data"].(map[string]interface{})["uid"] = strconv.Itoa(sc["data"].(map[string]interface{})["uid"].(int))
 		}
-		if dataJson, err := json.Marshal(sc["data"]); err == nil {
-			if err = json.Unmarshal(dataJson, &superChatMsg.Data); err == nil {
+		if dataJson, err := sonic.Marshal(sc["data"]); err == nil {
+			if err = sonic.Unmarshal(dataJson, &superChatMsg.Data); err == nil {
 				m = MsgEvent{Cmd: CmdSuperChatMessage, SuperChatMessage: &superChatMsg, RoomId: msg["RoomId"].(int)}
 			}
 		}
@@ -111,7 +111,7 @@ func (_ *Handler) SetSuperChatMessage(msg map[string]interface{}) (m MsgEvent) {
 // SetSendGift 赠送礼物
 func (_ *Handler) SetSendGift(msg map[string]interface{}) (m MsgEvent) {
 	sendGift := SendGift{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &sendGift); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &sendGift); err == nil {
 		m = MsgEvent{Cmd: CmdSendGift, SendGift: &sendGift, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -120,7 +120,7 @@ func (_ *Handler) SetSendGift(msg map[string]interface{}) (m MsgEvent) {
 // SetOnlineRankV2 未知
 func (_ *Handler) SetOnlineRankV2(msg map[string]interface{}) (m MsgEvent) {
 	onlineRankV2 := OnlineRankV2{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &onlineRankV2); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &onlineRankV2); err == nil {
 		m = MsgEvent{Cmd: CmdOnlineRankV2, OnlineRankV2: &onlineRankV2, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -129,7 +129,7 @@ func (_ *Handler) SetOnlineRankV2(msg map[string]interface{}) (m MsgEvent) {
 // SetOnlineRankTop3 未知
 func (_ *Handler) SetOnlineRankTop3(msg map[string]interface{}) (m MsgEvent) {
 	onlineRankTop3 := OnlineRankTop3{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &onlineRankTop3); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &onlineRankTop3); err == nil {
 		m = MsgEvent{Cmd: CmdOnlineRankTop3, OnlineRankTop3: &onlineRankTop3, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -138,7 +138,7 @@ func (_ *Handler) SetOnlineRankTop3(msg map[string]interface{}) (m MsgEvent) {
 // SetLikeInfoV3Click 可能为点赞
 func (_ *Handler) SetLikeInfoV3Click(msg map[string]interface{}) (m MsgEvent) {
 	likeInfoV3Click := LikeInfoV3Click{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &likeInfoV3Click); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &likeInfoV3Click); err == nil {
 		m = MsgEvent{Cmd: CmdLikeInfoV3Click, LikeInfoV3Click: &likeInfoV3Click, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -147,7 +147,7 @@ func (_ *Handler) SetLikeInfoV3Click(msg map[string]interface{}) (m MsgEvent) {
 // SetStopLiveRoomList 未知
 func (_ *Handler) SetStopLiveRoomList(msg map[string]interface{}) (m MsgEvent) {
 	stopLiveRoomList := StopLiveRoomList{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &stopLiveRoomList); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &stopLiveRoomList); err == nil {
 		m = MsgEvent{Cmd: CmdStopLiveRoomList, StopLiveRoomList: &stopLiveRoomList, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -156,7 +156,7 @@ func (_ *Handler) SetStopLiveRoomList(msg map[string]interface{}) (m MsgEvent) {
 // SetLikeInfoV3Update 未知
 func (_ *Handler) SetLikeInfoV3Update(msg map[string]interface{}) (m MsgEvent) {
 	likeInfoV3Update := LikeInfoV3Update{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &likeInfoV3Update); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &likeInfoV3Update); err == nil {
 		m = MsgEvent{Cmd: CmdLikeInfoV3Update, LikeInfoV3Update: &likeInfoV3Update, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -165,7 +165,7 @@ func (_ *Handler) SetLikeInfoV3Update(msg map[string]interface{}) (m MsgEvent) {
 // SetHotRankChange 未知
 func (_ *Handler) SetHotRankChange(msg map[string]interface{}) (m MsgEvent) {
 	hotRankChange := HotRankChange{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &hotRankChange); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &hotRankChange); err == nil {
 		m = MsgEvent{Cmd: CmdHotRankChange, HotRankChange: &hotRankChange, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -174,7 +174,7 @@ func (_ *Handler) SetHotRankChange(msg map[string]interface{}) (m MsgEvent) {
 // SetRoomRealTimeMessageUpdate 未知
 func (_ *Handler) SetRoomRealTimeMessageUpdate(msg map[string]interface{}) (m MsgEvent) {
 	roomRealTimeMessageUpdate := RoomRealTimeMessageUpdate{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &roomRealTimeMessageUpdate); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &roomRealTimeMessageUpdate); err == nil {
 		m = MsgEvent{Cmd: CmdRoomRealTimeMessageUpdate, RoomRealTimeMessageUpdate: &roomRealTimeMessageUpdate, RoomId: msg["RoomId"].(int)}
 
 	}
@@ -184,7 +184,7 @@ func (_ *Handler) SetRoomRealTimeMessageUpdate(msg map[string]interface{}) (m Ms
 // SetWidgetBanner 未知
 func (_ *Handler) SetWidgetBanner(msg map[string]interface{}) (m MsgEvent) {
 	widgetBanner := WidgetBanner{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &widgetBanner); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &widgetBanner); err == nil {
 		m = MsgEvent{Cmd: CmdWidgetBanner, WidgetBanner: &widgetBanner, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -193,7 +193,7 @@ func (_ *Handler) SetWidgetBanner(msg map[string]interface{}) (m MsgEvent) {
 // SetHotRankChangedV2 未知
 func (_ *Handler) SetHotRankChangedV2(msg map[string]interface{}) (m MsgEvent) {
 	hotRankChangedV2 := HotRankChangedV2{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &hotRankChangedV2); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &hotRankChangedV2); err == nil {
 		m = MsgEvent{Cmd: CmdHotRankChangedV2, HotRankChangedV2: &hotRankChangedV2, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -202,7 +202,7 @@ func (_ *Handler) SetHotRankChangedV2(msg map[string]interface{}) (m MsgEvent) {
 // SetGuardHonorThousand 未知
 func (_ *Handler) SetGuardHonorThousand(msg map[string]interface{}) (m MsgEvent) {
 	guardHonorThousand := GuardHonorThousand{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &guardHonorThousand); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &guardHonorThousand); err == nil {
 		m = MsgEvent{Cmd: CmdGuardHonorThousand, GuardHonorThousand: &guardHonorThousand, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -211,7 +211,7 @@ func (_ *Handler) SetGuardHonorThousand(msg map[string]interface{}) (m MsgEvent)
 // SetLive 开始直播
 func (_ *Handler) SetLive(msg map[string]interface{}) (m MsgEvent) {
 	live := Live{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &live); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &live); err == nil {
 		m = MsgEvent{Cmd: CmdLive, Live: &live, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -220,7 +220,7 @@ func (_ *Handler) SetLive(msg map[string]interface{}) (m MsgEvent) {
 // SetRoomChange 未知
 func (_ *Handler) SetRoomChange(msg map[string]interface{}) (m MsgEvent) {
 	roomChange := RoomChange{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &roomChange); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &roomChange); err == nil {
 		m = MsgEvent{Cmd: CmdRoomChange, RoomChange: &roomChange, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -229,7 +229,7 @@ func (_ *Handler) SetRoomChange(msg map[string]interface{}) (m MsgEvent) {
 // SetRoomBlockMsg 未知
 func (_ *Handler) SetRoomBlockMsg(msg map[string]interface{}) (m MsgEvent) {
 	roomBlockMsg := RoomBlockMsg{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &roomBlockMsg); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &roomBlockMsg); err == nil {
 		m = MsgEvent{Cmd: CmdRoomBlockMsg, RoomBlockMsg: &roomBlockMsg, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -238,7 +238,7 @@ func (_ *Handler) SetRoomBlockMsg(msg map[string]interface{}) (m MsgEvent) {
 // SetFullScreenSpecialEffect 可能为礼物特效
 func (_ *Handler) SetFullScreenSpecialEffect(msg map[string]interface{}) (m MsgEvent) {
 	fullScreenSpecialEffect := FullScreenSpecialEffect{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &fullScreenSpecialEffect); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &fullScreenSpecialEffect); err == nil {
 		m = MsgEvent{Cmd: CmdFullScreenSpecialEffect, FullScreenSpecialEffect: &fullScreenSpecialEffect, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -247,7 +247,7 @@ func (_ *Handler) SetFullScreenSpecialEffect(msg map[string]interface{}) (m MsgE
 // SetCommonNoticeDanmaku 未知
 func (_ *Handler) SetCommonNoticeDanmaku(msg map[string]interface{}) (m MsgEvent) {
 	commonNoticeDanmaku := CommonNoticeDanmaku{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &commonNoticeDanmaku); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &commonNoticeDanmaku); err == nil {
 		m = MsgEvent{Cmd: CmdCommonNoticeDanmaku, CommonNoticeDanmaku: &commonNoticeDanmaku, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -256,7 +256,7 @@ func (_ *Handler) SetCommonNoticeDanmaku(msg map[string]interface{}) (m MsgEvent
 // SetTradingScore 未知
 func (_ *Handler) SetTradingScore(msg map[string]interface{}) (m MsgEvent) {
 	tradingScore := TradingScore{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &tradingScore); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &tradingScore); err == nil {
 		m = MsgEvent{Cmd: CmdTradingScore, TradingScore: &tradingScore, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -267,7 +267,7 @@ func (_ *Handler) SetPreparing(msg map[string]interface{}) (m MsgEvent) {
 	preparing := Preparing{}
 	preparing.Cmd = CmdPreparing
 	tmp := make(map[string]interface{})
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &tmp); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &tmp); err == nil {
 		preparing.RoomId = msg["RoomId"].(string)
 		m = MsgEvent{Cmd: CmdPreparing, Preparing: &preparing, RoomId: msg["RoomId"].(int)}
 	}
@@ -277,7 +277,7 @@ func (_ *Handler) SetPreparing(msg map[string]interface{}) (m MsgEvent) {
 // SetGuardBuy 大航海购买
 func (_ *Handler) SetGuardBuy(msg map[string]interface{}) (m MsgEvent) {
 	guardBuy := GuardBuy{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &guardBuy); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &guardBuy); err == nil {
 		m = MsgEvent{Cmd: CmdGuardBuy, GuardBuy: &guardBuy, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -286,7 +286,7 @@ func (_ *Handler) SetGuardBuy(msg map[string]interface{}) (m MsgEvent) {
 // SetGiftStarProcess 未知
 func (_ *Handler) SetGiftStarProcess(msg map[string]interface{}) (m MsgEvent) {
 	giftStarProcess := GiftStarProcess{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &giftStarProcess); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &giftStarProcess); err == nil {
 		m = MsgEvent{Cmd: CmdGiftStarProcess, GiftStarProcess: &giftStarProcess, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -295,7 +295,7 @@ func (_ *Handler) SetGiftStarProcess(msg map[string]interface{}) (m MsgEvent) {
 // SetRoomSkinMsg 未知
 func (_ *Handler) SetRoomSkinMsg(msg map[string]interface{}) (m MsgEvent) {
 	roomSkinMsg := RoomSkinMsg{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &roomSkinMsg); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &roomSkinMsg); err == nil {
 		m = MsgEvent{Cmd: CmdRoomSkinMsg, RoomSkinMsg: &roomSkinMsg, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -304,7 +304,7 @@ func (_ *Handler) SetRoomSkinMsg(msg map[string]interface{}) (m MsgEvent) {
 // SetEntryEffect 未知
 func (_ *Handler) SetEntryEffect(msg map[string]interface{}) (m MsgEvent) {
 	enterEffect := EntryEffect{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &enterEffect); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &enterEffect); err == nil {
 		m = MsgEvent{Cmd: CmdEntryEffect, EntryEffect: &enterEffect, RoomId: msg["RoomId"].(int)}
 	}
 	return
@@ -313,7 +313,7 @@ func (_ *Handler) SetEntryEffect(msg map[string]interface{}) (m MsgEvent) {
 // SetUserToastMsg 上舰长
 func (_ *Handler) SetUserToastMsg(msg map[string]interface{}) (m MsgEvent) {
 	userToastMsg := UserToastMsg{}
-	if err := json.Unmarshal([]byte(msg["msg"].(string)), &userToastMsg); err == nil {
+	if err := sonic.Unmarshal([]byte(msg["msg"].(string)), &userToastMsg); err == nil {
 		m = MsgEvent{Cmd: CmdUserToastMsg, UserToastMsg: &userToastMsg, RoomId: msg["RoomId"].(int)}
 	}
 	return
