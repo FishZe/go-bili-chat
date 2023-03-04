@@ -24,6 +24,7 @@ func init() {
 		LogFormat:       "[bili_live][%time%][%lvl%]: %msg% \n",
 	})
 	ChangeLogLevel(log.ErrorLevel)
+	SetJsonCoder(&DefaultJson{})
 }
 
 func ChangeLogLevel(level log.Level) {

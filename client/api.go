@@ -1,7 +1,6 @@
 package client
 
 import (
-	"github.com/bytedance/sonic"
 	"io"
 	"net/http"
 	"net/url"
@@ -79,7 +78,7 @@ func GetLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
 		return ApiLiveAuth{}, err
 	}
 	var jBA ApiLiveAuth
-	err = sonic.Unmarshal(s, &jBA)
+	err = JsonCoder.Unmarshal(s, &jBA)
 	if err != nil {
 		return ApiLiveAuth{}, err
 	}

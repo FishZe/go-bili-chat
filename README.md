@@ -91,6 +91,22 @@ func main() {
 
 **关于为什么在处理绑定函数时, 多一个直播间号的参数, 因为考虑到可能会有根据不同的直播间分发处理消息的需求**
 
+默认使用的Json解析器为`sonic`, 有需要自定义`json`解析器的可以使用这种方式:
+
+```go
+type Json struct{}
+
+func (j *Json) Unmarshal(data []byte, v interface{}) error {
+	return json.Unmarshal(data, v)
+}
+
+func (j *Json) Marshal(v interface{}) ([]byte, error) {
+	return json.Marshal(v)
+}
+
+bili.SetJsonCoder(&Json{})
+```
+
 具体的示例代码可以查看`example/main.gp`
 
 对于需要查看`DEBUG`日志的情况, 可以修改日志等级

@@ -2,7 +2,6 @@ package client
 
 import (
 	"bytes"
-	"github.com/bytedance/sonic"
 )
 
 func uint32ToByte4(num uint32) []byte {
@@ -82,7 +81,7 @@ func (wsAuth *WsAuthMessage) GetPackage() []byte {
 }
 
 func (wsAuth *WsAuthBody) getAuthBytes() []byte {
-	authBody, err := sonic.Marshal(wsAuth)
+	authBody, err := JsonCoder.Marshal(wsAuth)
 	if err != nil {
 		return []byte{}
 	}
@@ -102,7 +101,7 @@ func (wsHeartBeat *WsHeartBeatMessage) GetPackage() []byte {
 func (wsAuthReplyMessage *WsAuthReplyMessage) SetPackage(header WsHeader, msg []byte) {
 	wsAuthReplyMessage.WsHeader = header
 	authBody := WsAuthReplyBody{}
-	if err := sonic.Unmarshal(msg[header.HeaderLen:], &authBody); err == nil {
+	if err := JsonCoder.Unmarshal(msg[header.HeaderLen:], &authBody); err == nil {
 		wsAuthReplyMessage.Body = authBody
 	}
 }

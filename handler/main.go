@@ -14,6 +14,13 @@ type Handler struct {
 	funcNames map[string]string
 }
 
+type jsonCoder interface {
+	Unmarshal(data []byte, v interface{}) error
+	Marshal(v interface{}) ([]byte, error)
+}
+
+var JsonCoder jsonCoder
+
 func (handler *Handler) Init() {
 	handler.funcNames = make(map[string]string)
 }

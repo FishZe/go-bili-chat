@@ -3,7 +3,6 @@ package client
 import "errors"
 
 const (
-	CmdProto       = 0
 	AuthProto      = 1
 	HeartBeatProto = 1
 	CmdZlibProto   = 2

@@ -1,15 +1,30 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	bili "github.com/FishZe/go_bili_chat"
 	handle "github.com/FishZe/go_bili_chat/handler"
+	log "github.com/sirupsen/logrus"
 	// log "github.com/sirupsen/logrus" // 日志
 )
+
+type Json struct{}
+
+func (j *Json) Unmarshal(data []byte, v interface{}) error {
+	log.Println(string(data))
+	return json.Unmarshal(data, v)
+}
+
+func (j *Json) Marshal(v interface{}) ([]byte, error) {
+	log.Println(v)
+	return json.Marshal(v)
+}
 
 func main() {
 	// 可选: 修改日志等级 请删除import的注释
 	// bili.ChangeLogLevel(log.DebugLevel)
+	bili.SetJsonCoder(&Json{})
 	// 新建一个命令处理器
 	h := bili.GetNewHandler()
 	// 注册一个处理，将该直播间的弹幕消息绑定到这个函数

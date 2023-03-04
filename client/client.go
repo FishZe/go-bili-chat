@@ -9,6 +9,13 @@ import (
 )
 import "github.com/gorilla/websocket"
 
+type jsonCoder interface {
+	Unmarshal(data []byte, v interface{}) error
+	Marshal(v interface{}) ([]byte, error)
+}
+
+var JsonCoder jsonCoder
+
 type Client struct {
 	RoomId    int
 	Connected bool
