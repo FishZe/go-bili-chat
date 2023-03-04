@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"compress/zlib"
 	"github.com/andybalholm/brotli"
-	log "github.com/sirupsen/logrus"
 	"io"
 )
 
@@ -78,20 +77,17 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 	wsHeader := WsHeaderDecoder(msg)
 	switch wsHeader.OpCode {
 	case OpHeartBeatReply:
-		log.Debug("receive heartbeat reply")
-		// wsHeartBeatReply := WsHeartBeatReply{}
-		// wsHeartBeatReply.SetPackage(wsHeader, msg)
+		wsHeartBeatReply := WsHeartBeatReply{}
+		wsHeartBeatReply.SetPackage(wsHeader, msg)
 	case OpCmd:
 		msgBody := msg
 		cmdHeader := wsHeader
 		switch wsHeader.ProtoVer {
 		case CmdZlibProto:
-			log.Debug("receive zlib proto msg")
 			msgBody = msgHandler.CmdZlibProtoDecoder(&wsHeader, msg)
 			cmdHeader = WsHeaderDecoder(msgBody)
 			fallthrough
 		case CmdBrotliProto:
-			log.Debug("receive brotli proto msg")
 			msgBody = msgHandler.CmdBrotliProtoDecoder(&wsHeader, msg)
 			cmdHeader = WsHeaderDecoder(msgBody)
 			fallthrough
@@ -106,9 +102,8 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 			}
 		}
 	case OpAuthReply:
-		log.Debug("receive auth reply")
-		// wsAuthReplyMessage := WsAuthReplyMessage{}
-		// wsAuthReplyMessage.SetPackage(wsHeader, msg)
+		wsAuthReplyMessage := WsAuthReplyMessage{}
+		wsAuthReplyMessage.SetPackage(wsHeader, msg)
 	case OpError:
 		log.Warnf("recv error msg: %s", string(msg[wsHeader.HeaderLen:wsHeader.PackageLen]))
 	}
