@@ -4,7 +4,7 @@
 
 ### 介绍
 
-`go_bili_chat` 是一个用于处理 Bilibili 直播间信息流库，可以用于开发自己的 Bilibili 直播间信息流处理程序。
+`go-bili-chat` 是一个用于处理 Bilibili 直播间信息流库，可以用于开发自己的 Bilibili 直播间信息流处理程序。
 
 b站直播间信息流以Websocket传输并加密, 含有几十个不同的命令, 本项目对其进行了解析, 并提供了一些简单的处理方法, 以便于开发者快速开发自己的程序。
 
@@ -138,12 +138,12 @@ h.AddOption(handle.CmdDanmuMsg, 21545805, func(event handle.MsgEvent) {
 控制台会显示类似如下的日志
 
 ```text
-[bili_live][02-21 16:42:55][DEBUG]: distribute DANMU_MSG cmd to 弹幕处理
+[bili-live][02-21 16:42:55][DEBUG]: distribute DANMU_MSG cmd to 弹幕处理
 ```
 
 #### 所有的消息类型:
-这些常量请填入`go_bili_chat.GetNewHandler().AddOption()`的第一个参数
-```go
+这些常量请填入`go-bili-chat.GetNewHandler().AddOption()`的第一个参数
+```text
 常量名                            原始命令
 CmdDanmuMsg                     "DANMU_MSG"
 CmdSuperChatMessage             "SUPER_CHAT_MESSAGE"
@@ -175,6 +175,13 @@ CmdGiftStarProcess              "GIFT_STAR_PROCESS"
 CmdRoomSkinMsg                  "ROOM_SKIN_MSG"
 CmdEnterEffect                  "ENTER_EFFECT"
 CmdUserToastMsg                 "USER_TOAST_MSG"
+CmdHeartBeatReply               "HEARTBEAT_REPLY"
+CmdPopularityRedPocketNew       "POPULARITY_RED_POCKET_NEW"
+CmdAreaRankChanged              "AREA_RANK_CHANGED"
+CmdSuperChatEntrance            "SUPER_CHAT_ENTRANCE"
+CmdPlayTogether                 "PLAY_TOGETHER"
+CmdComboSend                    "COMBO_SEND"
+CmdPopularityRedPocketStart     "POPULARITY_RED_POCKET_START"
 ```
 
 由于我也不是很明白b站的命令, 所以这里只是列出了我知道的命令, 如果有人知道更多的命令, 请在issue中提出, 我会及时更新。
@@ -199,8 +206,8 @@ type MsgEvent struct {
 	//直播间号 
 	RoomId int
     // 以下为不同的消息类型 
-	DanMuMsg DanMuMsg
-	SuperChatMessage SuperChatMessage
+	DanMuMsg *DanMuMsg
+	SuperChatMessage *SuperChatMessage
     // 下同, 可参考上方的消息类型, 取消Cmd即为结构体名称...
 	...
 }
@@ -225,7 +232,7 @@ type DanMuMsg struct {
 	}
 }
 ```
-结构体内容, 请参考`go_bili_chat/Handler/template.go`中的定义
+结构体内容, 请参考`go-bili-chat/Handler/template.go`中的定义
 因为30个实在是太多了, 所以我就不一一列出来了...
 
 ## 在弹幕消息中, 我还没有完全明白每个参数的含义, 强烈欢迎各位PR完善

@@ -30,6 +30,13 @@ const (
 	CmdRoomSkinMsg               = "ROOM_SKIN_MSG"
 	CmdEntryEffect               = "ENTRY_EFFECT"
 	CmdUserToastMsg              = "USER_TOAST_MSG"
+	CmdHeartBeatReply            = "HEARTBEAT_REPLY"
+	CmdPopularityRedPocketNew    = "POPULARITY_RED_POCKET_NEW"
+	CmdAreaRankChanged           = "AREA_RANK_CHANGED"
+	CmdSuperChatEntrance         = "SUPER_CHAT_ENTRANCE"
+	CmdPlayTogether              = "PLAY_TOGETHER"
+	CmdComboSend                 = "COMBO_SEND"
+	CmdPopularityRedPocketStart  = "POPULARITY_RED_POCKET_START"
 )
 
 var CmdName = map[string]string{
@@ -63,6 +70,13 @@ var CmdName = map[string]string{
 	"ROOM_SKIN_MSG":                 "RoomSkinMsg",
 	"ENTRY_EFFECT":                  "EntryEffect",
 	"USER_TOAST_MSG":                "UserToastMsg",
+	"HEARTBEAT_REPLY":               "HeartBeatReply",
+	"POPULARITY_RED_POCKET_NEW":     "PopularityRedPocketNew",
+	"POPULARITY_RED_POCKET_START":   "PopularityRedPocketStart",
+	"AREA_RANK_CHANGED":             "AreaRankChanged",
+	"SUPER_CHAT_ENTRANCE":           "SuperChatEntrance",
+	"PLAY_TOGETHER":                 "PlayTogether",
+	"COMBO_SEND":                    "ComboSend",
 }
 
 type MsgEvent struct {
@@ -97,6 +111,13 @@ type MsgEvent struct {
 	RoomSkinMsg               *RoomSkinMsg
 	EntryEffect               *EntryEffect
 	UserToastMsg              *UserToastMsg
+	HeartBeatReply            *HeartBeatReply
+	PopularityRedPocketNew    *PopularityRedPocketNew
+	AreaRankChanged           *AreaRankChanged
+	SuperChatEntrance         *SuperChatEntrance
+	PlayTogether              *PlayTogether
+	ComboSend                 *ComboSend
+	PopularityRedPocketStart  *PopularityRedPocketStart
 }
 
 type FansMedal struct {
@@ -135,7 +156,7 @@ type OnlineRankV2 struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		List []struct {
-			UID        int    `json:"uid,omitempty"`
+			UID        int64  `json:"uid,omitempty"`
 			Face       string `json:"face,omitempty"`
 			Score      string `json:"score"`
 			Name       string `json:"uname"`
@@ -183,7 +204,7 @@ type OnlineRankCount struct {
 type LikeInfoV3Click struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
-		UID              int       `json:"uid"`
+		UID              int64     `json:"uid"`
 		Name             string    `json:"uname"`
 		NameColor        string    `json:"uname_color"`
 		ShowArea         int       `json:"show_area"`
@@ -202,7 +223,7 @@ type LikeInfoV3Click struct {
 type InteractWord struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
-		UID           int       `json:"uid"`
+		UID           int64     `json:"uid"`
 		Name          string    `json:"uname"`
 		NameColor     string    `json:"uname_color"`
 		Dmscore       int       `json:"dmscore"`
@@ -237,7 +258,7 @@ type RoomRealTimeMessageUpdate struct {
 type SendGift struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
-		UID               int         `json:"uid"`
+		UID               int64       `json:"uid"`
 		Name              string      `json:"uname"`
 		NameColor         string      `json:"name_color"`
 		Action            string      `json:"action"`
@@ -408,7 +429,7 @@ type NoticeMsg struct {
 	MsgSelf    string `json:"msg_self"`
 	LinkURL    string `json:"link_url"`
 	MsgType    int    `json:"msg_type"`
-	ShieldUID  int    `json:"shield_uid"`
+	ShieldUID  int64  `json:"shield_uid"`
 	BusinessID string `json:"business_id"`
 	Scatter    struct {
 		Min int `json:"min"`
@@ -537,12 +558,12 @@ type CommonNoticeDanmaku struct {
 type TradingScore struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
-		BubbleShowTime int `json:"bubble_show_time"`
-		Num            int `json:"num"`
-		ScoreID        int `json:"score_id"`
-		UID            int `json:"uid"`
-		UpdateTime     int `json:"update_time"`
-		UpdateType     int `json:"update_type"`
+		BubbleShowTime int   `json:"bubble_show_time"`
+		Num            int   `json:"num"`
+		ScoreID        int   `json:"score_id"`
+		UID            int64 `json:"uid"`
+		UpdateTime     int   `json:"update_time"`
+		UpdateType     int   `json:"update_type"`
 	} `json:"data"`
 }
 
@@ -554,7 +575,7 @@ type Preparing struct {
 type GuardBuy struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
-		UID        int    `json:"uid"`
+		UID        int64  `json:"uid"`
 		Username   string `json:"username"`
 		GuardLevel int    `json:"guard_level"`
 		Num        int    `json:"num"`
@@ -627,7 +648,7 @@ type EntryEffect struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		ID                   int           `json:"id"`
-		UID                  int           `json:"uid"`
+		UID                  int64         `json:"uid"`
 		TargetID             int           `json:"target_id"`
 		MockEffect           int           `json:"mock_effect"`
 		Face                 string        `json:"face"`
@@ -683,5 +704,167 @@ type UserToastMsg struct {
 		Unit             string `json:"unit"`
 		UserShow         bool   `json:"user_show"`
 		Username         string `json:"username"`
+	} `json:"data"`
+}
+
+type HeartBeatReply struct {
+	Sum int `json:"sum"`
+}
+
+type PopularityRedPocketNew struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		LotId       int    `json:"lot_id"`
+		StartTime   int    `json:"start_time"`
+		CurrentTime int    `json:"current_time"`
+		WaitNum     int    `json:"wait_num"`
+		Uname       string `json:"uname"`
+		Uid         int64  `json:"uid"`
+		Action      string `json:"action"`
+		Num         int    `json:"num"`
+		GiftName    string `json:"gift_name"`
+		GiftId      int    `json:"gift_id"`
+		Price       int    `json:"price"`
+		NameColor   string `json:"name_color"`
+		MedalInfo   struct {
+			TargetId         int    `json:"target_id"`
+			Special          string `json:"special"`
+			IconId           int    `json:"icon_id"`
+			AnchorUname      string `json:"anchor_uname"`
+			AnchorRoomid     int    `json:"anchor_roomid"`
+			MedalLevel       int    `json:"medal_level"`
+			MedalName        string `json:"medal_name"`
+			MedalColor       int    `json:"medal_color"`
+			MedalColorStart  int    `json:"medal_color_start"`
+			MedalColorEnd    int    `json:"medal_color_end"`
+			MedalColorBorder int    `json:"medal_color_border"`
+			IsLighted        int    `json:"is_lighted"`
+			GuardLevel       int    `json:"guard_level"`
+		} `json:"medal_info"`
+	} `json:"data"`
+}
+
+type AreaRankChanged struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ConfId      int    `json:"conf_id"`
+		RankName    string `json:"rank_name"`
+		Uid         int64  `json:"uid"`
+		Rank        int    `json:"rank"`
+		IconUrlBlue string `json:"icon_url_blue"`
+		IconUrlPink string `json:"icon_url_pink"`
+		IconUrlGrey string `json:"icon_url_grey"`
+		ActionType  int    `json:"action_type"`
+		Timestamp   int    `json:"timestamp"`
+		MsgId       string `json:"msg_id"`
+		JumpUrlLink string `json:"jump_url_link"`
+		JumpUrlPc   string `json:"jump_url_pc"`
+		JumpUrlPink string `json:"jump_url_pink"`
+		JumpUrlWeb  string `json:"jump_url_web"`
+	} `json:"data"`
+}
+
+type SuperChatEntrance struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Status        int    `json:"status"`
+		JumpUrl       string `json:"jump_url"`
+		Icon          string `json:"icon"`
+		BroadcastType int    `json:"broadcast_type"`
+	} `json:"data"`
+	Roomid string `json:"roomid"`
+}
+
+type PlayTogether struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Ruid        int    `json:"ruid"`
+		Roomid      int    `json:"roomid"`
+		Action      string `json:"action"`
+		Uid         int64  `json:"uid"`
+		Timestamp   int    `json:"timestamp"`
+		Message     string `json:"message"`
+		MessageType int    `json:"message_type"`
+		JumpUrl     string `json:"jump_url"`
+		WebUrl      string `json:"web_url"`
+		ApplyNumber int    `json:"apply_number"`
+		RefreshTool bool   `json:"refresh_tool"`
+		CurFleetNum int    `json:"cur_fleet_num"`
+		MaxFleetNum int    `json:"max_fleet_num"`
+	} `json:"data"`
+}
+
+type ComboSend struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Action         string `json:"action"`
+		BatchComboId   string `json:"batch_combo_id"`
+		BatchComboNum  int    `json:"batch_combo_num"`
+		ComboId        string `json:"combo_id"`
+		ComboNum       int    `json:"combo_num"`
+		ComboTotalCoin int    `json:"combo_total_coin"`
+		Dmscore        int    `json:"dmscore"`
+		GiftId         int    `json:"gift_id"`
+		GiftName       string `json:"gift_name"`
+		GiftNum        int    `json:"gift_num"`
+		IsJoinReceiver bool   `json:"is_join_receiver"`
+		IsNaming       bool   `json:"is_naming"`
+		IsShow         int    `json:"is_show"`
+		MedalInfo      struct {
+			AnchorRoomid     int    `json:"anchor_roomid"`
+			AnchorUname      string `json:"anchor_uname"`
+			GuardLevel       int    `json:"guard_level"`
+			IconId           int    `json:"icon_id"`
+			IsLighted        int    `json:"is_lighted"`
+			MedalColor       int    `json:"medal_color"`
+			MedalColorBorder int    `json:"medal_color_border"`
+			MedalColorEnd    int    `json:"medal_color_end"`
+			MedalColorStart  int    `json:"medal_color_start"`
+			MedalLevel       int    `json:"medal_level"`
+			MedalName        string `json:"medal_name"`
+			Special          string `json:"special"`
+			TargetId         int64  `json:"target_id"`
+		} `json:"medal_info"`
+		NameColor       string `json:"name_color"`
+		RUname          string `json:"r_uname"`
+		ReceiveUserInfo struct {
+			Uid   int    `json:"uid"`
+			Uname string `json:"uname"`
+		} `json:"receive_user_info"`
+		Ruid       int         `json:"ruid"`
+		SendMaster interface{} `json:"send_master"`
+		TotalNum   int         `json:"total_num"`
+		Uid        int64       `json:"uid"`
+		Uname      string      `json:"uname"`
+	} `json:"data"`
+}
+
+type PopularityRedPocketStart struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		LotId           int    `json:"lot_id"`
+		SenderUid       int64  `json:"sender_uid"`
+		SenderName      string `json:"sender_name"`
+		SenderFace      string `json:"sender_face"`
+		JoinRequirement int    `json:"join_requirement"`
+		Danmu           string `json:"danmu"`
+		CurrentTime     int    `json:"current_time"`
+		StartTime       int    `json:"start_time"`
+		EndTime         int    `json:"end_time"`
+		LastTime        int    `json:"last_time"`
+		RemoveTime      int    `json:"remove_time"`
+		ReplaceTime     int    `json:"replace_time"`
+		LotStatus       int    `json:"lot_status"`
+		H5Url           string `json:"h5_url"`
+		UserStatus      int    `json:"user_status"`
+		Awards          []struct {
+			GiftId   int    `json:"gift_id"`
+			GiftName string `json:"gift_name"`
+			GiftPic  string `json:"gift_pic"`
+			Num      int    `json:"num"`
+		} `json:"awards"`
+		LotConfigId int `json:"lot_config_id"`
+		TotalPrice  int `json:"total_price"`
+		WaitNum     int `json:"wait_num"`
 	} `json:"data"`
 }

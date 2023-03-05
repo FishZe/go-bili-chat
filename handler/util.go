@@ -175,7 +175,6 @@ func (_ *Handler) SetRoomRealTimeMessageUpdate(msg map[string]interface{}) (m Ms
 	roomRealTimeMessageUpdate := RoomRealTimeMessageUpdate{}
 	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &roomRealTimeMessageUpdate); err == nil {
 		m = MsgEvent{Cmd: CmdRoomRealTimeMessageUpdate, RoomRealTimeMessageUpdate: &roomRealTimeMessageUpdate, RoomId: msg["RoomId"].(int)}
-
 	}
 	return
 }
@@ -314,6 +313,60 @@ func (_ *Handler) SetUserToastMsg(msg map[string]interface{}) (m MsgEvent) {
 	userToastMsg := UserToastMsg{}
 	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &userToastMsg); err == nil {
 		m = MsgEvent{Cmd: CmdUserToastMsg, UserToastMsg: &userToastMsg, RoomId: msg["RoomId"].(int)}
+	}
+	return
+}
+
+func (_ *Handler) SetHeartBeatReply(msg map[string]interface{}) (m MsgEvent) {
+	heartBeatReply := HeartBeatReply{Sum: msg["msg"].(int)}
+	m = MsgEvent{Cmd: CmdHeartBeatReply, RoomId: msg["RoomId"].(int), HeartBeatReply: &heartBeatReply}
+	return
+}
+
+func (_ *Handler) SetPopularityRedPocketNew(msg map[string]interface{}) (m MsgEvent) {
+	popularityRedPocketNew := PopularityRedPocketNew{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &popularityRedPocketNew); err == nil {
+		m = MsgEvent{Cmd: CmdPopularityRedPocketNew, RoomId: msg["RoomId"].(int), PopularityRedPocketNew: &popularityRedPocketNew}
+	}
+	return
+}
+
+func (_ *Handler) SetAreaRankChanged(msg map[string]interface{}) (m MsgEvent) {
+	areaRankChanged := AreaRankChanged{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &areaRankChanged); err == nil {
+		m = MsgEvent{Cmd: CmdAreaRankChanged, RoomId: msg["RoomId"].(int), AreaRankChanged: &areaRankChanged}
+	}
+	return
+}
+
+func (_ *Handler) SetSuperChatEntrance(msg map[string]interface{}) (m MsgEvent) {
+	superChatEntrance := SuperChatEntrance{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &superChatEntrance); err == nil {
+		m = MsgEvent{Cmd: CmdSuperChatEntrance, RoomId: msg["RoomId"].(int), SuperChatEntrance: &superChatEntrance}
+	}
+	return
+}
+
+func (_ *Handler) SetPlayTogether(msg map[string]interface{}) (m MsgEvent) {
+	playTogether := PlayTogether{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &playTogether); err == nil {
+		m = MsgEvent{Cmd: CmdPlayTogether, RoomId: msg["RoomId"].(int), PlayTogether: &playTogether}
+	}
+	return
+}
+
+func (_ *Handler) SetComboSend(msg map[string]interface{}) (m MsgEvent) {
+	comboSend := ComboSend{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &comboSend); err == nil {
+		m = MsgEvent{Cmd: CmdComboSend, RoomId: msg["RoomId"].(int), ComboSend: &comboSend}
+	}
+	return
+}
+
+func (_ *Handler) SetPopularityRedPocketStart(msg map[string]interface{}) (m MsgEvent) {
+	popularityRedPocketStart := PopularityRedPocketStart{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &popularityRedPocketStart); err == nil {
+		m = MsgEvent{Cmd: CmdPopularityRedPocketStart, RoomId: msg["RoomId"].(int), PopularityRedPocketStart: &popularityRedPocketStart}
 	}
 	return
 }
