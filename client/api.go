@@ -16,16 +16,7 @@ const (
 	MainWsUrl      = "broadcastlv.chat.bilibili.com"
 )
 
-const DefaultSequence = 1
-const DelaySequence = 2
-
-var SequenceMode = DefaultSequence
-
 var cookies = ""
-
-func ChangeSequenceMode(mode int) {
-	SequenceMode = mode
-}
 
 func getReq(data url.Values, getUrl string) ([]byte, error) {
 	u, err := url.ParseRequestURI(getUrl)
@@ -49,7 +40,7 @@ func getReq(data url.Values, getUrl string) ([]byte, error) {
 		_ = Body.Close()
 	}(resp.Body)
 	if resp.StatusCode != 200 {
-		return nil, ErrespCodeNot
+		return nil, RespCodeNotError
 	}
 	s, err := io.ReadAll(resp.Body)
 	if err != nil {
