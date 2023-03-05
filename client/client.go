@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 )
-import "github.com/fasthttp/websocket"
+import "github.com/gorilla/websocket"
 
 type jsonCoder interface {
 	Unmarshal(data []byte, v interface{}) error
@@ -115,7 +115,7 @@ func (c *Client) sendConnect() error {
 			return err
 		} else if apiLiveAuth.Code != 0 {
 			log.Warnf("get live room info error: %v", apiLiveAuth.Message)
-			return ErrespCodeNot
+			return RespCodeNotError
 		}
 		wsAuthMsg.Body.Key = apiLiveAuth.Data.Token
 		for nowSum, i := range apiLiveAuth.Data.HostList {
@@ -150,6 +150,7 @@ func (c *Client) connectLoop() {
 			log.Warn("connect to blive error: ", err)
 			time.Sleep(5 * time.Second)
 		} else {
+			log.Info("connected to blive success: ", c.RoomId)
 			c.Connected = true
 			break
 		}
