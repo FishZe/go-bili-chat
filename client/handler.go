@@ -88,12 +88,6 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 		case CmdZlibProto:
 			msgBody = msgHandler.CmdZlibProtoDecoder(&wsHeader, msg)
 			cmdHeader = WsHeaderDecoder(msgBody)
-			fallthrough
-		case CmdBrotliProto:
-			msgBody = msgHandler.CmdBrotliProtoDecoder(&wsHeader, msg)
-			cmdHeader = WsHeaderDecoder(msgBody)
-			fallthrough
-		default:
 			for {
 				msgHandler.CmdHandler(&cmdHeader, msgBody[:int(cmdHeader.PackageLen)])
 				msgBody = msgBody[cmdHeader.PackageLen:]
@@ -102,6 +96,19 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 				}
 				cmdHeader = WsHeaderDecoder(msgBody)
 			}
+		case CmdBrotliProto:
+			msgBody = msgHandler.CmdBrotliProtoDecoder(&wsHeader, msg)
+			cmdHeader = WsHeaderDecoder(msgBody)
+			for {
+				msgHandler.CmdHandler(&cmdHeader, msgBody[:int(cmdHeader.PackageLen)])
+				msgBody = msgBody[cmdHeader.PackageLen:]
+				if len(msgBody) == 0 {
+					break
+				}
+				cmdHeader = WsHeaderDecoder(msgBody)
+			}
+		default:
+			msgHandler.CmdHandler(&cmdHeader, msgBody[:int(cmdHeader.PackageLen)])
 		}
 	case OpAuthReply:
 		// wsAuthReplyMessage := WsAuthReplyMessage{}
