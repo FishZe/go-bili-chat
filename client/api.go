@@ -12,8 +12,8 @@ import (
 
 const (
 	UserAgent      = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
-	BiliUrl        = "www.bilibili.com"
 	BiliLiveApiUrl = "api.live.bilibili.com"
+	MainWsUrl      = "broadcastlv.chat.bilibili.com"
 )
 
 const DefaultSequence = 1
@@ -27,65 +27,42 @@ func ChangeSequenceMode(mode int) {
 	SequenceMode = mode
 }
 
-func getReq(data url.Values, getUrl string, cookies string) ([]byte, string, error) {
+func getReq(data url.Values, getUrl string) ([]byte, error) {
 	u, err := url.ParseRequestURI(getUrl)
 	if err != nil {
-		return nil, "", err
+		return nil, err
 	}
 	u.RawQuery = data.Encode()
 	client := http.Client{}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
-		return nil, "", err
+		return nil, err
 	}
 	req.Header = http.Header{
 		"User-Agent": {UserAgent},
-		"cookie":     {cookies},
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, "", err
+		return nil, err
 	}
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
 	}(resp.Body)
 	if resp.StatusCode != 200 {
-		return nil, "", RespCodeNotError
-	}
-	if resp.Header.Get("Set-Cookie") != "" {
-		cookies = ""
-		for _, v := range resp.Header["Set-Cookie"] {
-			cookies += v + ";"
-		}
-	} else {
-		cookies = ""
+		return nil, RespCodeNotError
 	}
 	s, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, "", err
+		return nil, err
 	}
-	return s, cookies, nil
-}
-
-func getCookies() string {
-	getUrl := url.URL{Scheme: "https", Host: BiliUrl, Path: "/"}
-	data := url.Values{}
-	data.Set("spm_id_from", "333.999.0.0")
-	_, cookies, err := getReq(data, getUrl.String(), "")
-	if err != nil {
-		return ""
-	}
-	return cookies
+	return s, nil
 }
 
 func getLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
-	if cookies == "" {
-		cookies = getCookies()
-	}
 	getUrl := url.URL{Scheme: "https", Host: BiliLiveApiUrl, Path: "/xlive/web-room/v1/index/getDanmuInfo"}
 	data := url.Values{}
 	data.Set("id", strconv.Itoa(roomId))
-	s, _, err := getReq(data, getUrl.String(), cookies)
+	s, err := getReq(data, getUrl.String())
 	if err != nil {
 		return ApiLiveAuth{}, err
 	}
@@ -127,4 +104,20 @@ func getPing(pingUrl string) float64 {
 	}
 	stats := p.Statistics()
 	return stats.AvgRtt.Seconds()
+}
+
+func GetRealRoomId(roomId int) (int, error) {
+	getUrl := url.URL{Scheme: "https", Host: BiliLiveApiUrl, Path: "/xlive/web-room/v1/index/getRoomPlayInfo"}
+	data := url.Values{}
+	data.Set("room_id", strconv.Itoa(roomId))
+	s, err := getReq(data, getUrl.String())
+	if err != nil {
+		return 0, err
+	}
+	var jBA ApiLiveRoomId
+	err = JsonCoder.Unmarshal(s, &jBA)
+	if err != nil {
+		return 0, err
+	}
+	return jBA.Data.RoomID, nil
 }
