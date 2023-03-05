@@ -1,10 +1,13 @@
 package client
 
 import (
+	"github.com/go-ping/ping"
 	"io"
 	"net/http"
 	"net/url"
+	"sort"
 	"strconv"
+	"time"
 )
 
 const (
@@ -12,6 +15,17 @@ const (
 	BiliLiveApiUrl = "api.live.bilibili.com"
 	MainWsUrl      = "broadcastlv.chat.bilibili.com"
 )
+
+const DefaultSequence = 1
+const DelaySequence = 2
+
+var SequenceMode = DefaultSequence
+
+var cookies = ""
+
+func ChangeSequenceMode(mode int) {
+	SequenceMode = mode
+}
 
 func getReq(data url.Values, getUrl string) ([]byte, error) {
 	u, err := url.ParseRequestURI(getUrl)
@@ -44,7 +58,7 @@ func getReq(data url.Values, getUrl string) ([]byte, error) {
 	return s, nil
 }
 
-func GetLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
+func getLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
 	getUrl := url.URL{Scheme: "https", Host: BiliLiveApiUrl, Path: "/xlive/web-room/v1/index/getDanmuInfo"}
 	data := url.Values{}
 	data.Set("id", strconv.Itoa(roomId))
@@ -57,7 +71,39 @@ func GetLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
 	if err != nil {
 		return ApiLiveAuth{}, err
 	}
-	return jBA, nil
+	return liveRoomSort(jBA), nil
+}
+
+func liveRoomSort(j ApiLiveAuth) ApiLiveAuth {
+	if SequenceMode == DefaultSequence {
+		return j
+	} else if SequenceMode == DelaySequence {
+		pings := make(map[string]float64, 10)
+		for _, v := range j.Data.HostList {
+			pings[v.Host] = getPing(v.Host)
+		}
+		sort.Slice(j.Data.HostList, func(i, k int) bool {
+			return pings[j.Data.HostList[i].Host] < pings[j.Data.HostList[k].Host]
+		})
+		return j
+	}
+	return j
+}
+
+func getPing(pingUrl string) float64 {
+	p, err := ping.NewPinger(pingUrl)
+	p.SetPrivileged(true)
+	if err != nil {
+		return float64(INF)
+	}
+	p.Count = 3
+	p.Interval = 100 * time.Millisecond
+	err = p.Run()
+	if err != nil {
+		return float64(INF)
+	}
+	stats := p.Statistics()
+	return stats.AvgRtt.Seconds()
 }
 
 func GetRealRoomId(roomId int) (int, error) {
