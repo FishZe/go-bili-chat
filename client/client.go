@@ -102,7 +102,7 @@ func (c *Client) revHandler(handler MsgHandler) {
 
 func (c *Client) sendConnect() error {
 	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{UID: 0, Roomid: c.RoomId, Protover: 3, Platform: "web", Type: 2}}
-	apiLiveAuth, err := GetLiveRoomAuth(c.RoomId)
+	apiLiveAuth, err := getLiveRoomAuth(c.RoomId)
 	if err != nil {
 		return err
 	} else if apiLiveAuth.Code != 0 {
