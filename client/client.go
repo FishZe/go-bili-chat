@@ -170,4 +170,5 @@ func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
 	go c.revHandler(handler)
 	go c.receiveWsMsg()
 	go c.heartBeat()
+	log.Debug("start blive success", c.RoomId)
 }

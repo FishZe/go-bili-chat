@@ -40,6 +40,31 @@ type ApiLiveAuth struct {
 	} `json:"data"`
 }
 
+type ApiLiveRoomId struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	TTL     int    `json:"ttl"`
+	Data    struct {
+		RoomID          int           `json:"room_id"`
+		ShortID         int           `json:"short_id"`
+		UID             int           `json:"uid"`
+		NeedP2P         int           `json:"need_p2p"`
+		IsHidden        bool          `json:"is_hidden"`
+		IsLocked        bool          `json:"is_locked"`
+		IsPortrait      bool          `json:"is_portrait"`
+		LiveStatus      int           `json:"live_status"`
+		HiddenTill      int           `json:"hidden_till"`
+		LockTill        int           `json:"lock_till"`
+		Encrypted       bool          `json:"encrypted"`
+		PwdVerified     bool          `json:"pwd_verified"`
+		LiveTime        int           `json:"live_time"`
+		RoomShield      int           `json:"room_shield"`
+		IsSp            int           `json:"is_sp"`
+		SpecialType     int           `json:"special_type"`
+		PlayURL         interface{}   `json:"play_url"`
+		AllSpecialTypes []interface{} `json:"all_special_types"`
+	} `json:"data"`
+}
 type WsHeader struct {
 	PackageLen uint32
 	HeaderLen  uint16

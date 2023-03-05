@@ -61,3 +61,19 @@ func GetLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
 	}
 	return jBA, nil
 }
+
+func GetRealRoomId(roomId int) (int, error) {
+	getUrl := url.URL{Scheme: "https", Host: BiliLiveApiUrl, Path: "/xlive/web-room/v1/index/getRoomPlayInfo"}
+	data := url.Values{}
+	data.Set("room_id", strconv.Itoa(roomId))
+	s, err := getReq(data, getUrl.String())
+	if err != nil {
+		return 0, err
+	}
+	var jBA ApiLiveRoomId
+	err = JsonCoder.Unmarshal(s, &jBA)
+	if err != nil {
+		return 0, err
+	}
+	return jBA.Data.RoomID, nil
+}

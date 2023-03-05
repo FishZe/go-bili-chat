@@ -48,6 +48,15 @@ func (h *Handler) AddRoom(roomId int) {
 		return
 	}
 	room := LiveRoom{}
+	if roomId <= 10000 {
+		RealroomId, err := client.GetRealRoomId(roomId)
+		if err != nil {
+			log.Error(err)
+			return
+		}
+		log.Info(roomId, " is short roomid, the real roomid is: ", RealroomId)
+		roomId = RealroomId
+	}
 	room.RoomId = roomId
 	room.Client.RoomId = room.RoomId
 	room.Client.BiliChat(h.Handler.CmdChan)
