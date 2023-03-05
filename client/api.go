@@ -13,8 +13,6 @@ const (
 	MainWsUrl      = "broadcastlv.chat.bilibili.com"
 )
 
-var cookies = ""
-
 func getReq(data url.Values, getUrl string) ([]byte, error) {
 	u, err := url.ParseRequestURI(getUrl)
 	if err != nil {
@@ -37,7 +35,7 @@ func getReq(data url.Values, getUrl string) ([]byte, error) {
 		_ = Body.Close()
 	}(resp.Body)
 	if resp.StatusCode != 200 {
-		return nil, RespCodeNotError
+		return nil, ErrespCodeNot
 	}
 	s, err := io.ReadAll(resp.Body)
 	if err != nil {

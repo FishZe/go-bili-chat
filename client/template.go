@@ -18,7 +18,7 @@ const (
 	OpAuthReply      = 8
 )
 
-var RespCodeNotError = errors.New("resp code not 0")
+var ErrespCodeNot = errors.New("resp code not 0")
 
 type ApiLiveAuth struct {
 	Code    int    `json:"code"`
