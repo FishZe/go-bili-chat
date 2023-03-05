@@ -19,8 +19,11 @@ const (
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 func getReq(data url.Values, getUrl string) ([]byte, error) {
 =======
+=======
+>>>>>>> 61a0301 (添加根据延迟排序的功能)
 const DefaultSequence = 1
 const DelaySequence = 2
 
@@ -72,8 +75,11 @@ func getReq(data url.Values, getUrl string) ([]byte, error) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 func GetLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
 =======
+=======
+>>>>>>> 61a0301 (添加根据延迟排序的功能)
 func getLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
 	if cookies == "" {
 		cookies = getCookies()
@@ -124,6 +130,7 @@ func getPing(pingUrl string) float64 {
 	}
 	stats := p.Statistics()
 	return stats.AvgRtt.Seconds()
+<<<<<<< HEAD
 }
 
 func GetRealRoomId(roomId int) (int, error) {
@@ -140,4 +147,6 @@ func GetRealRoomId(roomId int) (int, error) {
 		return 0, err
 	}
 	return jBA.Data.RoomID, nil
+=======
+>>>>>>> 61a0301 (添加根据延迟排序的功能)
 }

@@ -103,9 +103,13 @@ func (c *Client) revHandler(handler MsgHandler) {
 func (c *Client) sendConnect() error {
 	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{UID: 0, Roomid: c.RoomId, Protover: 3, Platform: "web", Type: 2}}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	u := url.URL{Scheme: "wss", Host: MainWsUrl, Path: "/sub"}
 	log.Debug("connect to blive websocket: ", u.String())
 	err := c.biliChatConnect(u.String())
+=======
+	apiLiveAuth, err := getLiveRoomAuth(c.RoomId)
+>>>>>>> 61a0301 (添加根据延迟排序的功能)
 =======
 	apiLiveAuth, err := getLiveRoomAuth(c.RoomId)
 >>>>>>> 61a0301 (添加根据延迟排序的功能)

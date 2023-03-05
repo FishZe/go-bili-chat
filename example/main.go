@@ -14,12 +14,16 @@ func main() {
 =======
 	bili.SetJsonCoder(&Json{})
 <<<<<<< HEAD
+<<<<<<< HEAD
 	bili.SetClientSequenceMode(bili.DelayClientSequence)
 >>>>>>> 61a0301 (添加根据延迟排序的功能)
 =======
 >>>>>>> a7a3af0 (Revert "更换 ws 库")
 =======
 >>>>>>> 92e7fae (更换 ws 库)
+=======
+	bili.SetClientSequenceMode(bili.DelayClientSequence)
+>>>>>>> 61a0301 (添加根据延迟排序的功能)
 	// 新建一个命令处理器
 	h := bili.GetNewHandler()
 	// 注册一个处理，将该直播间的弹幕消息绑定到这个函数
