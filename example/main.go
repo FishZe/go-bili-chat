@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	bili "github.com/FishZe/go_bili_chat"
-	handle "github.com/FishZe/go_bili_chat/handler"
+	bili "github.com/FishZe/go-bili-chat"
+	handle "github.com/FishZe/go-bili-chat/handler"
 	log "github.com/sirupsen/logrus"
 	// log "github.com/sirupsen/logrus" // 日志
 )
