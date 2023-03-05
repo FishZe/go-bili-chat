@@ -55,6 +55,7 @@ require (
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	golang.org/x/sys v0.6.0 // indirect
 =======
 =======
@@ -74,4 +75,9 @@ require (
 =======
 	golang.org/x/sys v0.6.0 // indirect
 >>>>>>> 92e7fae (更换 ws 库)
+=======
+	golang.org/x/net v0.7.0 // indirect
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
+	golang.org/x/sys v0.5.0 // indirect
+>>>>>>> 1b7a1e9 (Bump golang.org/x/net from 0.0.0-20210316092652-d523dce5a7f4 to 0.7.0)
 )
