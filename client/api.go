@@ -2,6 +2,7 @@ package client
 
 import (
 	"github.com/go-ping/ping"
+	log "github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 	"net/url"
@@ -16,15 +17,15 @@ const (
 	MainWsUrl      = "broadcastlv.chat.bilibili.com"
 )
 
-const DefaultSequence = 1
-const DelaySequence = 2
+const DefaultPriority = 1 << 0
+const DelayPriority = 1 << 1
+const NoCDNPriority = 1 << 2
 
-var SequenceMode = DefaultSequence
-
-var cookies = ""
+var PriorityMode = DefaultPriority
 
 func ChangeSequenceMode(mode int) {
-	SequenceMode = mode
+	log.Debug("change sequence mode: ", mode)
+	PriorityMode = mode
 }
 
 func getReq(data url.Values, getUrl string) ([]byte, error) {
@@ -62,22 +63,24 @@ func getLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
 	getUrl := url.URL{Scheme: "https", Host: BiliLiveApiUrl, Path: "/xlive/web-room/v1/index/getDanmuInfo"}
 	data := url.Values{}
 	data.Set("id", strconv.Itoa(roomId))
+	log.Debug("try to get live room info: ", roomId)
 	s, err := getReq(data, getUrl.String())
 	if err != nil {
 		return ApiLiveAuth{}, err
 	}
-	var jBA ApiLiveAuth
-	err = JsonCoder.Unmarshal(s, &jBA)
+	var j ApiLiveAuth
+	err = JsonCoder.Unmarshal(s, &j)
 	if err != nil {
 		return ApiLiveAuth{}, err
 	}
-	return liveRoomSort(jBA), nil
+	return liveRoomSort(j), nil
 }
 
 func liveRoomSort(j ApiLiveAuth) ApiLiveAuth {
-	if SequenceMode == DefaultSequence {
+	switch PriorityMode {
+	case DefaultPriority:
 		return j
-	} else if SequenceMode == DelaySequence {
+	case DelayPriority:
 		pings := make(map[string]float64, 10)
 		for _, v := range j.Data.HostList {
 			pings[v.Host] = getPing(v.Host)
@@ -86,8 +89,14 @@ func liveRoomSort(j ApiLiveAuth) ApiLiveAuth {
 			return pings[j.Data.HostList[i].Host] < pings[j.Data.HostList[k].Host]
 		})
 		return j
+	case NoCDNPriority:
+		sort.Slice(j.Data.HostList, func(i, k int) bool {
+			return j.Data.HostList[i].Host == MainWsUrl
+		})
+		return j
+	default:
+		return j
 	}
-	return j
 }
 
 func getPing(pingUrl string) float64 {
@@ -110,14 +119,15 @@ func GetRealRoomId(roomId int) (int, error) {
 	getUrl := url.URL{Scheme: "https", Host: BiliLiveApiUrl, Path: "/xlive/web-room/v1/index/getRoomPlayInfo"}
 	data := url.Values{}
 	data.Set("room_id", strconv.Itoa(roomId))
+	log.Debug("try to get real room id: ", roomId)
 	s, err := getReq(data, getUrl.String())
 	if err != nil {
 		return 0, err
 	}
-	var jBA ApiLiveRoomId
-	err = JsonCoder.Unmarshal(s, &jBA)
+	var j ApiLiveRoomId
+	err = JsonCoder.Unmarshal(s, &j)
 	if err != nil {
 		return 0, err
 	}
-	return jBA.Data.RoomID, nil
+	return j.Data.RoomID, nil
 }
