@@ -102,28 +102,33 @@ func (c *Client) revHandler(handler MsgHandler) {
 
 func (c *Client) sendConnect() error {
 	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{UID: 0, Roomid: c.RoomId, Protover: 3, Platform: "web", Type: 2}}
-	apiLiveAuth, err := getLiveRoomAuth(c.RoomId)
+	u := url.URL{Scheme: "wss", Host: MainWsUrl, Path: "/sub"}
+	log.Debug("connect to blive websocket: ", u.String())
+	err := c.biliChatConnect(u.String())
 	if err != nil {
-		return err
-	} else if apiLiveAuth.Code != 0 {
-		log.Warnf("get live room info error: %v", apiLiveAuth.Message)
-		return RespCodeNotError
-	}
-	wsAuthMsg.Body.Key = apiLiveAuth.Data.Token
-	for nowSum, i := range apiLiveAuth.Data.HostList {
-		u := url.URL{Scheme: "wss", Host: i.Host + ":" + strconv.Itoa(i.WssPort), Path: "/sub"}
-		log.Debug("connect to blive websocket: ", u.String())
-		err = c.biliChatConnect(u.String())
+		apiLiveAuth, err := GetLiveRoomAuth(c.RoomId)
 		if err != nil {
-			log.Warnf("connect to blive websocket error for %d time: %v\n", nowSum, err)
-			if nowSum == 2 {
-				return err
-			}
-		} else {
-			log.Debug("connect to blive websocket success")
-			break
+			return err
+		} else if apiLiveAuth.Code != 0 {
+			log.Warnf("get live room info error: %v", apiLiveAuth.Message)
+			return RespCodeNotError
 		}
-		time.Sleep(1 * time.Second)
+		wsAuthMsg.Body.Key = apiLiveAuth.Data.Token
+		for nowSum, i := range apiLiveAuth.Data.HostList {
+			u := url.URL{Scheme: "wss", Host: i.Host + ":" + strconv.Itoa(i.WssPort), Path: "/sub"}
+			log.Debug("connect to blive websocket: ", u.String())
+			err = c.biliChatConnect(u.String())
+			if err != nil {
+				log.Warnf("connect to blive websocket error for %d time: %v\n", nowSum, err)
+				if nowSum == 2 {
+					return err
+				}
+			} else {
+				log.Debug("connect to blive websocket success")
+				break
+			}
+			time.Sleep(1 * time.Second)
+		}
 	}
 	err = c.sendAuthMsg(wsAuthMsg)
 	if err != nil {
@@ -165,4 +170,5 @@ func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
 	go c.revHandler(handler)
 	go c.receiveWsMsg()
 	go c.heartBeat()
+	log.Debug("start blive success", c.RoomId)
 }
