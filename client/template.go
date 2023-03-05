@@ -18,7 +18,12 @@ const (
 	OpAuthReply      = 8
 )
 
+<<<<<<< HEAD
 var ErrespCodeNot = errors.New("resp code not 0")
+=======
+var INF = 0x3f3f3f
+var RespCodeNotError = errors.New("resp code not 0")
+>>>>>>> 61a0301 (添加根据延迟排序的功能)
 
 type ApiLiveAuth struct {
 	Code    int    `json:"code"`

@@ -9,6 +9,11 @@ import (
 func main() {
 	// 可选: 修改日志等级 请删除import的注释
 	// bili.ChangeLogLevel(log.DebugLevel)
+<<<<<<< HEAD
+=======
+	bili.SetJsonCoder(&Json{})
+	bili.SetClientSequenceMode(bili.DelayClientSequence)
+>>>>>>> 61a0301 (添加根据延迟排序的功能)
 	// 新建一个命令处理器
 	h := bili.GetNewHandler()
 	// 注册一个处理，将该直播间的弹幕消息绑定到这个函数
