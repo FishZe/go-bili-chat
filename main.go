@@ -8,6 +8,11 @@ import (
 	"sync"
 )
 
+const DefaultClientSequence = 1
+const DelayClientSequence = 2
+
+var ClientSequenceMode = DefaultClientSequence
+
 type Handler struct {
 	Handler handler.Handler
 	rooms   sync.Map
@@ -21,14 +26,20 @@ type LiveRoom struct {
 func init() {
 	log.SetFormatter(&easy.Formatter{
 		TimestampFormat: "01-02 15:04:05",
-		LogFormat:       "[bili_live][%time%][%lvl%]: %msg% \n",
+		LogFormat:       "[bili-live][%time%][%lvl%]: %msg% \n",
 	})
 	ChangeLogLevel(log.ErrorLevel)
 	SetJsonCoder(&DefaultJson{})
+	SetClientSequenceMode(DefaultClientSequence)
 }
 
 func ChangeLogLevel(level log.Level) {
 	log.SetLevel(level)
+}
+
+func SetClientSequenceMode(mode int) {
+	ClientSequenceMode = mode
+	client.ChangeSequenceMode(mode)
 }
 
 func GetNewHandler() Handler {
