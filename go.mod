@@ -1,4 +1,4 @@
-module github.com/FishZe/go_bili_chat
+module github.com/FishZe/go-bili-chat
 
 go 1.19
 
