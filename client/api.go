@@ -18,6 +18,7 @@ const (
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 func getReq(data url.Values, getUrl string) ([]byte, error) {
 =======
 const DefaultSequence = 1
@@ -36,6 +37,8 @@ func getReq(data url.Values, getUrl string, cookies string) ([]byte, string, err
 =======
 var cookies = ""
 
+=======
+>>>>>>> 92e7fae (更换 ws 库)
 func getReq(data url.Values, getUrl string) ([]byte, error) {
 >>>>>>> a7a3af0 (Revert "更换 ws 库")
 	u, err := url.ParseRequestURI(getUrl)
@@ -59,7 +62,7 @@ func getReq(data url.Values, getUrl string) ([]byte, error) {
 		_ = Body.Close()
 	}(resp.Body)
 	if resp.StatusCode != 200 {
-		return nil, RespCodeNotError
+		return nil, ErrespCodeNot
 	}
 	s, err := io.ReadAll(resp.Body)
 	if err != nil {
