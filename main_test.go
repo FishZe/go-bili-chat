@@ -2,7 +2,7 @@ package go_bili_chat
 
 import (
 	"fmt"
-	"github.com/FishZe/go_bili_chat/handler"
+	"github.com/FishZe/go-bili-chat/handler"
 	log "github.com/sirupsen/logrus"
 	"testing"
 )
