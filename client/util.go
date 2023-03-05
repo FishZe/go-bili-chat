@@ -109,7 +109,7 @@ func (wsAuthReplyMessage *WsAuthReplyMessage) SetPackage(header WsHeader, msg []
 func (wsHeartBeatReply *WsHeartBeatReply) SetPackage(header WsHeader, msg []byte) {
 	wsHeartBeatReply.WsHeader = header
 	wsHeartBeatReply.Hot = byte4ToUint32(msg[header.HeaderLen : header.HeaderLen+4])
-	wsHeartBeatReply.Msg = msg[header.HeaderLen+4:]
+	wsHeartBeatReply.Msg = msg[header.HeaderLen:]
 }
 
 func (wsCmdMessage *WsCmdMessage) SetPackage(header WsHeader, msg []byte) {

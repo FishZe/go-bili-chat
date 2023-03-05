@@ -13,6 +13,8 @@ type MsgHandler struct {
 	CmdChan chan map[string]interface{}
 }
 
+var HeartBeatReplyCmd = "HEARTBEAT_REPLY"
+
 func getCmd(msg []byte) string {
 	// 反正只需要一个cmd进行分发, 就不需要json解析整个数据了
 	var layer = 0
@@ -79,8 +81,13 @@ func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
 	wsHeader := WsHeaderDecoder(msg)
 	switch wsHeader.OpCode {
 	case OpHeartBeatReply:
-		// wsHeartBeatReply := WsHeartBeatReply{}
-		// wsHeartBeatReply.SetPackage(wsHeader, msg)
+		wsHeartBeatReply := WsHeartBeatReply{}
+		wsHeartBeatReply.SetPackage(wsHeader, msg)
+		rev := make(map[string]interface{})
+		rev["cmd"] = HeartBeatReplyCmd
+		rev["msg"] = int(byte4ToUint32(wsHeartBeatReply.Msg))
+		rev["RoomId"] = msgHandler.RoomId
+		msgHandler.CmdChan <- rev
 	case OpCmd:
 		msgBody := msg
 		cmdHeader := wsHeader

@@ -30,6 +30,7 @@ const (
 	CmdRoomSkinMsg               = "ROOM_SKIN_MSG"
 	CmdEntryEffect               = "ENTRY_EFFECT"
 	CmdUserToastMsg              = "USER_TOAST_MSG"
+	CmdHeartBeatReply            = "HEARTBEAT_REPLY"
 )
 
 var CmdName = map[string]string{
@@ -63,6 +64,7 @@ var CmdName = map[string]string{
 	"ROOM_SKIN_MSG":                 "RoomSkinMsg",
 	"ENTRY_EFFECT":                  "EntryEffect",
 	"USER_TOAST_MSG":                "UserToastMsg",
+	"HEARTBEAT_REPLY":               "HeartBeatReply",
 }
 
 type MsgEvent struct {
@@ -97,6 +99,7 @@ type MsgEvent struct {
 	RoomSkinMsg               *RoomSkinMsg
 	EntryEffect               *EntryEffect
 	UserToastMsg              *UserToastMsg
+	HeartBeatReply            *HeartBeatReply
 }
 
 type FansMedal struct {
@@ -684,4 +687,8 @@ type UserToastMsg struct {
 		UserShow         bool   `json:"user_show"`
 		Username         string `json:"username"`
 	} `json:"data"`
+}
+
+type HeartBeatReply struct {
+	Sum int `json:"sum"`
 }

@@ -317,3 +317,9 @@ func (_ *Handler) SetUserToastMsg(msg map[string]interface{}) (m MsgEvent) {
 	}
 	return
 }
+
+func (_ *Handler) SetHeartBeatReply(msg map[string]interface{}) (m MsgEvent) {
+	heartBeatReply := HeartBeatReply{Sum: msg["msg"].(int)}
+	m = MsgEvent{Cmd: CmdHeartBeatReply, RoomId: msg["RoomId"].(int), HeartBeatReply: &heartBeatReply}
+	return
+}
