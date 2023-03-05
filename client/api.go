@@ -90,6 +90,9 @@ func getLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
 		cookies = getCookies()
 	}
 >>>>>>> 61a0301 (添加根据延迟排序的功能)
+=======
+func getLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
+>>>>>>> fe9cf075d2ac7527740d13647d701e760d9c4bd4
 	getUrl := url.URL{Scheme: "https", Host: BiliLiveApiUrl, Path: "/xlive/web-room/v1/index/getDanmuInfo"}
 	data := url.Values{}
 	data.Set("id", strconv.Itoa(roomId))
