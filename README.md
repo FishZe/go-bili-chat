@@ -14,15 +14,15 @@ b站直播间信息流以Websocket传输并加密, 含有几十个不同的命�
 
 因此, 你需要先将命令处理函数绑定到处理器, 再开启直播间进行处理,
 
-一个简单的使用示例:
+#### 一个简单的使用示例:
 
 ```go
 package main
 
 import (
 	"fmt"
-	bili "github.com/FishZe/go_bili_chat"
-	handle "github.com/FishZe/go_bili_chat/handler"
+	bili "github.com/FishZe/go-bili-chat"
+	handle "github.com/FishZe/go-bili-chat/handler"
 )
 
 func main() {
@@ -34,7 +34,7 @@ func main() {
 		fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
 	})
 	// 连接到直播间
-	h.AddRoom(26097368)
+	_ = h.AddRoom(26097368)
 	// 启动处理器
 	h.Run()
 }
@@ -42,15 +42,15 @@ func main() {
 ```
 特殊地, 绑定函数的直播间号为0时，绑定所有房间
 
-也可以先运行命令处理器，再添加房间：
+#### 也可以先运行命令处理器，再添加房间：
 
 ```go
 package main
 
 import (
 	"fmt"
-	bili "github.com/FishZe/go_bili_chat"
-	handle "github.com/FishZe/go_bili_chat/handler"
+	bili "github.com/FishZe/go-bili-chat"
+	handle "github.com/FishZe/go-bili-chat/handler"
 	"time"
 )
 
@@ -61,21 +61,21 @@ func main() {
 	h.AddOption(handle.CmdDanmuMsg, 26097368, func(event handle.MsgEvent) {
 		fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
 	})
-	h.AddRoom(26097368)
+	_ = h.AddRoom(26097368)
 	for {
 		time.Sleep(time.Second)
-    }
+	}
 }
 ```
-当然了，也可以删除房间：
+#### 当然了，也可以删除房间：
 
 ```go
 package main
 
 import (
 	"fmt"
-	bili "github.com/FishZe/go_bili_chat"
-	handle "github.com/FishZe/go_bili_chat/handler"
+	bili "github.com/FishZe/go-bili-chat"
+	handle "github.com/FishZe/go-bili-chat/handler"
 )
 
 func main() {
@@ -83,15 +83,29 @@ func main() {
 	h.AddOption(handle.CmdDanmuMsg, 26097368, func(event handle.MsgEvent) {
 		fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
 	})
-	h.AddRoom(26097368)
-	h.DelRoom(26097368)
+	_ = h.AddRoom(26097368)
+	_ = h.DelRoom(26097368)
 	h.Run()
 }
 ```
 
 **关于为什么在处理绑定函数时, 多一个直播间号的参数, 因为考虑到可能会有根据不同的直播间分发处理消息的需求**
 
-默认使用的Json解析器为`sonic`, 有需要自定义`json`解析器的可以使用这种方式:
+### 对于接入的服务器: 程序提供了3个模式:
+
+```text
+DefaultPriority: 默认模式, 按照b站提供的顺序进行连接
+DelayPriority: 低延迟模式, 将会在连接前计算到所有提供的服务器的延迟, 并选择最低的(连接会慢一些)
+NoCDNPriority: 不使用CDN模式, 适合大量连接的情况
+```
+
+默认使用的模式为`DefaultPriority`, 有需要的可以使用这种方式修改:
+
+```go
+bili.SetClientPriorityMode(bili.DelayPriority)
+```
+
+#### 默认使用的Json解析器为`sonic`, 有需要自定义`json`解析器的可以使用这种方式:
 
 ```go
 type Json struct{}
@@ -109,7 +123,7 @@ bili.SetJsonCoder(&Json{})
 
 具体的示例代码可以查看`example/main.gp`
 
-对于需要查看`DEBUG`日志的情况, 可以修改日志等级
+#### 对于需要查看`DEBUG`日志的情况, 可以修改日志等级
 ```go
 bili.ChangeLogLevel(log.DebugLevel)
 ```

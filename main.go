@@ -1,6 +1,7 @@
 package go_bili_chat
 
 import (
+	"errors"
 	"github.com/FishZe/go-bili-chat/client"
 	"github.com/FishZe/go-bili-chat/handler"
 	log "github.com/sirupsen/logrus"
@@ -8,10 +9,14 @@ import (
 	"sync"
 )
 
-const DefaultClientSequence = 1
-const DelayClientSequence = 2
+const DefaultClientPriority = 1 << 0
+const DelayClientPriority = 1 << 1
+const NoCDNClientPriority = 1 << 2
 
-var ClientSequenceMode = DefaultClientSequence
+var ClientPriorityMode = DefaultClientPriority
+var GetRoomFailed = errors.New("get room failed")
+var RoomAlreadyExist = errors.New("room already exist")
+var RoomNotExist = errors.New("room not exist")
 
 type Handler struct {
 	Handler handler.Handler
@@ -30,15 +35,15 @@ func init() {
 	})
 	ChangeLogLevel(log.ErrorLevel)
 	SetJsonCoder(&DefaultJson{})
-	SetClientSequenceMode(DefaultClientSequence)
+	SetClientPriorityMode(ClientPriorityMode)
 }
 
 func ChangeLogLevel(level log.Level) {
 	log.SetLevel(level)
 }
 
-func SetClientSequenceMode(mode int) {
-	ClientSequenceMode = mode
+func SetClientPriorityMode(mode int) {
+	ClientPriorityMode = mode
 	client.ChangeSequenceMode(mode)
 }
 
@@ -54,29 +59,31 @@ func (h *Handler) AddOption(Cmd string, RoomId int, Do func(event handler.MsgEve
 	h.Handler.AddOption(Cmd, RoomId, Do, funcName...)
 }
 
-func (h *Handler) AddRoom(roomId int) {
+func (h *Handler) AddRoom(roomId int) error {
 	if _, ok := h.rooms.Load(roomId); ok {
-		return
+		return RoomAlreadyExist
 	}
 	room := LiveRoom{}
 	if roomId <= 10000 {
-		RealroomId, err := client.GetRealRoomId(roomId)
+		RealRoomId, err := client.GetRealRoomId(roomId)
 		if err != nil {
-			log.Error(err)
-			return
+			return err
+		} else if RealRoomId == 0 {
+			return GetRoomFailed
 		}
-		log.Info(roomId, " is short roomid, the real roomid is: ", RealroomId)
-		roomId = RealroomId
+		log.Debug(roomId, " is short roomid, the real roomid is: ", RealRoomId)
+		roomId = RealRoomId
 	}
 	room.RoomId = roomId
 	room.Client.RoomId = room.RoomId
 	room.Client.BiliChat(h.Handler.CmdChan)
 	h.rooms.Store(room.RoomId, room)
+	return nil
 }
 
-func (h *Handler) DelRoom(RoomId int) {
+func (h *Handler) DelRoom(RoomId int) error {
 	if _, ok := h.rooms.Load(RoomId); !ok {
-		return
+		return RoomNotExist
 	}
 	h.Handler.DelRoomOption(RoomId)
 	if c, ok := h.rooms.Load(RoomId); ok {
@@ -84,6 +91,7 @@ func (h *Handler) DelRoom(RoomId int) {
 		cl.Close()
 		h.rooms.Delete(RoomId)
 	}
+	return nil
 }
 
 func (h *Handler) Run() {
