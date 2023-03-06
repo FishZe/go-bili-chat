@@ -4,7 +4,6 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"reflect"
-	"time"
 )
 
 type Handler struct {
@@ -86,8 +85,6 @@ func (handler *Handler) CmdHandler() {
 					}
 				}
 			}
-		default:
-			time.Sleep(10 * time.Microsecond)
 		}
 	}
 }
