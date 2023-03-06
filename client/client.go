@@ -60,24 +60,26 @@ func (c *Client) receiveWsMsg() {
 					c.connectLoop()
 				}
 				c.revMsg <- message
+			} else {
+				time.Sleep(200 * time.Millisecond)
 			}
 		}
 	}
 }
 
 func (c *Client) heartBeat() {
+	t := time.NewTicker(time.Second * 30)
 	for {
 		select {
 		case <-c.ctx.Done():
 			log.Debug("heartBeat exit...")
 			_ = c.connect.Close()
 			return
-		default:
+		case <-t.C:
 			if c.Connected && c.connect != nil {
 				heartBeatPackage := WsHeartBeatMessage{Body: []byte{}}
 				log.Debug("send heart beat to blive...")
 				_ = c.connect.WriteMessage(websocket.TextMessage, heartBeatPackage.GetPackage())
-				time.Sleep(30 * time.Second)
 			}
 		}
 	}
@@ -94,8 +96,6 @@ func (c *Client) revHandler(handler MsgHandler) {
 			if ok {
 				go handler.MsgHandler(msg)
 			}
-		default:
-			time.Sleep(10 * time.Microsecond)
 		}
 	}
 }
