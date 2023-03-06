@@ -77,7 +77,6 @@ func (msgHandler *MsgHandler) CmdZlibProtoDecoder(wsHeader *WsHeader, msg []byte
 }
 
 func (msgHandler *MsgHandler) MsgHandler(msg []byte) {
-	// TODO: 我好像还没写心跳包和认证包回复的处理
 	wsHeader := WsHeaderDecoder(msg)
 	switch wsHeader.OpCode {
 	case OpHeartBeatReply:

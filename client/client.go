@@ -17,13 +17,12 @@ type jsonCoder interface {
 var JsonCoder jsonCoder
 
 type Client struct {
-	RoomId        int
-	Connected     bool
-	ctx           context.Context
-	cancel        context.CancelFunc
-	connect       *websocket.Conn
-	revMsg        chan []byte
-	heartBeatConn chan struct{}
+	RoomId    int
+	Connected bool
+	ctx       context.Context
+	cancel    context.CancelFunc
+	connect   *websocket.Conn
+	revMsg    chan []byte
 }
 
 func (c *Client) biliChatConnect(url string) error {
@@ -69,26 +68,20 @@ func (c *Client) receiveWsMsg() {
 }
 
 func (c *Client) heartBeat() {
+	t := time.NewTicker(time.Second * 30)
 	for {
 		select {
 		case <-c.ctx.Done():
 			log.Debug("heartBeat exit...")
 			_ = c.connect.Close()
 			return
-		case <-c.heartBeatConn:
+		case <-t.C:
 			if c.Connected && c.connect != nil {
 				heartBeatPackage := WsHeartBeatMessage{Body: []byte{}}
 				log.Debug("send heart beat to blive...")
 				_ = c.connect.WriteMessage(websocket.TextMessage, heartBeatPackage.GetPackage())
 			}
 		}
-	}
-}
-
-func (c *Client) heartBeatLoop() {
-	for {
-		time.Sleep(30 * time.Second)
-		c.heartBeatConn <- struct{}{}
 	}
 }
 
@@ -193,7 +186,6 @@ func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
 	c.ctx, c.cancel = context.WithCancel(context.Background())
 	go c.revHandler(handler)
 	go c.receiveWsMsg()
-	go c.heartBeatLoop()
 	go c.heartBeat()
 	log.Debug("start blive success: ", c.RoomId)
 }
