@@ -89,6 +89,14 @@ func main() {
 }
 ```
 
+#### 如果你有删除房间或debug的需求, 可以绑定函数时传入函数的名称
+```go
+h.AddOption(handle.CmdDanmuMsg, 26097368, func(event handle.MsgEvent) {
+    fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
+}, "弹幕")
+h.DelOption("弹幕")
+```
+
 **关于为什么在处理绑定函数时, 多一个直播间号的参数, 因为考虑到可能会有根据不同的直播间分发处理消息的需求**
 
 ### 对于接入的服务器: 程序提供了3个模式:

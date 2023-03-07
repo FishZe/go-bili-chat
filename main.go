@@ -59,6 +59,10 @@ func (h *Handler) AddOption(Cmd string, RoomId int, Do func(event handler.MsgEve
 	h.Handler.AddOption(Cmd, RoomId, Do, funcName...)
 }
 
+func (h *Handler) DelOption(name string) {
+	h.Handler.DelOption(name)
+}
+
 func (h *Handler) AddRoom(roomId int) error {
 	if _, ok := h.rooms.Load(roomId); ok {
 		return RoomAlreadyExist

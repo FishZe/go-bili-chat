@@ -25,6 +25,7 @@ func (handler *Handler) Init() {
 }
 
 func (handler *Handler) AddOption(Cmd string, RoomId int, Do func(event MsgEvent), funcName ...string) {
+	fmt.Printf("%p", Do)
 	if _, ok := handler.DoFunc[Cmd]; !ok {
 		handler.DoFunc[Cmd] = make(map[int][]func(event MsgEvent))
 	}
@@ -46,6 +47,22 @@ func (handler *Handler) DelRoomOption(roomId int) {
 		if _, ok := v[roomId]; ok {
 			delete(handler.DoFunc[k], roomId)
 			log.Debug("Del Option: ", k, roomId)
+		}
+	}
+}
+
+func (handler *Handler) DelOption(name string) {
+	for k, v := range handler.DoFunc {
+		for k1, v1 := range v {
+			for i, v2 := range v1 {
+				if name == handler.funcNames[fmt.Sprintf("%p", v2)] {
+					handler.DoFunc[k][k1] = append(handler.DoFunc[k][k1][:i], handler.DoFunc[k][k1][i+1:]...)
+					if len(handler.DoFunc[k][k1]) == 0 {
+						delete(handler.DoFunc[k], k1)
+					}
+					log.Debug("Del Option: ", k, k1, name)
+				}
+			}
 		}
 	}
 }
