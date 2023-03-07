@@ -25,7 +25,6 @@ func (handler *Handler) Init() {
 }
 
 func (handler *Handler) AddOption(Cmd string, RoomId int, Do func(event MsgEvent), funcName ...string) {
-	fmt.Printf("%p", Do)
 	if _, ok := handler.DoFunc[Cmd]; !ok {
 		handler.DoFunc[Cmd] = make(map[int][]func(event MsgEvent))
 	}
