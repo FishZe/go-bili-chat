@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 )
-import "github.com/gorilla/websocket"
+import "github.com/fasthttp/websocket"
 
 type jsonCoder interface {
 	Unmarshal(data []byte, v interface{}) error
