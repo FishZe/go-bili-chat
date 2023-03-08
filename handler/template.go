@@ -569,7 +569,7 @@ type TradingScore struct {
 
 type Preparing struct {
 	Cmd    string `json:"cmd"`
-	RoomId string `json:"roomid"`
+	RoomId int    `json:"roomid"`
 }
 
 type GuardBuy struct {

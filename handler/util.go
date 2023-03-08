@@ -266,7 +266,7 @@ func (_ *Handler) SetPreparing(msg map[string]interface{}) (m MsgEvent) {
 	preparing.Cmd = CmdPreparing
 	tmp := make(map[string]interface{})
 	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &tmp); err == nil {
-		preparing.RoomId = msg["RoomId"].(string)
+		preparing.RoomId = msg["RoomId"].(int)
 		m = MsgEvent{Cmd: CmdPreparing, Preparing: &preparing, RoomId: msg["RoomId"].(int)}
 	}
 	return
