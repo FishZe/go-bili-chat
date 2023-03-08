@@ -47,12 +47,12 @@ func SetClientPriorityMode(mode int) {
 	client.ChangeSequenceMode(mode)
 }
 
-func GetNewHandler() Handler {
+func GetNewHandler() *Handler {
 	h := Handler{}
 	h.Handler.DoFunc = make(map[string]map[int][]func(event handler.MsgEvent), 0)
 	h.Handler.CmdChan = make(chan map[string]interface{}, 10)
 	h.Handler.Init()
-	return h
+	return &h
 }
 
 func (h *Handler) AddOption(Cmd string, RoomId int, Do func(event handler.MsgEvent), funcName ...string) {
@@ -96,6 +96,15 @@ func (h *Handler) DelRoom(RoomId int) error {
 		h.rooms.Delete(RoomId)
 	}
 	return nil
+}
+
+func (h *Handler) CountRoom() int {
+	count := 0
+	h.rooms.Range(func(key, value interface{}) bool {
+		count++
+		return true
+	})
+	return count
 }
 
 func (h *Handler) Run() {
