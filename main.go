@@ -94,6 +94,15 @@ func (h *Handler) DelRoom(RoomId int) error {
 	return nil
 }
 
+func (h *Handler) CountRoom() int {
+	count := 0
+	h.rooms.Range(func(key, value interface{}) bool {
+		count++
+		return true
+	})
+	return count
+}
+
 func (h *Handler) Run() {
 	h.Handler.CmdHandler()
 }
