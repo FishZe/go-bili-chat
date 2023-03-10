@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 )
-import "github.com/gorilla/websocket"
+import "github.com/fasthttp/websocket"
 
 type jsonCoder interface {
 	Unmarshal(data []byte, v interface{}) error
@@ -17,12 +17,12 @@ type jsonCoder interface {
 var JsonCoder jsonCoder
 
 type Client struct {
+	// 一个直播间的状态: 关闭 / 已连接 / 连接中
 	RoomId    int
 	Connected bool
 	ctx       context.Context
 	cancel    context.CancelFunc
 	connect   *websocket.Conn
-	revMsg    chan []byte
 }
 
 func (c *Client) biliChatConnect(url string) error {
@@ -44,7 +44,7 @@ func (c *Client) sendAuthMsg(wsAuthMsg WsAuthMessage) error {
 	return nil
 }
 
-func (c *Client) receiveWsMsg() {
+func (c *Client) receiveWsMsg(handler MsgHandler) {
 	for {
 		select {
 		case <-c.ctx.Done():
@@ -59,9 +59,7 @@ func (c *Client) receiveWsMsg() {
 					c.Connected = false
 					c.connectLoop()
 				}
-				c.revMsg <- message
-			} else {
-				time.Sleep(200 * time.Millisecond)
+				handler.MsgHandler(message)
 			}
 		}
 	}
@@ -73,28 +71,13 @@ func (c *Client) heartBeat() {
 		select {
 		case <-c.ctx.Done():
 			log.Debug("heartBeat exit...")
-			_ = c.connect.Close()
+			//_ = c.connect.Close()
 			return
 		case <-t.C:
 			if c.Connected && c.connect != nil {
 				heartBeatPackage := WsHeartBeatMessage{Body: []byte{}}
 				log.Debug("send heart beat to blive...")
 				_ = c.connect.WriteMessage(websocket.TextMessage, heartBeatPackage.GetPackage())
-			}
-		}
-	}
-}
-
-func (c *Client) revHandler(handler MsgHandler) {
-	for {
-		select {
-		case <-c.ctx.Done():
-			log.Debug("revHandler exit...")
-			c.revMsg = nil
-			return
-		case msg, ok := <-c.revMsg:
-			if ok {
-				go handler.MsgHandler(msg)
 			}
 		}
 	}
@@ -181,11 +164,9 @@ func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
 		}
 	}()
 	c.connectLoop()
-	c.revMsg = make(chan []byte, 10)
 	handler := MsgHandler{RoomId: c.RoomId, CmdChan: CmdChan}
 	c.ctx, c.cancel = context.WithCancel(context.Background())
-	go c.revHandler(handler)
-	go c.receiveWsMsg()
+	go c.receiveWsMsg(handler)
 	go c.heartBeat()
 	log.Debug("start blive success: ", c.RoomId)
 }

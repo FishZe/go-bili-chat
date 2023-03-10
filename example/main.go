@@ -23,7 +23,9 @@ func (j *Json) Marshal(v interface{}) ([]byte, error) {
 func main() {
 	// 可选: 修改日志等级 请删除import的注释
 	// bili.ChangeLogLevel(log.DebugLevel)
+	// 修改Json解析器
 	bili.SetJsonCoder(&Json{})
+	// 修改客户端优先级模式
 	bili.SetClientPriorityMode(bili.DelayClientPriority) // 优先使用延迟低的
 	// bili.SetClientPriorityMode(bili.NoCDNClientPriority) // 优先使用无CDN
 	// 新建一个命令处理器
@@ -56,6 +58,13 @@ func main() {
 	}, "心跳包回复")
 	// 连接到直播间
 	_ = h.AddRoom(RoomId)
+	// 删掉一个直播间
+	// _ = h.DelRoom(RoomId)
+	// 删掉一个处理
+	h.DelOption("心跳包回复")
+	// 获取连接个数
+	fmt.Println("已连接到: ", h.CountRoom(), "个直播间")
 	// 启动处理器
 	h.Run()
+	// 如果连接个数过多, 建议把 h.Run() 改为 go h.Run()并移动到添加直播间前
 }
