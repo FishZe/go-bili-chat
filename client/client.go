@@ -17,6 +17,7 @@ type jsonCoder interface {
 var JsonCoder jsonCoder
 
 type Client struct {
+	// 一个直播间的状态: 关闭 / 已连接 / 连接中
 	RoomId    int
 	Connected bool
 	ctx       context.Context

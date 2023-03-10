@@ -42,6 +42,7 @@ func (handler *Handler) AddOption(Cmd string, RoomId int, Do func(event MsgEvent
 }
 
 func (handler *Handler) DelRoomOption(roomId int) {
+	// TODO: 检查这里是否需要用sync.Map
 	for k, v := range handler.DoFunc {
 		if _, ok := v[roomId]; ok {
 			delete(handler.DoFunc[k], roomId)
