@@ -22,6 +22,7 @@ const DelayPriority = 1 << 1
 const NoCDNPriority = 1 << 2
 
 var PriorityMode = DefaultPriority
+var shortRoomId2Long = make(map[int]int)
 
 func ChangeSequenceMode(mode int) {
 	log.Debug("change sequence mode: ", mode)
@@ -116,6 +117,9 @@ func getPing(pingUrl string) float64 {
 }
 
 func GetRealRoomId(roomId int) (int, error) {
+	if _, ok := shortRoomId2Long[roomId]; ok {
+		return shortRoomId2Long[roomId], nil
+	}
 	getUrl := url.URL{Scheme: "https", Host: BiliLiveApiUrl, Path: "/xlive/web-room/v1/index/getRoomPlayInfo"}
 	data := url.Values{}
 	data.Set("room_id", strconv.Itoa(roomId))
@@ -129,5 +133,6 @@ func GetRealRoomId(roomId int) (int, error) {
 	if err != nil {
 		return 0, err
 	}
+	shortRoomId2Long[roomId] = j.Data.RoomID
 	return j.Data.RoomID, nil
 }

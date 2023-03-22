@@ -56,29 +56,41 @@ func GetNewHandler() *Handler {
 }
 
 func (h *Handler) AddOption(Cmd string, RoomId int, Do func(event handler.MsgEvent), funcName ...string) {
+	if RoomId <= 10000 {
+		RealRoomId, err := client.GetRealRoomId(RoomId)
+		if err != nil {
+			log.Error(err)
+			return
+		} else if RealRoomId == 0 {
+			log.Error(GetRoomFailed)
+			return
+		}
+		log.Debug(RoomId, " is short roomid, the real roomid is: ", RealRoomId)
+		RoomId = RealRoomId
+	}
 	h.Handler.AddOption(Cmd, RoomId, Do, funcName...)
 }
 
-func (h *Handler) DelOption(name string) {
-	h.Handler.DelOption(name)
+func (h *Handler) DelOption(Name string) {
+	h.Handler.DelOption(Name)
 }
 
-func (h *Handler) AddRoom(roomId int) error {
-	if _, ok := h.rooms.Load(roomId); ok {
-		return RoomAlreadyExist
-	}
-	room := LiveRoom{}
-	if roomId <= 10000 {
-		RealRoomId, err := client.GetRealRoomId(roomId)
+func (h *Handler) AddRoom(RoomId int) error {
+	if RoomId <= 10000 {
+		RealRoomId, err := client.GetRealRoomId(RoomId)
 		if err != nil {
 			return err
 		} else if RealRoomId == 0 {
 			return GetRoomFailed
 		}
-		log.Debug(roomId, " is short roomid, the real roomid is: ", RealRoomId)
-		roomId = RealRoomId
+		log.Debug(RoomId, " is short roomid, the real roomid is: ", RealRoomId)
+		RoomId = RealRoomId
 	}
-	room.RoomId = roomId
+	if _, ok := h.rooms.Load(RoomId); ok {
+		return RoomAlreadyExist
+	}
+	room := LiveRoom{}
+	room.RoomId = RoomId
 	room.Client.RoomId = room.RoomId
 	room.Client.BiliChat(h.Handler.CmdChan)
 	h.rooms.Store(room.RoomId, room)
@@ -86,6 +98,16 @@ func (h *Handler) AddRoom(roomId int) error {
 }
 
 func (h *Handler) DelRoom(RoomId int) error {
+	if RoomId <= 10000 {
+		RealRoomId, err := client.GetRealRoomId(RoomId)
+		if err != nil {
+			return err
+		} else if RealRoomId == 0 {
+			return GetRoomFailed
+		}
+		log.Debug(RoomId, " is short roomid, the real roomid is: ", RealRoomId)
+		RoomId = RealRoomId
+	}
 	if _, ok := h.rooms.Load(RoomId); !ok {
 		return RoomNotExist
 	}
