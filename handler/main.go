@@ -67,6 +67,31 @@ func (handler *Handler) DelOption(name string) {
 	}
 }
 
+func (handler *Handler) doHandler(f reflect.Value, msg map[string]interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Errorf("doHandler panic: %v, please make an issue to me!", err)
+		}
+	}()
+	res := f.Call([]reflect.Value{reflect.ValueOf(msg)})
+	msgEvent := res[0].Interface().(MsgEvent)
+	// 执行函数
+	if !(msgEvent.Cmd == "" || msgEvent.RoomId == 0) {
+		for _, k := range []int{msgEvent.RoomId, 0} {
+			for _, v := range handler.DoFunc[msg["cmd"].(string)][k] {
+				if log.GetLevel() == log.DebugLevel {
+					if name, ok := handler.funcNames[fmt.Sprintf("%p", v)]; ok {
+						log.Debugf("distribute %v cmd to %v", msg["cmd"].(string), name)
+					} else {
+						log.Debugf("distribute %v cmd to %p", msg["cmd"].(string), v)
+					}
+				}
+				go v(msgEvent)
+			}
+		}
+	}
+}
+
 func (handler *Handler) CmdHandler() {
 	for {
 		select {
@@ -81,23 +106,9 @@ func (handler *Handler) CmdHandler() {
 					if ok1 || ok2 {
 						setFunc := reflect.ValueOf(&Handler{}).MethodByName("Set" + CmdName[msg["cmd"].(string)])
 						if setFunc.IsValid() {
-							res := setFunc.Call([]reflect.Value{reflect.ValueOf(msg)})
-							msgEvent := res[0].Interface().(MsgEvent)
-							// 执行函数
-							if !(msgEvent.Cmd == "" || msgEvent.RoomId == 0) {
-								for _, k := range []int{msgEvent.RoomId, 0} {
-									for _, v := range handler.DoFunc[msg["cmd"].(string)][k] {
-										if log.GetLevel() == log.DebugLevel {
-											if name, ok := handler.funcNames[fmt.Sprintf("%p", v)]; ok {
-												log.Debugf("distribute %v cmd to %v", msg["cmd"].(string), name)
-											} else {
-												log.Debugf("distribute %v cmd to %p", msg["cmd"].(string), v)
-											}
-										}
-										go v(msgEvent)
-									}
-								}
-							}
+							handler.doHandler(setFunc, msg)
+						} else {
+							log.Debug(CmdName[msg["cmd"].(string)] + " not found, please make an issue to me!")
 						}
 					}
 				}
