@@ -1,123 +1,297 @@
 package handler
 
 const (
-	CmdDanmuMsg                  = "DANMU_MSG"
-	CmdSuperChatMessage          = "SUPER_CHAT_MESSAGE"
-	CmdWatchedChange             = "WATCHED_CHANGE"
-	CmdSendGift                  = "SEND_GIFT"
-	CmdOnlineRankCount           = "ONLINE_RANK_COUNT"
-	CmdOnlineRankV2              = "ONLINE_RANK_V2"
-	CmdOnlineRankTop3            = "ONLINE_RANK_TOP3"
-	CmdLikeInfoV3Click           = "LIKE_INFO_V3_CLICK"
-	CmdInteractWord              = "INTERACT_WORD"
-	CmdStopLiveRoomList          = "STOP_LIVE_ROOM_LIST"
-	CmdLikeInfoV3Update          = "LIKE_INFO_V3_UPDATE"
-	CmdHotRankChange             = "HOT_RANK_CHANGED"
-	CmdNoticeMsg                 = "NOTICE_MSG"
-	CmdRoomRealTimeMessageUpdate = "ROOM_REAL_TIME_MESSAGE_UPDATE"
-	CmdWidgetBanner              = "WIDGET_BANNER"
-	CmdHotRankChangedV2          = "HOT_RANK_CHANGED_V2"
-	CmdGuardHonorThousand        = "GUARD_HONOR_THOUSAND"
-	CmdLive                      = "LIVE"
-	CmdRoomChange                = "ROOM_CHANGE"
-	CmdRoomBlockMsg              = "ROOM_BLOCK_MSG"
-	CmdFullScreenSpecialEffect   = "FULL_SCREEN_SPECIAL_EFFECT"
-	CmdCommonNoticeDanmaku       = "COMMON_NOTICE_DANMAKU"
-	CmdTradingScore              = "TRADING_SCORE"
-	CmdPreparing                 = "PREPARING"
-	CmdGuardBuy                  = "GUARD_BUY"
-	CmdGiftStarProcess           = "GIFT_STAR_PROCESS"
-	CmdRoomSkinMsg               = "ROOM_SKIN_MSG"
-	CmdEntryEffect               = "ENTRY_EFFECT"
-	CmdUserToastMsg              = "USER_TOAST_MSG"
-	CmdHeartBeatReply            = "HEARTBEAT_REPLY"
-	CmdPopularityRedPocketNew    = "POPULARITY_RED_POCKET_NEW"
-	CmdAreaRankChanged           = "AREA_RANK_CHANGED"
-	CmdSuperChatEntrance         = "SUPER_CHAT_ENTRANCE"
-	CmdPlayTogether              = "PLAY_TOGETHER"
-	CmdComboSend                 = "COMBO_SEND"
-	CmdPopularityRedPocketStart  = "POPULARITY_RED_POCKET_START"
+	CmdDanmuMsg                      = "DANMU_MSG"
+	CmdSuperChatMessage              = "SUPER_CHAT_MESSAGE"
+	CmdWatchedChange                 = "WATCHED_CHANGE"
+	CmdSendGift                      = "SEND_GIFT"
+	CmdOnlineRankCount               = "ONLINE_RANK_COUNT"
+	CmdOnlineRankV2                  = "ONLINE_RANK_V2"
+	CmdOnlineRankTop3                = "ONLINE_RANK_TOP3"
+	CmdLikeInfoV3Click               = "LIKE_INFO_V3_CLICK"
+	CmdInteractWord                  = "INTERACT_WORD"
+	CmdStopLiveRoomList              = "STOP_LIVE_ROOM_LIST"
+	CmdLikeInfoV3Update              = "LIKE_INFO_V3_UPDATE"
+	CmdHotRankChange                 = "HOT_RANK_CHANGED"
+	CmdNoticeMsg                     = "NOTICE_MSG"
+	CmdRoomRealTimeMessageUpdate     = "ROOM_REAL_TIME_MESSAGE_UPDATE"
+	CmdWidgetBanner                  = "WIDGET_BANNER"
+	CmdHotRankChangedV2              = "HOT_RANK_CHANGED_V2"
+	CmdGuardHonorThousand            = "GUARD_HONOR_THOUSAND"
+	CmdLive                          = "LIVE"
+	CmdRoomChange                    = "ROOM_CHANGE"
+	CmdRoomBlockMsg                  = "ROOM_BLOCK_MSG"
+	CmdFullScreenSpecialEffect       = "FULL_SCREEN_SPECIAL_EFFECT"
+	CmdCommonNoticeDanmaku           = "COMMON_NOTICE_DANMAKU"
+	CmdTradingScore                  = "TRADING_SCORE"
+	CmdPreparing                     = "PREPARING"
+	CmdGuardBuy                      = "GUARD_BUY"
+	CmdGiftStarProcess               = "GIFT_STAR_PROCESS"
+	CmdRoomSkinMsg                   = "ROOM_SKIN_MSG"
+	CmdEntryEffect                   = "ENTRY_EFFECT"
+	CmdUserToastMsg                  = "USER_TOAST_MSG"
+	CmdHeartBeatReply                = "HEARTBEAT_REPLY"
+	CmdPopularityRedPocketNew        = "POPULARITY_RED_POCKET_NEW"
+	CmdAreaRankChanged               = "AREA_RANK_CHANGED"
+	CmdSuperChatEntrance             = "SUPER_CHAT_ENTRANCE"
+	CmdPlayTogether                  = "PLAY_TOGETHER"
+	CmdComboSend                     = "COMBO_SEND"
+	CmdPopularityRedPocketStart      = "POPULARITY_RED_POCKET_START"
+	CmdPkBattleProcess               = "PK_BATTLE_PROCESS"
+	CmdPopularRankChanged            = "POPULAR_RANK_CHANGED"
+	CmdPkBattleStartNew              = "PK_BATTLE_START_NEW"
+	CmdDanMuAggregation              = "DANMU_AGGREGATION"
+	CmdLiveInteractiveGame           = "LIVE_INTERACTIVE_GAME"
+	CmdRecommendCard                 = "RECOMMEND_CARD"
+	CmdPkBattleProcessNew            = "PK_BATTLE_PROCESS_NEW"
+	CmdPkBattlePreNew                = "PK_BATTLE_PRE_NEW"
+	CmdPkBattlePre                   = "PK_BATTLE_PRE"
+	CmdPkBattleFinalProcess          = "PK_BATTLE_FINAL_PROCESS"
+	CmdPkBattleStart                 = "PK_BATTLE_START"
+	CmdWidgetGiftStarProcess         = "WIDGET_GIFT_STAR_PROCESS"
+	CmdPopularityRedPocketWinnerList = "POPULARITY_RED_POCKET_WINNER_LIST"
+	CmdGotoBuyFlow                   = "GOTO_BUY_FLOW"
+	CmdPkBattleEnd                   = "PK_BATTLE_END"
+	CmdPkBattleSettleUser            = "PK_BATTLE_SETTLE_USER"
+	CmdAnchorLotStart                = "ANCHOR_LOT_START"
+	CmdPkBattleSettleV2              = "PK_BATTLE_SETTLE_V2"
+	CmdPkBattleSettle                = "PK_BATTLE_SETTLE"
+	CmdHotRoomNotify                 = "HOT_ROOM_NOTIFY"
+	CmdLiveOpenPlatformGame          = "LIVE_OPEN_PLATFORM_GAME"
+	CmdLivePanelChangeContent        = "LIVE_PANEL_CHANGE_CONTENT"
+	CmdGiftPanelPlan                 = "GIFT_PANEL_PLAN"
+	CmdShoppingExplainCard           = "SHOPPING_EXPLAIN_CARD"
+	CmdAnchorLotCheckStatus          = "ANCHOR_LOT_CHECK_STATUS"
+	CmdPkBattlePunishEnd             = "PK_BATTLE_PUNISH_END"
+	CmdAnchorLotEnd                  = "ANCHOR_LOT_END"
+	CmdAnchorLotAward                = "ANCHOR_LOT_AWARD"
+	CmdSpecialGift                   = "SPECIAL_GIFT"
+	CmdSuperChatMessageDelete        = "SUPER_CHAT_MESSAGE_DELETE"
+	CmdVoiceJoinRoomCountInfo        = "VOICE_JOIN_ROOM_COUNT_INFO"
+	CmdVoiceJoinList                 = "VOICE_JOIN_LIST"
+	CmdVoiceJoinStatus               = "VOICE_JOIN_STATUS"
+	CmdWarning                       = "WARNING"
+	CmdPkBattleRankChange            = "PK_BATTLE_RANK_CHANGE"
+	CmdPkBattleSettleNew             = "PK_BATTLE_SETTLE_NEW"
+	CmdHotBuyNum                     = "HOT_BUY_NUM"
+	CmdShoppingCartShow              = "SHOPPING_CART_SHOW"
+	CmdVoiceJoinSwitch               = "VOICE_JOIN_SWITCH"
+	CmdCutOff                        = "CUT_OFF"
+	CmdRoomAdminRevoke               = "ROOM_ADMIN_REVOKE"
+	CmdRoomSilentOff                 = "ROOM_SILENT_OFF"
+	CmdRoomSilentOn                  = "ROOM_SILENT_ON"
+	CmdRoomAdminEntrance             = "room_admin_entrance"
+	CmdRoomAdmins                    = "ROOM_ADMINS"
+	CmdVideoConnectionJoinStart      = "VIDEO_CONNECTION_JOIN_START"
+	CmdVideoConnectionMsg            = "VIDEO_CONNECTION_MSG"
+	CmdVideoConnectionJoinEnd        = "VIDEO_CONNECTION_JOIN_END"
+	CmdRingStatusChange              = "RING_STATUS_CHANGE"
+	CmdRingStatusChangeV2            = "RING_STATUS_CHANGE_V2"
+	CmdRoomLock                      = "ROOM_LOCK"
+	CmdShoppingBubblesStyle          = "SHOPPING_BUBBLES_STYLE"
+	CmdMultiVoiceOperating           = "MULTI_VOICE_OPERATING"
+	CmdMultiVoiceApplicationUser     = "MULTI_VOICE_APPLICATION_USER"
+	CmdPkBattleMatchTimeout          = "PK_BATTLE_MATCH_TIMEOUT"
+	CmdChangeRoomInfo                = "CHANGE_ROOM_INFO"
+	CmdLiveMultiViewChange           = "LIVE_MULTI_VIEW_CHANGE"
+	CmdGuardAchievementRoom          = "GUARD_ACHIEVEMENT_ROOM"
 )
 
 var CmdName = map[string]string{
-	"DANMU_MSG":                     "DanMuMsg",
-	"SUPER_CHAT_MESSAGE":            "SuperChatMessage",
-	"SUPER_CHAT_MESSAGE_JPN":        "SuperChatMessage",
-	"WATCHED_CHANGE":                "WatchedChange",
-	"SEND_GIFT":                     "SendGift",
-	"ONLINE_RANK_COUNT":             "OnlineRankCount",
-	"ONLINE_RANK_V2":                "OnlineRankV2",
-	"ONLINE_RANK_TOP3":              "OnlineRankTop3",
-	"LIKE_INFO_V3_CLICK":            "LikeInfoV3Click",
-	"INTERACT_WORD":                 "InteractWord",
-	"STOP_LIVE_ROOM_LIST":           "StopLiveRoomList",
-	"LIKE_INFO_V3_UPDATE":           "LikeInfoV3Update",
-	"HOT_RANK_CHANGED":              "HotRankChanged",
-	"NOTICE_MSG":                    "NoticeMsg",
-	"ROOM_REAL_TIME_MESSAGE_UPDATE": "RoomRealTimeMessageUpdate",
-	"WIDGET_BANNER":                 "WidgetBanner",
-	"HOT_RANK_CHANGED_V2":           "HotRankChangedV2",
-	"GUARD_HONOR_THOUSAND":          "GuardHonorThousand",
-	"LIVE":                          "Live",
-	"ROOM_CHANGE":                   "RoomChange",
-	"ROOM_BLOCK_MSG":                "RoomBlockMsg",
-	"FULL_SCREEN_SPECIAL_EFFECT":    "FullScreenSpecialEffect",
-	"COMMON_NOTICE_DANMAKU":         "CommonNoticeDanmaku",
-	"TRADING_SCORE":                 "TradingScore",
-	"PREPARING":                     "Preparing",
-	"GUARD_BUY":                     "GuardBuy",
-	"GIFT_STAR_PROCESS":             "GiftStarProcess",
-	"ROOM_SKIN_MSG":                 "RoomSkinMsg",
-	"ENTRY_EFFECT":                  "EntryEffect",
-	"USER_TOAST_MSG":                "UserToastMsg",
-	"HEARTBEAT_REPLY":               "HeartBeatReply",
-	"POPULARITY_RED_POCKET_NEW":     "PopularityRedPocketNew",
-	"POPULARITY_RED_POCKET_START":   "PopularityRedPocketStart",
-	"AREA_RANK_CHANGED":             "AreaRankChanged",
-	"SUPER_CHAT_ENTRANCE":           "SuperChatEntrance",
-	"PLAY_TOGETHER":                 "PlayTogether",
-	"COMBO_SEND":                    "ComboSend",
+	"DANMU_MSG":                         "DanMuMsg",
+	"SUPER_CHAT_MESSAGE":                "SuperChatMessage",
+	"SUPER_CHAT_MESSAGE_JPN":            "SuperChatMessage",
+	"WATCHED_CHANGE":                    "WatchedChange",
+	"SEND_GIFT":                         "SendGift",
+	"ONLINE_RANK_COUNT":                 "OnlineRankCount",
+	"ONLINE_RANK_V2":                    "OnlineRankV2",
+	"ONLINE_RANK_TOP3":                  "OnlineRankTop3",
+	"LIKE_INFO_V3_CLICK":                "LikeInfoV3Click",
+	"INTERACT_WORD":                     "InteractWord",
+	"STOP_LIVE_ROOM_LIST":               "StopLiveRoomList",
+	"LIKE_INFO_V3_UPDATE":               "LikeInfoV3Update",
+	"HOT_RANK_CHANGED":                  "HotRankChanged",
+	"NOTICE_MSG":                        "NoticeMsg",
+	"ROOM_REAL_TIME_MESSAGE_UPDATE":     "RoomRealTimeMessageUpdate",
+	"WIDGET_BANNER":                     "WidgetBanner",
+	"HOT_RANK_CHANGED_V2":               "HotRankChangedV2",
+	"GUARD_HONOR_THOUSAND":              "GuardHonorThousand",
+	"LIVE":                              "Live",
+	"ROOM_CHANGE":                       "RoomChange",
+	"ROOM_BLOCK_MSG":                    "RoomBlockMsg",
+	"FULL_SCREEN_SPECIAL_EFFECT":        "FullScreenSpecialEffect",
+	"COMMON_NOTICE_DANMAKU":             "CommonNoticeDanmaku",
+	"TRADING_SCORE":                     "TradingScore",
+	"PREPARING":                         "Preparing",
+	"GUARD_BUY":                         "GuardBuy",
+	"GIFT_STAR_PROCESS":                 "GiftStarProcess",
+	"ROOM_SKIN_MSG":                     "RoomSkinMsg",
+	"ENTRY_EFFECT":                      "EntryEffect",
+	"USER_TOAST_MSG":                    "UserToastMsg",
+	"HEARTBEAT_REPLY":                   "HeartBeatReply",
+	"POPULARITY_RED_POCKET_NEW":         "PopularityRedPocketNew",
+	"POPULARITY_RED_POCKET_START":       "PopularityRedPocketStart",
+	"AREA_RANK_CHANGED":                 "AreaRankChanged",
+	"SUPER_CHAT_ENTRANCE":               "SuperChatEntrance",
+	"PLAY_TOGETHER":                     "PlayTogether",
+	"COMBO_SEND":                        "ComboSend",
+	"PK_BATTLE_PROCESS":                 "PkBattleProcess",
+	"POPULAR_RANK_CHANGED":              "PopularRankChanged",
+	"PK_BATTLE_START_NEW":               "PkBattleStartNew",
+	"DANMU_AGGREGATION":                 "DanMuAggregation",
+	"LIVE_INTERACTIVE_GAME":             "LiveInteractiveGame",
+	"RECOMMEND_CARD":                    "RecommendCard",
+	"PK_BATTLE_PROCESS_NEW":             "PkBattleProcessNew",
+	"PK_BATTLE_PRE_NEW":                 "PkBattlePreNew",
+	"PK_BATTLE_PRE":                     "PkBattlePre",
+	"PK_BATTLE_FINAL_PROCESS":           "PkBattleFinalProcess",
+	"PK_BATTLE_START":                   "PkBattleStart",
+	"WIDGET_GIFT_STAR_PROCESS":          "WidgetGiftStarProcess",
+	"POPULARITY_RED_POCKET_WINNER_LIST": "PopularityRedPocketWinnerList",
+	"GOTO_BUY_FLOW":                     "GotoBuyFlow",
+	"PK_BATTLE_END":                     "PkBattleEnd",
+	"PK_BATTLE_SETTLE_USER":             "PkBattleSettleUser",
+	"ANCHOR_LOT_START":                  "AnchorLotStart",
+	"PK_BATTLE_SETTLE_V2":               "PkBattleSettleV2",
+	"PK_BATTLE_SETTLE":                  "PkBattleSettle",
+	"HOT_ROOM_NOTIFY":                   "HotRoomNotify",
+	"LIVE_OPEN_PLATFORM_GAME":           "LiveOpenPlatformGame",
+	"LIVE_PANEL_CHANGE_CONTENT":         "LivePanelChangeContent",
+	"GIFT_PANEL_PLAN":                   "GiftPanelPlan",
+	"SHOPPING_EXPLAIN_CARD":             "ShoppingExplainCard",
+	"ANCHOR_LOT_CHECKSTATUS":            "AnchorLotCheckStatus",
+	"PK_BATTLE_PUNISH_END":              "PkBattlePunishEnd",
+	"ANCHOR_LOT_END":                    "AnchorLotEnd",
+	"ANCHOR_LOT_AWARD":                  "AnchorLotAward",
+	"SPECIAL_GIFT":                      "SpecialGift",
+	"SUPER_CHAT_MESSAGE_DELETE":         "SuperChatMessageDelete",
+	"VOICE_JOIN_ROOM_COUNT_INFO":        "VoiceJoinRoomCountInfo",
+	"VOICE_JOIN_LIST":                   "VoiceJoinList",
+	"VOICE_JOIN_STATUS":                 "VoiceJoinStatus",
+	"WARNING":                           "Warning",
+	"PK_BATTLE_RANK_CHANGE":             "PkBattleRankChange",
+	"PK_BATTLE_SETTLE_NEW":              "PkBattleSettleNew",
+	"HOT_BUY_NUM":                       "HotBuyNum",
+	"SHOPPING_CART_SHOW":                "ShoppingCartShow",
+	"VOICE_JOIN_SWITCH":                 "VoiceJoinSwitch",
+	"CUT_OFF":                           "CutOff",
+	"ROOM_ADMIN_REVOKE":                 "RoomAdminRevoke",
+	"ROOM_SILENT_OFF":                   "RoomSilentOff",
+	"ROOM_SILENT_ON":                    "RoomSilentOn",
+	"room_admin_entrance":               "RoomAdminEntrance",
+	"ROOM_ADMINS":                       "RoomAdmins",
+	"VIDEO_CONNECTION_JOIN_START":       "VideoConnectionJoinStart",
+	"VIDEO_CONNECTION_MSG":              "VideoConnectionMsg",
+	"VIDEO_CONNECTION_JOIN_END":         "VideoConnectionJoinEnd",
+	"RING_STATUS_CHANGE":                "RingStatusChange",
+	"RING_STATUS_CHANGE_V2":             "RingStatusChangeV2",
+	"ROOM_LOCK":                         "RoomLock",
+	"SHOPPING_BUBBLES_STYLE":            "ShoppingBubblesStyle",
+	"MULTI_VOICE_OPERATING":             "MultiVoiceOperating",
+	"MULTI_VOICE_APPLICATION_USER":      "MultiVoiceApplicationUser",
+	"PK_BATTLE_MATCH_TIMEOUT":           "PkBattleMatchTimeout",
+	"CHANGE_ROOM_INFO":                  "ChangeRoomInfo",
+	"LIVE_MULTI_VIEW_CHANGE":            "LiveMultiViewChange",
+	"GUARD_ACHIEVEMENT_ROOM":            "GuardAchievementRoom",
 }
 
 type MsgEvent struct {
-	Cmd                       string
-	RoomId                    int
-	DanMuMsg                  *DanMuMsg
-	SuperChatMessage          *SuperChatMessage
-	WatchedChange             *WatchedChange
-	SendGift                  *SendGift
-	OnlineRankCount           *OnlineRankCount
-	OnlineRankV2              *OnlineRankV2
-	OnlineRankTop3            *OnlineRankTop3
-	LikeInfoV3Click           *LikeInfoV3Click
-	InteractWord              *InteractWord
-	StopLiveRoomList          *StopLiveRoomList
-	LikeInfoV3Update          *LikeInfoV3Update
-	HotRankChange             *HotRankChange
-	NoticeMsg                 *NoticeMsg
-	RoomRealTimeMessageUpdate *RoomRealTimeMessageUpdate
-	WidgetBanner              *WidgetBanner
-	HotRankChangedV2          *HotRankChangedV2
-	GuardHonorThousand        *GuardHonorThousand
-	Live                      *Live
-	RoomChange                *RoomChange
-	RoomBlockMsg              *RoomBlockMsg
-	FullScreenSpecialEffect   *FullScreenSpecialEffect
-	CommonNoticeDanmaku       *CommonNoticeDanmaku
-	TradingScore              *TradingScore
-	Preparing                 *Preparing
-	GuardBuy                  *GuardBuy
-	GiftStarProcess           *GiftStarProcess
-	RoomSkinMsg               *RoomSkinMsg
-	EntryEffect               *EntryEffect
-	UserToastMsg              *UserToastMsg
-	HeartBeatReply            *HeartBeatReply
-	PopularityRedPocketNew    *PopularityRedPocketNew
-	AreaRankChanged           *AreaRankChanged
-	SuperChatEntrance         *SuperChatEntrance
-	PlayTogether              *PlayTogether
-	ComboSend                 *ComboSend
-	PopularityRedPocketStart  *PopularityRedPocketStart
+	Cmd                           string
+	RoomId                        int
+	DanMuMsg                      *DanMuMsg
+	SuperChatMessage              *SuperChatMessage
+	WatchedChange                 *WatchedChange
+	SendGift                      *SendGift
+	OnlineRankCount               *OnlineRankCount
+	OnlineRankV2                  *OnlineRankV2
+	OnlineRankTop3                *OnlineRankTop3
+	LikeInfoV3Click               *LikeInfoV3Click
+	InteractWord                  *InteractWord
+	StopLiveRoomList              *StopLiveRoomList
+	LikeInfoV3Update              *LikeInfoV3Update
+	HotRankChange                 *HotRankChange
+	NoticeMsg                     *NoticeMsg
+	RoomRealTimeMessageUpdate     *RoomRealTimeMessageUpdate
+	WidgetBanner                  *WidgetBanner
+	HotRankChangedV2              *HotRankChangedV2
+	GuardHonorThousand            *GuardHonorThousand
+	Live                          *Live
+	RoomChange                    *RoomChange
+	RoomBlockMsg                  *RoomBlockMsg
+	FullScreenSpecialEffect       *FullScreenSpecialEffect
+	CommonNoticeDanmaku           *CommonNoticeDanmaku
+	TradingScore                  *TradingScore
+	Preparing                     *Preparing
+	GuardBuy                      *GuardBuy
+	GiftStarProcess               *GiftStarProcess
+	RoomSkinMsg                   *RoomSkinMsg
+	EntryEffect                   *EntryEffect
+	UserToastMsg                  *UserToastMsg
+	HeartBeatReply                *HeartBeatReply
+	PopularityRedPocketNew        *PopularityRedPocketNew
+	AreaRankChanged               *AreaRankChanged
+	SuperChatEntrance             *SuperChatEntrance
+	PlayTogether                  *PlayTogether
+	ComboSend                     *ComboSend
+	PopularityRedPocketStart      *PopularityRedPocketStart
+	PkBattleProcess               *PkBattleProcess
+	PopularRankChanged            *PopularRankChanged
+	PkBattleStartNew              *PkBattleStartNew
+	DanMuAggregation              *DanMuAggregation
+	LiveInteractiveGame           *LiveInteractiveGame
+	RecommendCard                 *RecommendCard
+	PkBattleProcessNew            *PkBattleProcessNew
+	PkBattlePreNew                *PkBattlePreNew
+	PkBattlePre                   *PkBattlePre
+	PkBattleFinalProcess          *PkBattleFinalProcess
+	PkBattleStart                 *PkBattleStart
+	WidgetGiftStarProcess         *WidgetGiftStarProcess
+	PopularityRedPocketWinnerList *PopularityRedPocketWinnerList
+	GotoBuyFlow                   *GotoBuyFlow
+	PkBattleEnd                   *PkBattleEnd
+	PkBattleSettleUser            *PkBattleSettleUser
+	AnchorLotStart                *AnchorLotStart
+	PkBattleSettleV2              *PkBattleSettleV2
+	PkBattleSettle                *PkBattleSettle
+	HotRoomNotify                 *HotRoomNotify
+	LiveOpenPlatformGame          *LiveOpenPlatformGame
+	LivePanelChangeContent        *LivePanelChangeContent
+	GiftPanelPlan                 *GiftPanelPlan
+	ShoppingExplainCard           *ShoppingExplainCard
+	AnchorLotCheckStatus          *AnchorLotCheckStatus
+	PkBattlePunishEnd             *PkBattlePunishEnd
+	AnchorLotEnd                  *AnchorLotEnd
+	AnchorLotAward                *AnchorLotAward
+	SpecialGift                   *SpecialGift
+	SuperChatMessageDelete        *SuperChatMessageDelete
+	VoiceJoinRoomCountInfo        *VoiceJoinRoomCountInfo
+	VoiceJoinList                 *VoiceJoinList
+	VoiceJoinStatus               *VoiceJoinStatus
+	Warning                       *Warning
+	PkBattleRankChange            *PkBattleRankChange
+	PkBattleSettleNew             *PkBattleSettleNew
+	HotBuyNum                     *HotBuyNum
+	ShoppingCartShow              *ShoppingCartShow
+	VoiceJoinSwitch               *VoiceJoinSwitch
+	CutOff                        *CutOff
+	RoomAdminRevoke               *RoomAdminRevoke
+	RoomSilentOff                 *RoomSilentOff
+	RoomSilentOn                  *RoomSilentOn
+	RoomAdminEntrance             *RoomAdminEntrance
+	RoomAdmins                    *RoomAdmins
+	VideoConnectionJoinStart      *VideoConnectionJoinStart
+	VideoConnectionMsg            *VideoConnectionMsg
+	VideoConnectionJoinEnd        *VideoConnectionJoinEnd
+	RingStatusChange              *RingStatusChange
+	RingStatusChangeV2            *RingStatusChangeV2
+	RoomLock                      *RoomLock
+	ShoppingBubblesStyle          *ShoppingBubblesStyle
+	MultiVoiceOperating           *MultiVoiceOperating
+	MultiVoiceApplicationUser     *MultiVoiceApplicationUser
+	PkBattleMatchTimeout          *PkBattleMatchTimeout
+	ChangeRoomInfo                *ChangeRoomInfo
+	LiveMultiViewChange           *LiveMultiViewChange
+	GuardAchievementRoom          *GuardAchievementRoom
 }
 
 type FansMedal struct {
@@ -828,7 +1002,7 @@ type ComboSend struct {
 		NameColor       string `json:"name_color"`
 		RUname          string `json:"r_uname"`
 		ReceiveUserInfo struct {
-			Uid   int    `json:"uid"`
+			Uid   int64  `json:"uid"`
 			Uname string `json:"uname"`
 		} `json:"receive_user_info"`
 		Ruid       int         `json:"ruid"`
@@ -866,5 +1040,1290 @@ type PopularityRedPocketStart struct {
 		LotConfigId int `json:"lot_config_id"`
 		TotalPrice  int `json:"total_price"`
 		WaitNum     int `json:"wait_num"`
+	} `json:"data"`
+}
+
+type PkBattleProcess struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		BattleType int `json:"battle_type"`
+		InitInfo   struct {
+			RoomId     int    `json:"room_id"`
+			Votes      int    `json:"votes"`
+			BestUname  string `json:"best_uname"`
+			VisionDesc int    `json:"vision_desc"`
+		} `json:"init_info"`
+		MatchInfo struct {
+			RoomId     int    `json:"room_id"`
+			Votes      int    `json:"votes"`
+			BestUname  string `json:"best_uname"`
+			VisionDesc int    `json:"vision_desc"`
+		} `json:"match_info"`
+	} `json:"data"`
+	PkId      int `json:"pk_id"`
+	PkStatus  int `json:"pk_status"`
+	Timestamp int `json:"timestamp"`
+}
+
+type PopularRankChanged struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Uid       int64  `json:"uid"`
+		Rank      int    `json:"rank"`
+		Countdown int    `json:"countdown"`
+		Timestamp int    `json:"timestamp"`
+		CacheKey  string `json:"cache_key"`
+	} `json:"data"`
+}
+
+type PkBattleStartNew struct {
+	Cmd       string `json:"cmd"`
+	PkId      int    `json:"pk_id"`
+	PkStatus  int    `json:"pk_status"`
+	Timestamp int    `json:"timestamp"`
+	Data      struct {
+		BattleType    int    `json:"battle_type"`
+		FinalHitVotes int    `json:"final_hit_votes"`
+		PkStartTime   int    `json:"pk_start_time"`
+		PkFrozenTime  int    `json:"pk_frozen_time"`
+		PkEndTime     int    `json:"pk_end_time"`
+		PkVotesType   int    `json:"pk_votes_type"`
+		PkVotesAdd    int    `json:"pk_votes_add"`
+		PkVotesName   string `json:"pk_votes_name"`
+		StarLightMsg  string `json:"star_light_msg"`
+		PkCountdown   int    `json:"pk_countdown"`
+		FinalConf     struct {
+			Switch    int `json:"switch"`
+			StartTime int `json:"start_time"`
+			EndTime   int `json:"end_time"`
+		} `json:"final_conf"`
+		InitInfo struct {
+			RoomId     int `json:"room_id"`
+			DateStreak int `json:"date_streak"`
+		} `json:"init_info"`
+		MatchInfo struct {
+			RoomId     int `json:"room_id"`
+			DateStreak int `json:"date_streak"`
+		} `json:"match_info"`
+	} `json:"data"`
+	Roomid string `json:"roomid"`
+}
+
+type DanMuAggregation struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ActivityIdentity string `json:"activity_identity"`
+		ActivitySource   int    `json:"activity_source"`
+		AggregationCycle int    `json:"aggregation_cycle"`
+		AggregationIcon  string `json:"aggregation_icon"`
+		AggregationNum   int    `json:"aggregation_num"`
+		BroadcastMsgType int    `json:"broadcast_msg_type"`
+		Dmscore          int    `json:"dmscore"`
+		Msg              string `json:"msg"`
+		ShowRows         int    `json:"show_rows"`
+		ShowTime         int    `json:"show_time"`
+		Timestamp        int    `json:"timestamp"`
+	} `json:"data"`
+}
+
+type LiveInteractiveGame struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Type           int         `json:"type"`
+		Uid            int64       `json:"uid"`
+		Uname          string      `json:"uname"`
+		Uface          string      `json:"uface"`
+		GiftId         int         `json:"gift_id"`
+		GiftName       string      `json:"gift_name"`
+		GiftNum        int         `json:"gift_num"`
+		Price          int         `json:"price"`
+		Paid           bool        `json:"paid"`
+		Msg            string      `json:"msg"`
+		FansMedalLevel int         `json:"fans_medal_level"`
+		GuardLevel     int         `json:"guard_level"`
+		Timestamp      int         `json:"timestamp"`
+		AnchorLottery  interface{} `json:"anchor_lottery"`
+		PkInfo         interface{} `json:"pk_info"`
+		AnchorInfo     interface{} `json:"anchor_info"`
+		ComboInfo      interface{} `json:"combo_info"`
+	} `json:"data"`
+}
+
+type RecommendCard struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		TitleIcon     string `json:"title_icon"`
+		RecommendList []struct {
+			ShoppingCardDetail struct {
+				GoodsId             string      `json:"goods_id"`
+				GoodsName           string      `json:"goods_name"`
+				GoodsPrice          string      `json:"goods_price"`
+				GoodsMaxPrice       string      `json:"goods_max_price"`
+				SaleStatus          int         `json:"sale_status"`
+				CouponName          string      `json:"coupon_name"`
+				GoodsIcon           string      `json:"goods_icon"`
+				GoodsStatus         int         `json:"goods_status"`
+				Source              int         `json:"source"`
+				H5Url               string      `json:"h5_url"`
+				JumpLink            string      `json:"jump_link"`
+				SchemaUrl           string      `json:"schema_url"`
+				IsPreSale           int         `json:"is_pre_sale"`
+				ActivityInfo        interface{} `json:"activity_info"`
+				PreSaleInfo         interface{} `json:"pre_sale_info"`
+				EarlyBirdInfo       interface{} `json:"early_bird_info"`
+				Timestamp           int         `json:"timestamp"`
+				CouponDiscountPrice string      `json:"coupon_discount_price"`
+				SellingPoint        string      `json:"selling_point"`
+				HotBuyNum           int         `json:"hot_buy_num"`
+				GiftBuyInfo         interface{} `json:"gift_buy_info"`
+				IsExclusive         bool        `json:"is_exclusive"`
+				CouponId            string      `json:"coupon_id"`
+				RewardInfo          interface{} `json:"reward_info"`
+				GoodsTagList        interface{} `json:"goods_tag_list"`
+				VirtualExtraInfo    struct {
+					GoodsType        int `json:"goods_type"`
+					WebContainerType int `json:"web_container_type"`
+				} `json:"virtual_extra_info"`
+				PriceInfo struct {
+					Normal struct {
+						PrefixPrice   string `json:"prefix_price"`
+						SalePrice     string `json:"sale_price"`
+						SuffixPrice   string `json:"suffix_price"`
+						StrockPrice   string `json:"strock_price"`
+						SaleStartTime int    `json:"sale_start_time"`
+						SaleEndTime   int    `json:"sale_end_time"`
+					} `json:"normal"`
+					Activity interface{} `json:"activity"`
+				} `json:"price_info"`
+				BtnInfo struct {
+					CardBtnStatus int    `json:"card_btn_status"`
+					CardBtnTitle  string `json:"card_btn_title"`
+					CardBtnStyle  int    `json:"card_btn_style"`
+				} `json:"btn_info"`
+				GoodsSortId int `json:"goods_sort_id"`
+			} `json:"shopping_card_detail"`
+			RecommendCardExtra interface{} `json:"recommend_card_extra"`
+		} `json:"recommend_list"`
+		Timestamp int `json:"timestamp"`
+	} `json:"data"`
+}
+
+type PkBattleProcessNew struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		BattleType int `json:"battle_type"`
+		InitInfo   struct {
+			RoomId     int    `json:"room_id"`
+			Votes      int    `json:"votes"`
+			BestUname  string `json:"best_uname"`
+			AssistInfo []struct {
+				Rank  int    `json:"rank"`
+				Uid   int64  `json:"uid"`
+				Face  string `json:"face"`
+				Uname string `json:"uname"`
+			} `json:"assist_info"`
+		} `json:"init_info"`
+		MatchInfo struct {
+			RoomId     int         `json:"room_id"`
+			Votes      int         `json:"votes"`
+			BestUname  string      `json:"best_uname"`
+			AssistInfo interface{} `json:"assist_info"`
+		} `json:"match_info"`
+	} `json:"data"`
+	PkId      int `json:"pk_id"`
+	PkStatus  int `json:"pk_status"`
+	Timestamp int `json:"timestamp"`
+}
+
+type PkBattlePreNew struct {
+	Cmd       string `json:"cmd"`
+	PkStatus  int    `json:"pk_status"`
+	PkId      int    `json:"pk_id"`
+	Timestamp int    `json:"timestamp"`
+	Data      struct {
+		BattleType  int         `json:"battle_type"`
+		MatchType   int         `json:"match_type"`
+		Uname       string      `json:"uname"`
+		Face        string      `json:"face"`
+		Uid         int64       `json:"uid"`
+		RoomId      int         `json:"room_id"`
+		SeasonId    int         `json:"season_id"`
+		PreTimer    int         `json:"pre_timer"`
+		PkVotesName string      `json:"pk_votes_name"`
+		EndWinTask  interface{} `json:"end_win_task"`
+	} `json:"data"`
+	Roomid int `json:"roomid"`
+}
+
+type PkBattlePre struct {
+	Cmd       string `json:"cmd"`
+	PkStatus  int    `json:"pk_status"`
+	PkId      int    `json:"pk_id"`
+	Timestamp int    `json:"timestamp"`
+	Data      struct {
+		BattleType  int         `json:"battle_type"`
+		MatchType   int         `json:"match_type"`
+		Uname       string      `json:"uname"`
+		Face        string      `json:"face"`
+		Uid         int64       `json:"uid"`
+		RoomId      int         `json:"room_id"`
+		SeasonId    int         `json:"season_id"`
+		PreTimer    int         `json:"pre_timer"`
+		PkVotesName string      `json:"pk_votes_name"`
+		EndWinTask  interface{} `json:"end_win_task"`
+	} `json:"data"`
+	Roomid int `json:"roomid"`
+}
+
+type PkBattleFinalProcess struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		BattleType   int `json:"battle_type"`
+		PkFrozenTime int `json:"pk_frozen_time"`
+	} `json:"data"`
+	PkId      int `json:"pk_id"`
+	PkStatus  int `json:"pk_status"`
+	Timestamp int `json:"timestamp"`
+}
+
+type PkBattleStart struct {
+	Cmd       string `json:"cmd"`
+	PkId      int    `json:"pk_id"`
+	PkStatus  int    `json:"pk_status"`
+	Timestamp int    `json:"timestamp"`
+	Data      struct {
+		BattleType    int    `json:"battle_type"`
+		FinalHitVotes int    `json:"final_hit_votes"`
+		PkStartTime   int    `json:"pk_start_time"`
+		PkFrozenTime  int    `json:"pk_frozen_time"`
+		PkEndTime     int    `json:"pk_end_time"`
+		PkVotesType   int    `json:"pk_votes_type"`
+		PkVotesAdd    int    `json:"pk_votes_add"`
+		PkVotesName   string `json:"pk_votes_name"`
+		StarLightMsg  string `json:"star_light_msg"`
+		PkCountdown   int    `json:"pk_countdown"`
+		FinalConf     struct {
+			Switch    int `json:"switch"`
+			StartTime int `json:"start_time"`
+			EndTime   int `json:"end_time"`
+		} `json:"final_conf"`
+		InitInfo struct {
+			RoomId     int `json:"room_id"`
+			DateStreak int `json:"date_streak"`
+		} `json:"init_info"`
+		MatchInfo struct {
+			RoomId     int `json:"room_id"`
+			DateStreak int `json:"date_streak"`
+		} `json:"match_info"`
+	} `json:"data"`
+	Roomid string `json:"roomid"`
+}
+
+type WidgetGiftStarProcess struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		StartDate   int `json:"start_date"`
+		ProcessList []struct {
+			GiftId       int    `json:"gift_id"`
+			GiftImg      string `json:"gift_img"`
+			GiftName     string `json:"gift_name"`
+			CompletedNum int    `json:"completed_num"`
+			TargetNum    int    `json:"target_num"`
+		} `json:"process_list"`
+		Finished       bool   `json:"finished"`
+		DdlTimestamp   int    `json:"ddl_timestamp"`
+		Version        int64  `json:"version"`
+		RewardGift     int    `json:"reward_gift"`
+		RewardGiftImg  string `json:"reward_gift_img"`
+		RewardGiftName string `json:"reward_gift_name"`
+	} `json:"data"`
+}
+
+type PopularityRedPocketWinnerList struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		LotId      int             `json:"lot_id"`
+		TotalNum   int             `json:"total_num"`
+		WinnerInfo [][]interface{} `json:"winner_info"`
+		Awards     struct {
+			Field1 struct {
+				AwardType   int    `json:"award_type"`
+				AwardName   string `json:"award_name"`
+				AwardPic    string `json:"award_pic"`
+				AwardBigPic string `json:"award_big_pic"`
+				AwardPrice  int    `json:"award_price"`
+			} `json:"31225"`
+			Field2 struct {
+				AwardType   int    `json:"award_type"`
+				AwardName   string `json:"award_name"`
+				AwardPic    string `json:"award_pic"`
+				AwardBigPic string `json:"award_big_pic"`
+				AwardPrice  int    `json:"award_price"`
+			} `json:"31251"`
+			Field3 struct {
+				AwardType   int    `json:"award_type"`
+				AwardName   string `json:"award_name"`
+				AwardPic    string `json:"award_pic"`
+				AwardBigPic string `json:"award_big_pic"`
+				AwardPrice  int    `json:"award_price"`
+			} `json:"31278"`
+		} `json:"awards"`
+		Version int `json:"version"`
+	} `json:"data"`
+}
+
+type GotoBuyFlow struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Text string `json:"text"`
+	} `json:"data"`
+}
+
+type PkBattleEnd struct {
+	Cmd       string `json:"cmd"`
+	PkId      string `json:"pk_id"`
+	PkStatus  int    `json:"pk_status"`
+	Timestamp int    `json:"timestamp"`
+	Data      struct {
+		BattleType int `json:"battle_type"`
+		Timer      int `json:"timer"`
+		InitInfo   struct {
+			RoomId     int    `json:"room_id"`
+			Votes      int    `json:"votes"`
+			WinnerType int    `json:"winner_type"`
+			BestUname  string `json:"best_uname"`
+		} `json:"init_info"`
+		MatchInfo struct {
+			RoomId     int    `json:"room_id"`
+			Votes      int    `json:"votes"`
+			WinnerType int    `json:"winner_type"`
+			BestUname  string `json:"best_uname"`
+		} `json:"match_info"`
+	} `json:"data"`
+}
+
+type PkBattleSettleUser struct {
+	Cmd          string `json:"cmd"`
+	PkId         int    `json:"pk_id"`
+	PkStatus     int    `json:"pk_status"`
+	SettleStatus int    `json:"settle_status"`
+	Timestamp    int    `json:"timestamp"`
+	Data         struct {
+		PkId         string `json:"pk_id"`
+		SeasonId     int    `json:"season_id"`
+		SettleStatus int    `json:"settle_status"`
+		ResultType   int    `json:"result_type"`
+		BattleType   int    `json:"battle_type"`
+		ResultInfo   struct {
+			TotalScore        int           `json:"total_score"`
+			ResultTypeScore   int           `json:"result_type_score"`
+			PkVotes           int           `json:"pk_votes"`
+			PkVotesName       string        `json:"pk_votes_name"`
+			PkCritScore       int           `json:"pk_crit_score"`
+			PkResistCritScore int           `json:"pk_resist_crit_score"`
+			PkExtraScoreSlot  string        `json:"pk_extra_score_slot"`
+			PkExtraValue      int           `json:"pk_extra_value"`
+			PkExtraScore      int           `json:"pk_extra_score"`
+			PkTaskScore       int           `json:"pk_task_score"`
+			PkTimesScore      int           `json:"pk_times_score"`
+			PkDoneTimes       int           `json:"pk_done_times"`
+			PkTotalTimes      int           `json:"pk_total_times"`
+			WinCount          int           `json:"win_count"`
+			WinFinalHit       int           `json:"win_final_hit"`
+			WinnerCountScore  int           `json:"winner_count_score"`
+			TaskScoreList     []interface{} `json:"task_score_list"`
+		} `json:"result_info"`
+		Winner struct {
+			RoomId    int    `json:"room_id"`
+			Uid       int64  `json:"uid"`
+			Uname     string `json:"uname"`
+			Face      string `json:"face"`
+			FaceFrame string `json:"face_frame"`
+			Exp       struct {
+				Color       int `json:"color"`
+				UserLevel   int `json:"user_level"`
+				MasterLevel struct {
+					Color int `json:"color"`
+					Level int `json:"level"`
+				} `json:"master_level"`
+			} `json:"exp"`
+			BestUser struct {
+				Uid         int64  `json:"uid"`
+				Uname       string `json:"uname"`
+				Face        string `json:"face"`
+				PkVotes     int    `json:"pk_votes"`
+				PkVotesName string `json:"pk_votes_name"`
+				Exp         struct {
+					Color int `json:"color"`
+					Level int `json:"level"`
+				} `json:"exp"`
+				FaceFrame string `json:"face_frame"`
+				Badge     struct {
+					Url      string `json:"url"`
+					Desc     string `json:"desc"`
+					Position int    `json:"position"`
+				} `json:"badge"`
+				AwardInfo           interface{}   `json:"award_info"`
+				AwardInfoList       []interface{} `json:"award_info_list"`
+				EndWinAwardInfoList struct {
+					List []interface{} `json:"list"`
+				} `json:"end_win_award_info_list"`
+			} `json:"best_user"`
+		} `json:"winner"`
+		MyInfo struct {
+			RoomId    int    `json:"room_id"`
+			Uid       int64  `json:"uid"`
+			Uname     string `json:"uname"`
+			Face      string `json:"face"`
+			FaceFrame string `json:"face_frame"`
+			Exp       struct {
+				Color       int `json:"color"`
+				UserLevel   int `json:"user_level"`
+				MasterLevel struct {
+					Color int `json:"color"`
+					Level int `json:"level"`
+				} `json:"master_level"`
+			} `json:"exp"`
+			BestUser struct {
+				Uid         int64  `json:"uid"`
+				Uname       string `json:"uname"`
+				Face        string `json:"face"`
+				PkVotes     int    `json:"pk_votes"`
+				PkVotesName string `json:"pk_votes_name"`
+				Exp         struct {
+					Color int `json:"color"`
+					Level int `json:"level"`
+				} `json:"exp"`
+				FaceFrame string `json:"face_frame"`
+				Badge     struct {
+					Url      string `json:"url"`
+					Desc     string `json:"desc"`
+					Position int    `json:"position"`
+				} `json:"badge"`
+				AwardInfo           interface{}   `json:"award_info"`
+				AwardInfoList       []interface{} `json:"award_info_list"`
+				EndWinAwardInfoList struct {
+					List []interface{} `json:"list"`
+				} `json:"end_win_award_info_list"`
+			} `json:"best_user"`
+		} `json:"my_info"`
+		LevelInfo struct {
+			FirstRankName  string `json:"first_rank_name"`
+			SecondRankNum  int    `json:"second_rank_num"`
+			FirstRankImg   string `json:"first_rank_img"`
+			SecondRankIcon string `json:"second_rank_icon"`
+		} `json:"level_info"`
+	} `json:"data"`
+}
+
+type AnchorLotStart struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		AssetIcon     string `json:"asset_icon"`
+		AssetIconWebp string `json:"asset_icon_webp"`
+		AwardImage    string `json:"award_image"`
+		AwardName     string `json:"award_name"`
+		AwardNum      int    `json:"award_num"`
+		AwardType     int    `json:"award_type"`
+		CurGiftNum    int    `json:"cur_gift_num"`
+		CurrentTime   int    `json:"current_time"`
+		Danmu         string `json:"danmu"`
+		DanmuNew      []struct {
+			Danmu     string `json:"danmu"`
+			DanmuView string `json:"danmu_view"`
+			Reject    bool   `json:"reject"`
+		} `json:"danmu_new"`
+		DanmuType      int    `json:"danmu_type"`
+		GiftId         int    `json:"gift_id"`
+		GiftName       string `json:"gift_name"`
+		GiftNum        int    `json:"gift_num"`
+		GiftPrice      int    `json:"gift_price"`
+		GoawayTime     int    `json:"goaway_time"`
+		GoodsId        int    `json:"goods_id"`
+		Id             int    `json:"id"`
+		IsBroadcast    int    `json:"is_broadcast"`
+		JoinType       int    `json:"join_type"`
+		LotStatus      int    `json:"lot_status"`
+		MaxTime        int    `json:"max_time"`
+		RequireText    string `json:"require_text"`
+		RequireType    int    `json:"require_type"`
+		RequireValue   int    `json:"require_value"`
+		RoomId         int    `json:"room_id"`
+		SendGiftEnsure int    `json:"send_gift_ensure"`
+		ShowPanel      int    `json:"show_panel"`
+		StartDontPopup int    `json:"start_dont_popup"`
+		Status         int    `json:"status"`
+		Time           int    `json:"time"`
+		Url            string `json:"url"`
+		WebUrl         string `json:"web_url"`
+	} `json:"data"`
+}
+
+type PkBattleSettleV2 struct {
+	Cmd          string `json:"cmd"`
+	PkId         int    `json:"pk_id"`
+	PkStatus     int    `json:"pk_status"`
+	SettleStatus int    `json:"settle_status"`
+	Timestamp    int    `json:"timestamp"`
+	Data         struct {
+		PkId       string `json:"pk_id"`
+		SeasonId   int    `json:"season_id"`
+		PkType     int    `json:"pk_type"`
+		ResultType int    `json:"result_type"`
+		ResultInfo struct {
+			TotalScore   int    `json:"total_score"`
+			PkVotes      int    `json:"pk_votes"`
+			PkVotesName  string `json:"pk_votes_name"`
+			PkExtraValue int    `json:"pk_extra_value"`
+		} `json:"result_info"`
+		LevelInfo struct {
+			Uid            string `json:"uid"`
+			FirstRankName  string `json:"first_rank_name"`
+			SecondRankNum  int    `json:"second_rank_num"`
+			FirstRankImg   string `json:"first_rank_img"`
+			SecondRankIcon string `json:"second_rank_icon"`
+		} `json:"level_info"`
+		AssistList []struct {
+			Id    int    `json:"id"`
+			Uname string `json:"uname"`
+			Face  string `json:"face"`
+			Score int    `json:"score"`
+		} `json:"assist_list"`
+		StarLightMsg string `json:"star_light_msg"`
+	} `json:"data"`
+}
+
+type PkBattleSettle struct {
+	Cmd          string `json:"cmd"`
+	PkId         int    `json:"pk_id"`
+	PkStatus     int    `json:"pk_status"`
+	SettleStatus int    `json:"settle_status"`
+	Timestamp    int    `json:"timestamp"`
+	Data         struct {
+		PkId         string `json:"pk_id"`
+		SeasonId     int    `json:"season_id"`
+		SettleStatus int    `json:"settle_status"`
+		ResultType   int    `json:"result_type"`
+		BattleType   int    `json:"battle_type"`
+		ResultInfo   struct {
+			TotalScore        int           `json:"total_score"`
+			ResultTypeScore   int           `json:"result_type_score"`
+			PkVotes           int           `json:"pk_votes"`
+			PkVotesName       string        `json:"pk_votes_name"`
+			PkCritScore       int           `json:"pk_crit_score"`
+			PkResistCritScore int           `json:"pk_resist_crit_score"`
+			PkExtraScoreSlot  string        `json:"pk_extra_score_slot"`
+			PkExtraValue      int           `json:"pk_extra_value"`
+			PkExtraScore      int           `json:"pk_extra_score"`
+			PkTaskScore       int           `json:"pk_task_score"`
+			PkTimesScore      int           `json:"pk_times_score"`
+			PkDoneTimes       int           `json:"pk_done_times"`
+			PkTotalTimes      int           `json:"pk_total_times"`
+			WinCount          int           `json:"win_count"`
+			WinFinalHit       int           `json:"win_final_hit"`
+			WinnerCountScore  int           `json:"winner_count_score"`
+			TaskScoreList     []interface{} `json:"task_score_list"`
+		} `json:"result_info"`
+		Winner struct {
+			RoomId    int    `json:"room_id"`
+			Uid       int64  `json:"uid"`
+			Uname     string `json:"uname"`
+			Face      string `json:"face"`
+			FaceFrame string `json:"face_frame"`
+			Exp       struct {
+				Color       int `json:"color"`
+				UserLevel   int `json:"user_level"`
+				MasterLevel struct {
+					Color int `json:"color"`
+					Level int `json:"level"`
+				} `json:"master_level"`
+			} `json:"exp"`
+			BestUser struct {
+				Uid         int64  `json:"uid"`
+				Uname       string `json:"uname"`
+				Face        string `json:"face"`
+				PkVotes     int    `json:"pk_votes"`
+				PkVotesName string `json:"pk_votes_name"`
+				Exp         struct {
+					Color int `json:"color"`
+					Level int `json:"level"`
+				} `json:"exp"`
+				FaceFrame string `json:"face_frame"`
+				Badge     struct {
+					Url      string `json:"url"`
+					Desc     string `json:"desc"`
+					Position int    `json:"position"`
+				} `json:"badge"`
+				AwardInfo           interface{}   `json:"award_info"`
+				AwardInfoList       []interface{} `json:"award_info_list"`
+				EndWinAwardInfoList struct {
+					List []interface{} `json:"list"`
+				} `json:"end_win_award_info_list"`
+			} `json:"best_user"`
+		} `json:"winner"`
+		MyInfo struct {
+			RoomId    int    `json:"room_id"`
+			Uid       int64  `json:"uid"`
+			Uname     string `json:"uname"`
+			Face      string `json:"face"`
+			FaceFrame string `json:"face_frame"`
+			Exp       struct {
+				Color       int `json:"color"`
+				UserLevel   int `json:"user_level"`
+				MasterLevel struct {
+					Color int `json:"color"`
+					Level int `json:"level"`
+				} `json:"master_level"`
+			} `json:"exp"`
+			BestUser struct {
+				Uid         int64  `json:"uid"`
+				Uname       string `json:"uname"`
+				Face        string `json:"face"`
+				PkVotes     int    `json:"pk_votes"`
+				PkVotesName string `json:"pk_votes_name"`
+				Exp         struct {
+					Color int `json:"color"`
+					Level int `json:"level"`
+				} `json:"exp"`
+				FaceFrame string `json:"face_frame"`
+				Badge     struct {
+					Url      string `json:"url"`
+					Desc     string `json:"desc"`
+					Position int    `json:"position"`
+				} `json:"badge"`
+				AwardInfo           interface{}   `json:"award_info"`
+				AwardInfoList       []interface{} `json:"award_info_list"`
+				EndWinAwardInfoList struct {
+					List []interface{} `json:"list"`
+				} `json:"end_win_award_info_list"`
+			} `json:"best_user"`
+		} `json:"my_info"`
+		LevelInfo struct {
+			FirstRankName  string `json:"first_rank_name"`
+			SecondRankNum  int    `json:"second_rank_num"`
+			FirstRankImg   string `json:"first_rank_img"`
+			SecondRankIcon string `json:"second_rank_icon"`
+		} `json:"level_info"`
+	} `json:"data"`
+}
+
+type HotRoomNotify struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Threshold        int `json:"threshold"`
+		Ttl              int `json:"ttl"`
+		ExitNoRefresh    int `json:"exit_no_refresh"`
+		RandomDelayReqV2 []struct {
+			Path  string `json:"path"`
+			Delay int    `json:"delay"`
+		} `json:"random_delay_req_v2"`
+	} `json:"data"`
+}
+
+type LiveOpenPlatformGame struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		MsgType              string      `json:"msg_type"`
+		MsgSubType           string      `json:"msg_sub_type"`
+		GameName             string      `json:"game_name"`
+		GameCode             string      `json:"game_code"`
+		GameId               string      `json:"game_id"`
+		GameStatus           string      `json:"game_status"`
+		GameMsg              string      `json:"game_msg"`
+		GameConf             string      `json:"game_conf"`
+		InteractivePanelConf string      `json:"interactive_panel_conf"`
+		Timestamp            int         `json:"timestamp"`
+		BlockUids            interface{} `json:"block_uids"`
+	} `json:"data"`
+}
+
+type LivePanelChangeContent struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		SettingList []struct {
+			BizId         int         `json:"biz_id"`
+			Icon          string      `json:"icon"`
+			Title         string      `json:"title"`
+			Note          string      `json:"note"`
+			Weight        float64     `json:"weight"`
+			StatusType    int         `json:"status_type"`
+			Notification  interface{} `json:"notification"`
+			Custom        interface{} `json:"custom"`
+			JumpUrl       string      `json:"jump_url"`
+			TypeId        int         `json:"type_id"`
+			Tab           interface{} `json:"tab"`
+			DynamicIcon   string      `json:"dynamic_icon"`
+			SubIcon       string      `json:"sub_icon"`
+			PanelIcon     string      `json:"panel_icon"`
+			MatchEntrance int         `json:"match_entrance"`
+			IconInfo      interface{} `json:"icon_info"`
+		} `json:"setting_list"`
+		InteractionList interface{} `json:"interaction_list"`
+		OuterList       []struct {
+			BizId        int         `json:"biz_id"`
+			Icon         string      `json:"icon"`
+			Title        string      `json:"title"`
+			Note         string      `json:"note"`
+			Weight       int         `json:"weight"`
+			StatusType   int         `json:"status_type"`
+			Notification interface{} `json:"notification"`
+			Custom       []struct {
+				Icon    string `json:"icon"`
+				Title   string `json:"title"`
+				Note    string `json:"note"`
+				JumpUrl string `json:"jump_url"`
+				Status  int    `json:"status"`
+				SubIcon string `json:"sub_icon"`
+			} `json:"custom"`
+			JumpUrl string `json:"jump_url"`
+			TypeId  int    `json:"type_id"`
+			Tab     *struct {
+				Type       string `json:"type"`
+				BizType    string `json:"biz_type"`
+				TabComment struct {
+				} `json:"tab_comment"`
+				TabTopic struct {
+				} `json:"tab_topic"`
+				Aggregation          int    `json:"aggregation"`
+				Id                   int    `json:"id"`
+				SubTitle             string `json:"sub_title"`
+				SubIcon              string `json:"sub_icon"`
+				ShowOuterAggregation int    `json:"show_outer_aggregation"`
+				ShowGuideBubble      string `json:"show_guide_bubble"`
+				GlobalId             string `json:"global_id"`
+			} `json:"tab"`
+			DynamicIcon   string      `json:"dynamic_icon"`
+			SubIcon       string      `json:"sub_icon"`
+			PanelIcon     string      `json:"panel_icon"`
+			MatchEntrance int         `json:"match_entrance"`
+			IconInfo      interface{} `json:"icon_info"`
+		} `json:"outer_list"`
+		PanelData     interface{} `json:"panel_data"`
+		IsFixed       int         `json:"is_fixed"`
+		IsMatch       int         `json:"is_match"`
+		MatchCristina string      `json:"match_cristina"`
+		MatchIcon     string      `json:"match_icon"`
+		MatchBgImage  string      `json:"match_bg_image"`
+	} `json:"data"`
+}
+
+type GiftPanelPlan struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		GiftList []struct {
+			GiftId int `json:"gift_id"`
+			Config struct {
+				Id                int    `json:"id"`
+				Name              string `json:"name"`
+				Price             int    `json:"price"`
+				Type              int    `json:"type"`
+				CoinType          string `json:"coin_type"`
+				BagGift           int    `json:"bag_gift"`
+				Effect            int    `json:"effect"`
+				CornerMark        string `json:"corner_mark"`
+				CornerBackground  string `json:"corner_background"`
+				Broadcast         int    `json:"broadcast"`
+				Draw              int    `json:"draw"`
+				StayTime          int    `json:"stay_time"`
+				AnimationFrameNum int    `json:"animation_frame_num"`
+				Desc              string `json:"desc"`
+				Rule              string `json:"rule"`
+				Rights            string `json:"rights"`
+				PrivilegeRequired int    `json:"privilege_required"`
+				CountMap          []struct {
+					Num            int    `json:"num"`
+					Text           string `json:"text"`
+					Desc           string `json:"desc"`
+					WebSvga        string `json:"web_svga"`
+					VerticalSvga   string `json:"vertical_svga"`
+					HorizontalSvga string `json:"horizontal_svga"`
+					SpecialColor   string `json:"special_color"`
+					EffectId       int    `json:"effect_id"`
+				} `json:"count_map"`
+				ImgBasic             string      `json:"img_basic"`
+				ImgDynamic           string      `json:"img_dynamic"`
+				FrameAnimation       string      `json:"frame_animation"`
+				Gif                  string      `json:"gif"`
+				Webp                 string      `json:"webp"`
+				FullScWeb            string      `json:"full_sc_web"`
+				FullScHorizontal     string      `json:"full_sc_horizontal"`
+				FullScVertical       string      `json:"full_sc_vertical"`
+				FullScHorizontalSvga string      `json:"full_sc_horizontal_svga"`
+				FullScVerticalSvga   string      `json:"full_sc_vertical_svga"`
+				BulletHead           string      `json:"bullet_head"`
+				BulletTail           string      `json:"bullet_tail"`
+				LimitInterval        int         `json:"limit_interval"`
+				BindRuid             int         `json:"bind_ruid"`
+				BindRoomid           int         `json:"bind_roomid"`
+				GiftType             int         `json:"gift_type"`
+				ComboResourcesId     int         `json:"combo_resources_id"`
+				MaxSendLimit         int         `json:"max_send_limit"`
+				Weight               int         `json:"weight"`
+				GoodsId              int         `json:"goods_id"`
+				HasImagedGift        int         `json:"has_imaged_gift"`
+				LeftCornerText       string      `json:"left_corner_text"`
+				LeftCornerBackground string      `json:"left_corner_background"`
+				GiftBanner           interface{} `json:"gift_banner"`
+				DiyCountMap          int         `json:"diy_count_map"`
+				EffectId             int         `json:"effect_id"`
+				FirstTips            string      `json:"first_tips"`
+				GiftAttrs            []int       `json:"gift_attrs"`
+			} `json:"config"`
+			FullScEffect  interface{} `json:"full_sc_effect"`
+			FloatScEffect interface{} `json:"float_sc_effect"`
+			SpecialType   int         `json:"special_type"`
+			Show          bool        `json:"show"`
+		} `json:"gift_list"`
+		SpecialTypeSort []int `json:"special_type_sort"`
+		Action          int   `json:"action"`
+	} `json:"data"`
+}
+
+type ShoppingExplainCard struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		GoodsId       string `json:"goods_id"`
+		GoodsName     string `json:"goods_name"`
+		GoodsPrice    string `json:"goods_price"`
+		GoodsMaxPrice string `json:"goods_max_price"`
+		SaleStatus    int    `json:"sale_status"`
+		CouponName    string `json:"coupon_name"`
+		GoodsIcon     string `json:"goods_icon"`
+		Status        int    `json:"status"`
+		H5Url         string `json:"h5_url"`
+		Source        int    `json:"source"`
+		Timestamp     int    `json:"timestamp"`
+		IsPreSale     int    `json:"is_pre_sale"`
+		ActivityInfo  struct {
+			ActivityId         int    `json:"activity_id"`
+			ActivityStatus     int    `json:"activity_status"`
+			StartTime          int    `json:"start_time"`
+			EndTime            int    `json:"end_time"`
+			IsAllSku           int    `json:"is_all_sku"`
+			Type               int    `json:"type"`
+			LowerDiscountPrice string `json:"lower_discount_price"`
+			UpperDiscountPrice string `json:"upper_discount_price"`
+			WarmUpTime         int    `json:"warm_up_time"`
+			ActivitySaleOut    bool   `json:"activity_sale_out"`
+		} `json:"activity_info"`
+		PreSaleInfo struct {
+			Deposit                     string `json:"deposit"`
+			DepositType                 int    `json:"deposit_type"`
+			MaxDeposit                  string `json:"max_deposit"`
+			PresaleStartOrderTime       int    `json:"presale_start_order_time"`
+			PresaleEndOrderTime         int    `json:"presale_end_order_time"`
+			PreSaleSupplyMoneyStartTime int    `json:"pre_sale_supply_money_start_time"`
+			PreSaleSupplyMoneyEndTime   int    `json:"pre_sale_supply_money_end_time"`
+		} `json:"pre_sale_info"`
+		EarlyBirdInfo       interface{} `json:"early_bird_info"`
+		UniqueId            string      `json:"unique_id"`
+		Uid                 int64       `json:"uid"`
+		SellingPoint        string      `json:"selling_point"`
+		CouponDiscountPrice string      `json:"coupon_discount_price"`
+		SeiStatus           int         `json:"sei_status"`
+		GiftBuyInfo         interface{} `json:"gift_buy_info"`
+		RewardInfo          interface{} `json:"reward_info"`
+		IsExclusive         bool        `json:"is_exclusive"`
+		CouponId            string      `json:"coupon_id"`
+		GoodsTagList        interface{} `json:"goods_tag_list"`
+		VirtualExtraInfo    interface{} `json:"virtual_extra_info"`
+		PriceInfo           interface{} `json:"price_info"`
+		BtnInfo             interface{} `json:"btn_info"`
+		GoodsSortId         int         `json:"goods_sort_id"`
+	} `json:"data"`
+}
+
+type AnchorLotCheckStatus struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Id     int   `json:"id"`
+		Status int   `json:"status"`
+		Uid    int64 `json:"uid"`
+	} `json:"data"`
+}
+
+type PkBattlePunishEnd struct {
+	Cmd       string `json:"cmd"`
+	PkId      string `json:"pk_id"`
+	PkStatus  int    `json:"pk_status"`
+	StatusMsg string `json:"status_msg"`
+	Timestamp int    `json:"timestamp"`
+	Data      struct {
+		BattleType int `json:"battle_type"`
+	} `json:"data"`
+}
+
+type AnchorLotEnd struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Id int `json:"id"`
+	} `json:"data"`
+}
+
+type AnchorLotAward struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		AwardDontPopup int    `json:"award_dont_popup"`
+		AwardImage     string `json:"award_image"`
+		AwardName      string `json:"award_name"`
+		AwardNum       int    `json:"award_num"`
+		AwardType      int    `json:"award_type"`
+		AwardUsers     []struct {
+			Uid   int64  `json:"uid"`
+			Uname string `json:"uname"`
+			Face  string `json:"face"`
+			Level int    `json:"level"`
+			Color int    `json:"color"`
+			Num   int    `json:"num"`
+		} `json:"award_users"`
+		Id        int    `json:"id"`
+		LotStatus int    `json:"lot_status"`
+		Url       string `json:"url"`
+		WebUrl    string `json:"web_url"`
+	} `json:"data"`
+}
+
+type SpecialGift struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Field1 struct {
+			Action   string `json:"action"`
+			Content  string `json:"content"`
+			HadJoin  int    `json:"hadJoin"`
+			Id       string `json:"id"`
+			Num      int    `json:"num"`
+			StormGif string `json:"storm_gif"`
+			Time     int    `json:"time"`
+		} `json:"39"`
+	} `json:"data"`
+}
+
+type SuperChatMessageDelete struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Ids []int `json:"ids"`
+	} `json:"data"`
+	Roomid int `json:"roomid"`
+}
+
+type VoiceJoinRoomCountInfo struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Cmd         string `json:"cmd"`
+		RoomId      int    `json:"room_id"`
+		RootStatus  int    `json:"root_status"`
+		RoomStatus  int    `json:"room_status"`
+		ApplyCount  int    `json:"apply_count"`
+		NotifyCount int    `json:"notify_count"`
+		RedPoint    int    `json:"red_point"`
+	} `json:"data"`
+	RoomId int `json:"room_id"`
+}
+
+type VoiceJoinList struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Cmd        string `json:"cmd"`
+		RoomId     int    `json:"room_id"`
+		Category   int    `json:"category"`
+		ApplyCount int    `json:"apply_count"`
+		RedPoint   int    `json:"red_point"`
+		Refresh    int    `json:"refresh"`
+	} `json:"data"`
+	RoomId int `json:"room_id"`
+}
+
+type VoiceJoinStatus struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		RoomId       int    `json:"room_id"`
+		Status       int    `json:"status"`
+		Channel      string `json:"channel"`
+		ChannelType  string `json:"channel_type"`
+		Uid          int64  `json:"uid"`
+		UserName     string `json:"user_name"`
+		HeadPic      string `json:"head_pic"`
+		Guard        int    `json:"guard"`
+		StartAt      int    `json:"start_at"`
+		CurrentTime  int    `json:"current_time"`
+		WebShareLink string `json:"web_share_link"`
+	} `json:"data"`
+	RoomId int `json:"room_id"`
+}
+
+type Warning struct {
+	Cmd    string `json:"cmd"`
+	Roomid int    `json:"roomid"`
+	Msg    string `json:"msg"`
+}
+
+type PkBattleRankChange struct {
+	Cmd       string `json:"cmd"`
+	Timestamp int    `json:"timestamp"`
+	Data      struct {
+		FirstRankImgUrl string `json:"first_rank_img_url"`
+		RankName        string `json:"rank_name"`
+	} `json:"data"`
+}
+
+type PkBattleSettleNew struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		BattleType int `json:"battle_type"`
+		DmConf     struct {
+			BgColor   string `json:"bg_color"`
+			FontColor string `json:"font_color"`
+		} `json:"dm_conf"`
+		Dmscore  int `json:"dmscore"`
+		InitInfo struct {
+			AssistInfo []struct {
+				Face  string `json:"face"`
+				Rank  int    `json:"rank"`
+				Uid   int64  `json:"uid"`
+				Uname string `json:"uname"`
+			} `json:"assist_info"`
+			ResultType int `json:"result_type"`
+			RoomId     int `json:"room_id"`
+			Votes      int `json:"votes"`
+		} `json:"init_info"`
+		MatchInfo struct {
+			AssistInfo []struct {
+				Face  string `json:"face"`
+				Rank  int    `json:"rank"`
+				Uid   int64  `json:"uid"`
+				Uname string `json:"uname"`
+			} `json:"assist_info"`
+			ResultType int `json:"result_type"`
+			RoomId     int `json:"room_id"`
+			Votes      int `json:"votes"`
+		} `json:"match_info"`
+		PkId          int `json:"pk_id"`
+		PkStatus      int `json:"pk_status"`
+		PunishEndTime int `json:"punish_end_time"`
+		SettleStatus  int `json:"settle_status"`
+		Timestamp     int `json:"timestamp"`
+	} `json:"data"`
+	PkId      int `json:"pk_id"`
+	PkStatus  int `json:"pk_status"`
+	Timestamp int `json:"timestamp"`
+}
+
+type HotBuyNum struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		GoodsId string `json:"goods_id"`
+		Num     int    `json:"num"`
+	} `json:"data"`
+}
+
+type ShoppingCartShow struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Status int `json:"status"`
+	} `json:"data"`
+}
+
+type VoiceJoinSwitch struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		RoomId     int `json:"room_id"`
+		RoomStatus int `json:"room_status"`
+		RootStatus int `json:"root_status"`
+	} `json:"data"`
+	Roomid int `json:"roomid"`
+}
+
+type CutOff struct {
+	Cmd    string `json:"cmd"`
+	Msg    string `json:"msg"`
+	Roomid int    `json:"roomid"`
+}
+
+type RoomAdminRevoke struct {
+	Cmd string `json:"cmd"`
+	Msg string `json:"msg"`
+	Uid int64  `json:"uid"`
+}
+
+type RoomSilentOff struct {
+	Data struct {
+		Type   string `json:"type"`
+		Level  int    `json:"level"`
+		Second int    `json:"second"`
+	} `json:"data"`
+	Cmd string `json:"cmd"`
+}
+
+type RoomSilentOn struct {
+	Data struct {
+		Type   string `json:"type"`
+		Level  int    `json:"level"`
+		Second int    `json:"second"`
+	} `json:"data"`
+	Cmd string `json:"cmd"`
+}
+
+type RoomAdminEntrance struct {
+	Cmd     string `json:"cmd"`
+	Dmscore int    `json:"dmscore"`
+	Level   int    `json:"level"`
+	Msg     string `json:"msg"`
+	Uid     int64  `json:"uid"`
+}
+
+type RoomAdmins struct {
+	Cmd  string  `json:"cmd"`
+	Uids []int64 `json:"uids"`
+}
+
+type VideoConnectionJoinStart struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Status       int    `json:"status"`
+		InvitedUid   int64  `json:"invited_uid"`
+		ChannelId    string `json:"channel_id"`
+		InvitedUname string `json:"invited_uname"`
+		InvitedFace  string `json:"invited_face"`
+		StartAt      int    `json:"start_at"`
+		CurrentTime  int    `json:"current_time"`
+	} `json:"data"`
+	Roomid int `json:"roomid"`
+}
+
+type VideoConnectionMsg struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ChannelId   string `json:"channel_id"`
+		CurrentTime int    `json:"current_time"`
+		Dmscore     int    `json:"dmscore"`
+		Toast       string `json:"toast"`
+	} `json:"data"`
+}
+
+type VideoConnectionJoinEnd struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ChannelId   string `json:"channel_id"`
+		StartAt     int    `json:"start_at"`
+		Toast       string `json:"toast"`
+		CurrentTime int    `json:"current_time"`
+	} `json:"data"`
+	Roomid int `json:"roomid"`
+}
+
+type RingStatusChange struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Status int `json:"status"`
+	} `json:"data"`
+}
+
+type RingStatusChangeV2 struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Status int `json:"status"`
+	} `json:"data"`
+}
+
+type RoomLock struct {
+	Cmd    string `json:"cmd"`
+	Expire string `json:"expire"`
+	Roomid int    `json:"roomid"`
+}
+
+type ShoppingBubblesStyle struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		IntervalBetweenBubbles int    `json:"interval_between_bubbles"`
+		IntervalBetweenQueues  int    `json:"interval_between_queues"`
+		CycleTime              int    `json:"cycle_time"`
+		GoodsCount             int    `json:"goods_count"`
+		Checksum               string `json:"checksum"`
+		BubblesList            []struct {
+			Tag        string        `json:"tag"`
+			Name       string        `json:"name"`
+			Priority   int           `json:"priority"`
+			ShowBanner int           `json:"show_banner"`
+			GoodsList  []interface{} `json:"goods_list"`
+		} `json:"bubbles_list"`
+	} `json:"data"`
+}
+
+type MultiVoiceOperating struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Uid        int64 `json:"uid"`
+		TotalPrice int   `json:"total_price"`
+		Ts         int64 `json:"ts"`
+	} `json:"data"`
+}
+
+type MultiVoiceApplicationUser struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Count        int    `json:"count"`
+		Uid          int64  `json:"uid"`
+		AnchorUid    int64  `json:"anchor_uid"`
+		OperateUid   int64  `json:"operate_uid"`
+		WantPosition int    `json:"want_position"`
+		Event        int    `json:"event"`
+		Toast        string `json:"toast"`
+		Channel      string `json:"channel"`
+		RoomId       int    `json:"roomId"`
+		Role         int    `json:"role"`
+	} `json:"data"`
+}
+
+type PkBattleMatchTimeout struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		BattleType int `json:"battle_type"`
+	} `json:"data"`
+}
+
+type ChangeRoomInfo struct {
+	Cmd        string `json:"cmd"`
+	Background string `json:"background"`
+	Roomid     int    `json:"roomid"`
+}
+
+type LiveMultiViewChange struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Scatter struct {
+			Max int `json:"max"`
+			Min int `json:"min"`
+		} `json:"scatter"`
+	} `json:"data"`
+}
+
+type GuardAchievementRoom struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		AnchorBasemapUrl        string `json:"anchor_basemap_url"`
+		AnchorGuardAchieveLevel int    `json:"anchor_guard_achieve_level"`
+		AnchorModal             struct {
+			FirstLineContent  string `json:"first_line_content"`
+			HighlightColor    string `json:"highlight_color"`
+			SecondLineContent string `json:"second_line_content"`
+			ShowTime          int    `json:"show_time"`
+		} `json:"anchor_modal"`
+		AppBasemapUrl            string `json:"app_basemap_url"`
+		CurrentAchievementLevel  int    `json:"current_achievement_level"`
+		Dmscore                  int    `json:"dmscore"`
+		EventType                int    `json:"event_type"`
+		Face                     string `json:"face"`
+		FirstLineContent         string `json:"first_line_content"`
+		FirstLineHighlightColor  string `json:"first_line_highlight_color"`
+		FirstLineNormalColor     string `json:"first_line_normal_color"`
+		HeadmapUrl               string `json:"headmap_url"`
+		IsFirst                  bool   `json:"is_first"`
+		IsFirstNew               bool   `json:"is_first_new"`
+		RoomId                   int    `json:"room_id"`
+		SecondLineContent        string `json:"second_line_content"`
+		SecondLineHighlightColor string `json:"second_line_highlight_color"`
+		SecondLineNormalColor    string `json:"second_line_normal_color"`
+		ShowTime                 int    `json:"show_time"`
+		WebBasemapUrl            string `json:"web_basemap_url"`
 	} `json:"data"`
 }
