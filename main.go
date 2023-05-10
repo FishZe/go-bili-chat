@@ -56,7 +56,7 @@ func GetNewHandler() *Handler {
 }
 
 func (h *Handler) AddOption(Cmd string, RoomId int, Do func(event handler.MsgEvent), funcName ...string) {
-	if RoomId <= 10000 {
+	if RoomId <= 10000 && RoomId != 0 {
 		RealRoomId, err := client.GetRealRoomId(RoomId)
 		if err != nil {
 			log.Error(err)
