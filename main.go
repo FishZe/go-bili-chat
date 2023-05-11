@@ -49,30 +49,30 @@ func SetClientPriorityMode(mode int) {
 
 func GetNewHandler() *Handler {
 	h := Handler{}
-	h.Handler.DoFunc = make(map[string]map[int][]func(event handler.MsgEvent), 0)
+	h.Handler.DoFunc = make(handler.CmdTable, 0)
 	h.Handler.CmdChan = make(chan map[string]interface{}, 10)
-	h.Handler.Init()
+	h.Handler.FuncPath = make(map[*handler.HandlerFunc]handler.Path)
 	return &h
 }
 
-func (h *Handler) AddOption(Cmd string, RoomId int, Do func(event handler.MsgEvent), funcName ...string) {
+func (h *Handler) AddOption(Cmd string, RoomId int, Do handler.HandlerFunc) *handler.HandlerFunc {
 	if RoomId <= 10000 && RoomId != 0 {
 		RealRoomId, err := client.GetRealRoomId(RoomId)
 		if err != nil {
 			log.Error(err)
-			return
+			return nil
 		} else if RealRoomId == 0 {
 			log.Error(GetRoomFailed)
-			return
+			return nil
 		}
 		log.Debug(RoomId, " is short roomid, the real roomid is: ", RealRoomId)
 		RoomId = RealRoomId
 	}
-	h.Handler.AddOption(Cmd, RoomId, Do, funcName...)
+	return h.Handler.AddOption(Cmd, RoomId, Do)
 }
 
-func (h *Handler) DelOption(Name string) {
-	h.Handler.DelOption(Name)
+func (h *Handler) DelOption(f *handler.HandlerFunc) {
+	h.Handler.DelOption(f)
 }
 
 func (h *Handler) AddRoom(RoomId int) error {
