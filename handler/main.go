@@ -5,12 +5,12 @@ import (
 	"reflect"
 )
 
-type HandlerFunc = func(event MsgEvent)
+type Do = func(event MsgEvent)
 
 // FuncTable
 // 空结构体不占空间，作为hashSet使用
 // 函数指针内存唯一
-type FuncTable = map[*HandlerFunc]struct{}
+type FuncTable = map[*Do]struct{}
 
 type RoomTable = map[int]FuncTable
 
@@ -25,7 +25,7 @@ type Handler struct {
 	CmdChan chan map[string]interface{}
 	DoFunc  CmdTable
 	//函数反查表
-	FuncPath map[*HandlerFunc]Path
+	FuncPath map[*Do]Path
 }
 
 type jsonCoder interface {
@@ -35,7 +35,7 @@ type jsonCoder interface {
 
 var JsonCoder jsonCoder
 
-func (handler *Handler) AddOption(Cmd string, RoomId int, Do HandlerFunc) *HandlerFunc {
+func (handler *Handler) AddOption(Cmd string, RoomId int, Do Do) *Do {
 	if _, ok := handler.DoFunc[Cmd]; !ok {
 		handler.DoFunc[Cmd] = make(RoomTable)
 	}
@@ -63,7 +63,7 @@ func (handler *Handler) DelRoomOption(roomId int) {
 	}
 }
 
-func (handler *Handler) DelOption(p *HandlerFunc) {
+func (handler *Handler) DelOption(p *Do) {
 	if p != nil {
 		path := handler.FuncPath[p]
 		delete(handler.DoFunc[path.Cmd][path.RoomId], p)
@@ -82,7 +82,13 @@ func (handler *Handler) doHandler(f reflect.Value, msg map[string]interface{}) {
 	// 执行函数
 	if msgEvent.Cmd != "" && msgEvent.RoomId != 0 {
 		if cmd, ok := msg["cmd"].(string); ok {
+			//房间号分发
 			for t := range handler.DoFunc[cmd][msgEvent.RoomId] {
+				log.Debugf("distribute %v cmd", msg["cmd"].(string))
+				go (*t)(msgEvent)
+			}
+			//全局分发
+			for t := range handler.DoFunc[cmd][0] {
 				log.Debugf("distribute %v cmd", msg["cmd"].(string))
 				go (*t)(msgEvent)
 			}
@@ -101,7 +107,7 @@ func (handler *Handler) CmdHandler() {
 					if dict, ok := handler.DoFunc[cmd]; ok {
 						// 处理房间存在
 						_, ok1 := dict[msg["RoomId"].(int)]
-						// 0 为所以房间
+						// 0 为所有房间
 						_, ok2 := dict[0]
 						if ok1 || ok2 {
 							setFunc := reflect.ValueOf(&Handler{}).MethodByName("Set" + CmdName[cmd])

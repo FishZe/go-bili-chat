@@ -51,11 +51,11 @@ func GetNewHandler() *Handler {
 	h := Handler{}
 	h.Handler.DoFunc = make(handler.CmdTable, 0)
 	h.Handler.CmdChan = make(chan map[string]interface{}, 10)
-	h.Handler.FuncPath = make(map[*handler.HandlerFunc]handler.Path)
+	h.Handler.FuncPath = make(map[*handler.Do]handler.Path)
 	return &h
 }
 
-func (h *Handler) AddOption(Cmd string, RoomId int, Do handler.HandlerFunc) *handler.HandlerFunc {
+func (h *Handler) AddOption(Cmd string, RoomId int, Do handler.Do) *handler.Do {
 	if RoomId <= 10000 && RoomId != 0 {
 		RealRoomId, err := client.GetRealRoomId(RoomId)
 		if err != nil {
@@ -71,7 +71,7 @@ func (h *Handler) AddOption(Cmd string, RoomId int, Do handler.HandlerFunc) *han
 	return h.Handler.AddOption(Cmd, RoomId, Do)
 }
 
-func (h *Handler) DelOption(f *handler.HandlerFunc) {
+func (h *Handler) DelOption(f *handler.Do) {
 	h.Handler.DelOption(f)
 }
 
