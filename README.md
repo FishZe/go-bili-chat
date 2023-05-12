@@ -149,11 +149,11 @@ bili.SetClientPriorityMode(bili.DelayPriority)
 type Json struct{}
 
 func (j *Json) Unmarshal(data []byte, v interface{}) error {
-	return json.Unmarshal(data, v)
+    return json.Unmarshal(data, v)
 }
 
 func (j *Json) Marshal(v interface{}) ([]byte, error) {
-	return json.Marshal(v)
+    return json.Marshal(v)
 }
 
 bili.SetJsonCoder(&Json{})
@@ -278,6 +278,18 @@ h.AddOption(handle.CmdDanmuMsg, 21545805, func(event handle.MsgEvent) {
 | 	CmdChangeRoomInfo                | "CHANGE_ROOM_INFO"                  |              |    
 | 	CmdLiveMultiViewChange           | "LIVE_MULTI_VIEW_CHANGE"            |              |    
 | 	CmdGuardAchievementRoom          | "GUARD_ACHIEVEMENT_ROOM"            |              |
+| CmdSysMsg                         | "SYS_MSG"                           |              | 
+| CmdMvRoleChange                   | "MV_ROLE_CHANGE"                    |              |
+| CmdSelectedGoodsInfo              | "SELECTED_GOODS_INFO"               |              |
+| CmdMultiVoiceOperatin             | "MULTI_VOICE_OPERATING"             |              |
+| CmdPanelInteractiveNotifyChange   | "PANEL_INTERACTIVE_NOTIFY_CHANGE"   |              |
+| CmdInteractiveUser                | "INTERACTIVE_USER"                  |              |
+| CmdUserVirtualMvp                 | "USER_VIRTUAL_MVP"                  |              |
+| CmdWidgetWishList                 | "WIDGET_WISH_LIST"                  |              |
+| CmdCheckSingStatus                | "CHECK_SING_STATUS"                 |              |
+| CmdRoomModuleDisplay              | "ROOM_MODULE_DISPLAY"               |              |
+| CmdVoiceChatUpdate                | "VOICE_CHAT_UPDATE"                 |              |
+| CmdReenterLiveRoom                | "REENTER_LIVE_ROOM"                 |              |
 
 由于我也不是很明白b站的命令, 所以这里只是列出了我知道的命令, 如果有人知道更多的命令, 请在issue中提出, 我会及时更新。
 

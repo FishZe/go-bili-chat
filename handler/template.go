@@ -95,6 +95,18 @@ const (
 	CmdChangeRoomInfo                = "CHANGE_ROOM_INFO"
 	CmdLiveMultiViewChange           = "LIVE_MULTI_VIEW_CHANGE"
 	CmdGuardAchievementRoom          = "GUARD_ACHIEVEMENT_ROOM"
+	CmdSysMsg                        = "SYS_MSG"
+	CmdMvRoleChange                  = "MV_ROLE_CHANGE"
+	CmdSelectedGoodsInfo             = "SELECTED_GOODS_INFO"
+	CmdMultiVoiceOperatin            = "MULTI_VOICE_OPERATING"
+	CmdPanelInteractiveNotifyChange  = "PANEL_INTERACTIVE_NOTIFY_CHANGE"
+	CmdInteractiveUser               = "INTERACTIVE_USER"
+	CmdUserVirtualMvp                = "USER_VIRTUAL_MVP"
+	CmdWidgetWishList                = "WIDGET_WISH_LIST"
+	CmdCheckSingStatus               = "CHECK_SING_STATUS"
+	CmdRoomModuleDisplay             = "ROOM_MODULE_DISPLAY"
+	CmdVoiceChatUpdate               = "VOICE_CHAT_UPDATE"
+	CmdReenterLiveRoom               = "REENTER_LIVE_ROOM"
 )
 
 var CmdName = map[string]string{
@@ -193,6 +205,18 @@ var CmdName = map[string]string{
 	"CHANGE_ROOM_INFO":                  "ChangeRoomInfo",
 	"LIVE_MULTI_VIEW_CHANGE":            "LiveMultiViewChange",
 	"GUARD_ACHIEVEMENT_ROOM":            "GuardAchievementRoom",
+	"SYS_MSG":                           "SysMsg",
+	"MVROLECHANGE":                      "MvRoleChange",
+	"SELECTED_GOODS_INFO":               "SelectedGoodsInfo",
+	"MULTI_VOICE_OPERATIN":              "MultiVoiceOperatin",
+	"PANEL_INTERACTIVE_NOTIFY_CHANGE":   "PanelInteractiveNotifyChange",
+	"INTERACTIVE_USER":                  "InteractiveUser",
+	"USER_VIRTUAL_MVP":                  "UserVirtualMvp",
+	"WIDGET_WISH_LIST":                  "WidgetWishList",
+	"CHECK_SING_STATUS":                 "CheckSingStatus",
+	"ROOM_MODULE_DISPLAY":               "RoomModuleDisplay",
+	"VOICE_CHAT_UPDATE":                 "VoiceChatUpdate",
+	"REENTER_LIVE_ROOM":                 "ReenterLiveRoom",
 }
 
 type MsgEvent struct {
@@ -292,6 +316,18 @@ type MsgEvent struct {
 	ChangeRoomInfo                *ChangeRoomInfo
 	LiveMultiViewChange           *LiveMultiViewChange
 	GuardAchievementRoom          *GuardAchievementRoom
+	SysMsg                        *SysMsg
+	MvRoleChange                  *MvRoleChange
+	SelectedGoodsInfo             *SelectedGoodsInfo
+	MultiVoiceOperatin            *MultiVoiceOperatin
+	PanelInteractiveNotifyChange  *PanelInteractiveNotifyChange
+	InteractiveUser               *InteractiveUser
+	UserVirtualMvp                *UserVirtualMvp
+	WidgetWishList                *WidgetWishList
+	CheckSingStatus               *CheckSingStatus
+	RoomModuleDisplay             *RoomModuleDisplay
+	VoiceChatUpdate               *VoiceChatUpdate
+	ReenterLiveRoom               *ReenterLiveRoom
 }
 
 type FansMedal struct {
@@ -447,12 +483,23 @@ type ReceiveUserInfo struct {
 type SendGift struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
-		UID               int64           `json:"uid"`
-		Name              string          `json:"uname"`
-		NameColor         string          `json:"name_color"`
-		Action            string          `json:"action"`
-		BatchComboID      string          `json:"batch_combo_id"`
-		BatchComboSend    interface{}     `json:"batch_combo_send"`
+		UID            int64  `json:"uid"`
+		Name           string `json:"uname"`
+		NameColor      string `json:"name_color"`
+		Action         string `json:"action"`
+		BatchComboID   string `json:"batch_combo_id"`
+		BatchComboSend struct {
+			Action        string      `json:"action"`
+			BatchComboId  string      `json:"batch_combo_id"`
+			BatchComboNum int         `json:"batch_combo_num"`
+			BlindGift     *BlindGift  `json:"blind_gift"`
+			GiftId        int         `json:"gift_id"`
+			GiftName      string      `json:"gift_name"`
+			GiftNum       int         `json:"gift_num"`
+			SendMaster    interface{} `json:"send_master"`
+			Uid           int         `json:"uid"`
+			Uname         string      `json:"uname"`
+		} `json:"batch_combo_send"`
 		BeatID            string          `json:"beatId"`
 		BizSource         string          `json:"biz_source"`
 		BlindGift         *BlindGift      `json:"blind_gift"`
@@ -2342,4 +2389,164 @@ type GuardAchievementRoom struct {
 		ShowTime                 int    `json:"show_time"`
 		WebBasemapUrl            string `json:"web_basemap_url"`
 	} `json:"data"`
+}
+
+type SysMsg struct {
+	Cmd string `json:"cmd"`
+	Msg string `json:"msg"`
+	Url string `json:"url"`
+}
+
+type MvRoleChange struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ChangeUid int64 `json:"change_uid"`
+		Role      int   `json:"role"`
+		RoomId    int   `json:"room_id"`
+		Ts        int   `json:"ts"`
+	} `json:"data"`
+}
+
+type SelectedGoodsInfo struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ChangeType int `json:"change_type"`
+		Item       []struct {
+			GoodsId             string      `json:"goods_id"`
+			GoodsName           string      `json:"goods_name"`
+			Source              int         `json:"source"`
+			GoodsIcon           string      `json:"goods_icon"`
+			IsPreSale           int         `json:"is_pre_sale"`
+			ActivityInfo        interface{} `json:"activity_info"`
+			PreSaleInfo         interface{} `json:"pre_sale_info"`
+			EarlyBirdInfo       interface{} `json:"early_bird_info"`
+			CouponDiscountPrice string      `json:"coupon_discount_price"`
+			SelectedText        string      `json:"selected_text"`
+			IsGiftBuy           int         `json:"is_gift_buy"`
+			GoodsPrice          string      `json:"goods_price"`
+			GoodsMaxPrice       string      `json:"goods_max_price"`
+			RewardInfo          interface{} `json:"reward_info"`
+			GoodsTagList        interface{} `json:"goods_tag_list"`
+		} `json:"item"`
+		Title string `json:"title"`
+	} `json:"data"`
+}
+
+type MultiVoiceOperatin struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Uid        int64 `json:"uid"`
+		TotalPrice int   `json:"total_price"`
+		Ts         int64 `json:"ts"`
+	} `json:"data"`
+}
+
+type PanelInteractiveNotifyChange struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		BizId    int    `json:"biz_id"`
+		EndTime  int    `json:"end_time"`
+		Icon     string `json:"icon"`
+		LastTime int    `json:"last_time"`
+		Level    int    `json:"level"`
+		Text     string `json:"text"`
+	} `json:"data"`
+}
+
+type InteractiveUser struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Type  int `json:"type"`
+		Value struct {
+			Delay         int    `json:"delay"`
+			DmMsg         string `json:"dm_msg"`
+			ProphetStatus int    `json:"prophet_status"`
+			SendMsg       int    `json:"send_msg"`
+		} `json:"value"`
+	} `json:"data"`
+}
+
+type UserVirtualMvp struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		GoodsId        int    `json:"goods_id"`
+		EffectId       int    `json:"effect_id"`
+		EffectQueue    int    `json:"effect_queue"`
+		Uid            int64  `json:"uid"`
+		Uname          string `json:"uname"`
+		UnameColor     string `json:"uname_color"`
+		UserGuardLevel int    `json:"user_guard_level"`
+		GoodsName      string `json:"goods_name"`
+		GoodsNum       int    `json:"goods_num"`
+		GoodsPrice     int    `json:"goods_price"`
+		GoodsIcon      string `json:"goods_icon"`
+		Action         string `json:"action"`
+		OrderId        string `json:"order_id"`
+		Timestamp      int    `json:"timestamp"`
+		SuccessToast   string `json:"success_toast"`
+		AnimationBlock int    `json:"animation_block"`
+	} `json:"data"`
+}
+
+type WidgetWishList struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Wish []struct {
+			Type       int    `json:"type"`
+			GiftId     int    `json:"gift_id"`
+			GiftName   string `json:"gift_name"`
+			GiftImg    string `json:"gift_img"`
+			GiftPrice  int    `json:"gift_price"`
+			TargetNum  int    `json:"target_num"`
+			CurrentNum int    `json:"current_num"`
+		} `json:"wish"`
+		WishStatus     int `json:"wish_status"`
+		Sid            int `json:"sid"`
+		WishStatusInfo []struct {
+			WishStatusMsg string `json:"wish_status_msg"`
+			WishStatusImg string `json:"wish_status_img"`
+			WishStatus    int    `json:"wish_status"`
+		} `json:"wish_status_info"`
+		WishName string `json:"wish_name"`
+	} `json:"data"`
+}
+
+type CheckSingStatus struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ShortTimeSize int   `json:"ShortTimeSize"`
+		ShortTimeSing int   `json:"ShortTimeSing"`
+		LongTimeSize  int   `json:"LongTimeSize"`
+		LongTimeSing  int   `json:"LongTimeSing"`
+		OpenArea      []int `json:"OpenArea"`
+	} `json:"data"`
+}
+
+type RoomModuleDisplay struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Timestamp int `json:"timestamp"`
+		Modules   struct {
+			BottomBanner int `json:"bottom_banner"`
+			TopBanner    int `json:"top_banner"`
+			WidgetBanner int `json:"widget_banner"`
+		} `json:"modules"`
+	} `json:"data"`
+}
+
+type VoiceChatUpdate struct {
+	Data struct {
+		Url string `json:"url"`
+	} `json:"data"`
+	Cmd string `json:"cmd"`
+}
+
+type ReenterLiveRoom struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		RoomId                int `json:"room_id"`
+		RequestRandomSecRange int `json:"request_random_sec_range"`
+		Reason                int `json:"reason"`
+	} `json:"data"`
+	Roomid int `json:"roomid"`
 }
