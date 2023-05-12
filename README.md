@@ -89,7 +89,29 @@ func main() {
 }
 ```
 
-#### 4. 对于连接房间过多的情况, 建议先`go h.Run()`再添加房间, 否则会阻塞通道造成内存大量占用
+#### 4. 还可以删除处理函数
+
+```go
+package main
+
+import (
+	"fmt"
+	bili "github.com/FishZe/go-bili-chat"
+	handle "github.com/FishZe/go-bili-chat/handler"
+)
+
+func main() {
+	h := bili.GetNewHandler()
+	danmu := h.AddOption(handle.CmdDanmuMsg, 26097368, func(event handle.MsgEvent) {
+		fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
+	})
+	_ = h.AddRoom(26097368)
+	h.DelOption(danmu)
+	h.Run()
+}
+```
+
+#### 5. 对于连接房间过多的情况, 建议先`go h.Run()`再添加房间, 否则会阻塞通道造成内存大量占用
 
 ```go
 go h.Run()
@@ -97,14 +119,6 @@ _ = h.AddRoom(26097368)
 _ = h.AddRoom(26097369)
 _ = h.AddRoom(26097370)
 // sth...
-```
-
-#### 5. 如果你有删除房间或debug的需求, 可以绑定函数时传入函数的名称
-```go
-h.AddOption(handle.CmdDanmuMsg, 26097368, func(event handle.MsgEvent) {
-    fmt.Printf("[%v] %v: %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Content)
-}, "弹幕")
-h.DelOption("弹幕")
 ```
 
 **关于为什么在处理绑定函数时, 多一个直播间号的参数, 因为考虑到可能会有根据不同的直播间分发处理消息的需求**
