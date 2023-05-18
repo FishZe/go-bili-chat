@@ -930,3 +930,51 @@ func (*Handler) SetReenterLiveRoom(msg map[string]interface{}) (m MsgEvent) {
 	}
 	return
 }
+
+func (*Handler) SetOfficialRoomEvent(msg map[string]interface{}) (m MsgEvent) {
+	officialRoomEvent := OfficialRoomEvent{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &officialRoomEvent); err == nil {
+		m = MsgEvent{Cmd: CmdOfficialRoomEvent, RoomId: msg["RoomId"].(int), OfficialRoomEvent: &officialRoomEvent}
+	}
+	return
+}
+
+func (*Handler) SetActivityBannerChangeV2(msg map[string]interface{}) (m MsgEvent) {
+	activityBannerChangeV2 := ActivityBannerChangeV2{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &activityBannerChangeV2); err == nil {
+		m = MsgEvent{Cmd: CmdActivityBannerChangeV2, RoomId: msg["RoomId"].(int), ActivityBannerChangeV2: &activityBannerChangeV2}
+	}
+	return
+}
+
+func (*Handler) SetActivityBannerChange(msg map[string]interface{}) (m MsgEvent) {
+	activityBannerChange := ActivityBannerChange{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &activityBannerChange); err == nil {
+		m = MsgEvent{Cmd: CmdActivityBannerChange, RoomId: msg["RoomId"].(int), ActivityBannerChange: &activityBannerChange}
+	}
+	return
+}
+
+func (*Handler) SetVideoConnectionStart(msg map[string]interface{}) (m MsgEvent) {
+	videoConnectionStart := VideoConnectionStart{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &videoConnectionStart); err == nil {
+		m = MsgEvent{Cmd: CmdVideoConnectionStart, RoomId: msg["RoomId"].(int), VideoConnectionStart: &videoConnectionStart}
+	}
+	return
+}
+
+func (*Handler) SetGuideInfoStatus(msg map[string]interface{}) (m MsgEvent) {
+	guideInfoStatus := GuideInfoStatus{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &guideInfoStatus); err == nil {
+		m = MsgEvent{Cmd: CmdGuideInfoStatus, RoomId: msg["RoomId"].(int), GuideInfoStatus: &guideInfoStatus}
+	}
+	return
+}
+
+func (*Handler) SetObsShieldStatusUpdate(msg map[string]interface{}) (m MsgEvent) {
+	obsShieldStatusUpdate := ObsShieldStatusUpdate{}
+	if err := JsonCoder.Unmarshal([]byte(msg["msg"].(string)), &obsShieldStatusUpdate); err == nil {
+		m = MsgEvent{Cmd: CmdObsShieldStatusUpdate, RoomId: msg["RoomId"].(int), ObsShieldStatusUpdate: &obsShieldStatusUpdate}
+	}
+	return
+}

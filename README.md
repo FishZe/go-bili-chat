@@ -149,7 +149,7 @@ bili.SetClientPriorityMode(bili.DelayPriority)
 type Json struct{}
 
 func (j *Json) Unmarshal(data []byte, v interface{}) error {
-    return json.Unmarshal(data, v)
+	return json.Unmarshal(data, v)
 }
 
 func (j *Json) Marshal(v interface{}) ([]byte, error) {
@@ -182,114 +182,120 @@ h.AddOption(handle.CmdDanmuMsg, 21545805, func(event handle.MsgEvent) {
 #### 所有支持的消息类型:
 这些常量请填入`go-bili-chat.GetNewHandler().AddOption()`的第一个参数
 
-| 变量名                               | 命令类型                                | 含义           |    
-|:----------------------------------|:------------------------------------|:-------------|
-| CmdDanmuMsg                       | "DANMU_MSG"                         | 弹幕消息         |
-| CmdSuperChatMessage               | "SUPER_CHAT_MESSAGE"                | 醒目留言消息       |
-| CmdWatchedChange                  | "WATCHED_CHANGE"                    |              |
-| CmdSendGift                       | "SEND_GIFT"                         | 赠送礼物         |
-| CmdOnlineRankCount                | "ONLINE_RANK_COUNT"                 |              |
-| CmdOnlineRankV2                   | "ONLINE_RANK_V2"                    |              |
-| CmdOnlineRankTop3                 | "ONLINE_RANK_TOP3"                  |              |
-| CmdLikeInfoV3Click                | "LIKE_INFO_V3_CLICK"                |              |
-| CmdInteractWord                   | "INTERACT_WORD"                     | 进场欢迎         |
-| CmdStopLiveRoomList               | "STOP_LIVE_ROOM_LIST"               |              |
-| CmdLikeInfoV3Update               | "LIKE_INFO_V3_UPDATE"               |              |
-| CmdHotRankChange                  | "HOT_RANK_CHANGED"                  |              |
-| CmdNoticeMsg                      | "NOTICE_MSG"                        | [存疑] 通知      |
-| CmdRoomRealTimeMessageUpdate      | "ROOM_REAL_TIME_MESSAGE_UPDATE"     |              |
-| CmdWidgetBanner                   | "WIDGET_BANNER"                     |              |
-| CmdHotRankChangedV2               | "HOT_RANK_CHANGED_V2"               |              |
-| CmdGuardHonorThousand             | "GUARD_HONOR_THOUSAND"              |              |
-| CmdLive                           | "LIVE"                              | [存疑] 开始直播    |
-| CmdRoomChange                     | "ROOM_CHANGE"                       |              |
-| 	CmdRoomBlockMsg                  | "ROOM_BLOCK_MSG"                    | [存疑] 禁言消息    |    
-| 	CmdFullScreenSpecialEffect       | "FULL_SCREEN_SPECIAL_EFFECT"        |              |    
-| 	CmdCommonNoticeDanmaku           | "COMMON_NOTICE_DANMAKU"             |              |    
-| 	CmdTradingScore                  | "TRADING_SCORE"                     |              |    
-| 	CmdPreparing                     | "PREPARING"                         | [存疑] 直播准备    |    
-| 	CmdGuardBuy                      | "GUARD_BUY"                         | 购买大航海        |    
-| 	CmdGiftStarProcess               | "GIFT_STAR_PROCESS"                 |              |    
-| 	CmdRoomSkinMsg                   | "ROOM_SKIN_MSG"                     |              |    
-| 	CmdEntryEffect                   | "ENTRY_EFFECT"                      |              |    
-| 	CmdUserToastMsg                  | "USER_TOAST_MSG"                    |              |    
-| 	CmdHeartBeatReply                | "HEARTBEAT_REPLY"                   | [自定义] 心跳包回复  |    
-| 	CmdPopularityRedPocketNew        | "POPULARITY_RED_POCKET_NEW"         |              |    
-| 	CmdAreaRankChanged               | "AREA_RANK_CHANGED"                 |              |    
-| 	CmdSuperChatEntrance             | "SUPER_CHAT_ENTRANCE"               |              |    
-| 	CmdPlayTogether                  | "PLAY_TOGETHER"                     |              |    
-| 	CmdComboSend                     | "COMBO_SEND"                        | [存疑] 礼物连击    |    
-| 	CmdPopularityRedPocketStart      | "POPULARITY_RED_POCKET_START"       |              |    
-| 	CmdPkBattleProcess               | "PK_BATTLE_PROCESS"                 | [存疑] PK相关    |    
-| 	CmdPopularRankChanged            | "POPULAR_RANK_CHANGED"              |              |    
-| 	CmdPkBattleStartNew              | "PK_BATTLE_START_NEW"               | [存疑] PK相关    |    
-| 	CmdDanMuAggregation              | "DANMU_AGGREGATION"                 |              |    
-| 	CmdLiveInteractiveGame           | "LIVE_INTERACTIVE_GAME"             |              |    
-| 	CmdRecommendCard                 | "RECOMMEND_CARD"                    |              |    
-| 	CmdPkBattleProcessNew            | "PK_BATTLE_PROCESS_NEW"             | [存疑] PK相关    |    
-| 	CmdPkBattlePreNew                | "PK_BATTLE_PRE_NEW"                 | [存疑] PK相关    |    
-| 	CmdPkBattlePre                   | "PK_BATTLE_PRE"                     | [存疑] PK相关    |    
-| 	CmdPkBattleFinalProcess          | "PK_BATTLE_FINAL_PROCESS"           | [存疑] PK相关    |    
-| 	CmdPkBattleStart                 | "PK_BATTLE_START"                   | [存疑] PK相关    |    
-| 	CmdWidgetGiftStarProcess         | "WIDGET_GIFT_STAR_PROCESS"          |              |    
-| 	CmdPopularityRedPocketWinnerList | "POPULARITY_RED_POCKET_WINNER_LIST" | [存疑] 红包相关    |    
-| 	CmdGotoBuyFlow                   | "GOTO_BUY_FLOW"                     | [存疑] 购物车提示消息 |    
-| 	CmdPkBattleEnd                   | "PK_BATTLE_END"                     | [存疑] PK相关    |    
-| 	CmdPkBattleSettleUser            | "PK_BATTLE_SETTLE_USER"             | [存疑] PK相关    |    
-| 	CmdAnchorLotStart                | "ANCHOR_LOT_START"                  |              |    
-| 	CmdPkBattleSettleV2              | "PK_BATTLE_SETTLE_V2"               | [存疑] PK相关    |    
-| 	CmdPkBattleSettle                | "PK_BATTLE_SETTLE"                  | [存疑] PK相关    |    
-| 	CmdHotRoomNotify                 | "HOT_ROOM_NOTIFY"                   |              |    
-| 	CmdLiveOpenPlatformGame          | "LIVE_OPEN_PLATFORM_GAME"           |              |    
-| 	CmdLivePanelChangeContent        | "LIVE_PANEL_CHANGE_CONTENT"         |              |    
-| 	CmdGiftPanelPlan                 | "GIFT_PANEL_PLAN"                   |              |    
-| 	CmdShoppingExplainCard           | "SHOPPING_EXPLAIN_CARD"             | [存疑] 购物车相关   |    
-| 	CmdAnchorLotCheckStatus          | "ANCHOR_LOT_CHECK_STATUS"           |              |    
-| 	CmdPkBattlePunishEnd             | "PK_BATTLE_PUNISH_END"              | [存疑] PK相关    |    
-| 	CmdAnchorLotEnd                  | "ANCHOR_LOT_END"                    |              |    
-| 	CmdAnchorLotAward                | "ANCHOR_LOT_AWARD"                  |              |    
-| 	CmdSpecialGift                   | "SPECIAL_GIFT"                      | [存疑] 特殊礼物    |    
-| 	CmdSuperChatMessageDelete        | "SUPER_CHAT_MESSAGE_DELETE"         | [存疑] 醒目留言被删除 |    
-| 	CmdVoiceJoinRoomCountInfo        | "VOICE_JOIN_ROOM_COUNT_INFO"        | [存疑] 语音连线相关  |    
-| 	CmdVoiceJoinList                 | "VOICE_JOIN_LIST"                   | [存疑] 语音连线相关  |    
-| 	CmdVoiceJoinStatus               | "VOICE_JOIN_STATUS"                 | [存疑] 语音连线相关  |    
-| 	CmdWarning                       | "WARNING"                           | 超管警告         |    
-| 	CmdPkBattleRankChange            | "PK_BATTLE_RANK_CHANGE"             | [存疑] PK相关    |    
-| 	CmdPkBattleSettleNew             | "PK_BATTLE_SETTLE_NEW"              | [存疑] PK相关    |    
-| 	CmdHotBuyNum                     | "HOT_BUY_NUM"                       |              |    
-| 	CmdShoppingCartShow              | "SHOPPING_CART_SHOW"                |              |    
-| 	CmdVoiceJoinSwitch               | "VOICE_JOIN_SWITCH"                 | [存疑] 语音连线相关  |    
-| 	CmdCutOff                        | "CUT_OFF"                           | 被切断直播        |    
-| 	CmdRoomAdminRevoke               | "ROOM_ADMIN_REVOKE"                 | 房管撤销         |    
-| 	CmdRoomSilentOff                 | "ROOM_SILENT_OFF"                   | [存疑] 直播禁言相关  |    
-| 	CmdRoomSilentOn                  | "ROOM_SILENT_ON"                    | [存疑] 直播禁言相关  |    
-| 	CmdRoomAdminEntrance             | "room_admin_entrance"               | 修改房管         |    
-| 	CmdRoomAdmins                    | "ROOM_ADMINS"                       | 房管列表更新       |    
-| 	CmdVideoConnectionJoinStart      | "VIDEO_CONNECTION_JOIN_START"       | [存疑] 视频连线相关  |    
-| 	CmdVideoConnectionMsg            | "VIDEO_CONNECTION_MSG"              | [存疑] 视频连线相关  |    
-| 	CmdVideoConnectionJoinEnd        | "VIDEO_CONNECTION_JOIN_END"         | [存疑] 视频连线相关  |    
-| 	CmdRingStatusChange              | "RING_STATUS_CHANGE"                |              |    
-| 	CmdRingStatusChangeV2            | "RING_STATUS_CHANGE_V2"             |              |    
-| 	CmdRoomLock                      | "ROOM_LOCK"                         |              |    
-| 	CmdShoppingBubblesStyle          | "SHOPPING_BUBBLES_STYLE"            | [存疑] 购物车相关   |    
-| 	CmdMultiVoiceOperating           | "MULTI_VOICE_OPERATING"             | [存疑] 视频连线相关  |    
-| 	CmdMultiVoiceApplicationUser     | "MULTI_VOICE_APPLICATION_USER"      | [存疑] 视频连线相关  |    
-| 	CmdPkBattleMatchTimeout          | "PK_BATTLE_MATCH_TIMEOUT"           | [存疑] PK相关    |    
-| 	CmdChangeRoomInfo                | "CHANGE_ROOM_INFO"                  |              |    
-| 	CmdLiveMultiViewChange           | "LIVE_MULTI_VIEW_CHANGE"            |              |    
-| 	CmdGuardAchievementRoom          | "GUARD_ACHIEVEMENT_ROOM"            |              |
-| CmdSysMsg                         | "SYS_MSG"                           |              | 
-| CmdMvRoleChange                   | "MV_ROLE_CHANGE"                    |              |
-| CmdSelectedGoodsInfo              | "SELECTED_GOODS_INFO"               |              |
-| CmdMultiVoiceOperatin             | "MULTI_VOICE_OPERATING"             |              |
-| CmdPanelInteractiveNotifyChange   | "PANEL_INTERACTIVE_NOTIFY_CHANGE"   |              |
-| CmdInteractiveUser                | "INTERACTIVE_USER"                  |              |
-| CmdUserVirtualMvp                 | "USER_VIRTUAL_MVP"                  |              |
-| CmdWidgetWishList                 | "WIDGET_WISH_LIST"                  |              |
-| CmdCheckSingStatus                | "CHECK_SING_STATUS"                 |              |
-| CmdRoomModuleDisplay              | "ROOM_MODULE_DISPLAY"               |              |
-| CmdVoiceChatUpdate                | "VOICE_CHAT_UPDATE"                 |              |
-| CmdReenterLiveRoom                | "REENTER_LIVE_ROOM"                 |              |
+| 变量名                               | 命令类型                                | 含义             |    
+|:----------------------------------|:------------------------------------|:---------------|
+| CmdDanmuMsg                       | "DANMU_MSG"                         | 弹幕消息           |
+| CmdSuperChatMessage               | "SUPER_CHAT_MESSAGE"                | 醒目留言消息         |
+| CmdWatchedChange                  | "WATCHED_CHANGE"                    | 直播间看过人数改变      |
+| CmdSendGift                       | "SEND_GIFT"                         | 赠送礼物           |
+| CmdOnlineRankCount                | "ONLINE_RANK_COUNT"                 |                |
+| CmdOnlineRankV2                   | "ONLINE_RANK_V2"                    |                |
+| CmdOnlineRankTop3                 | "ONLINE_RANK_TOP3"                  |                |
+| CmdLikeInfoV3Click                | "LIKE_INFO_V3_CLICK"                |                |
+| CmdInteractWord                   | "INTERACT_WORD"                     | 进场或关注消息        |
+| CmdStopLiveRoomList               | "STOP_LIVE_ROOM_LIST"               |                |
+| CmdLikeInfoV3Update               | "LIKE_INFO_V3_UPDATE"               | 直播间点赞数更新       |
+| CmdHotRankChange                  | "HOT_RANK_CHANGED"                  |                |
+| CmdNoticeMsg                      | "NOTICE_MSG"                        | 通知消息           |
+| CmdRoomRealTimeMessageUpdate      | "ROOM_REAL_TIME_MESSAGE_UPDATE"     | 直播间相关信息更新      |
+| CmdWidgetBanner                   | "WIDGET_BANNER"                     | 网页端直播间标题下的横幅内容 |
+| CmdHotRankChangedV2               | "HOT_RANK_CHANGED_V2"               |                |
+| CmdGuardHonorThousand             | "GUARD_HONOR_THOUSAND"              |                |
+| CmdLive                           | "LIVE"                              | [存疑] 开始直播      |
+| CmdRoomChange                     | "ROOM_CHANGE"                       | 直播间信息更改        |
+| 	CmdRoomBlockMsg                  | "ROOM_BLOCK_MSG"                    | [存疑] 禁言消息      |    
+| 	CmdFullScreenSpecialEffect       | "FULL_SCREEN_SPECIAL_EFFECT"        |                |    
+| 	CmdCommonNoticeDanmaku           | "COMMON_NOTICE_DANMAKU"             | 直播间所在分区排名提升祝福  |    
+| 	CmdTradingScore                  | "TRADING_SCORE"                     |                |    
+| 	CmdPreparing                     | "PREPARING"                         | 直播准备           |    
+| 	CmdGuardBuy                      | "GUARD_BUY"                         | 购买大航海          |    
+| 	CmdGiftStarProcess               | "GIFT_STAR_PROCESS"                 | 礼物星球点亮         |    
+| 	CmdRoomSkinMsg                   | "ROOM_SKIN_MSG"                     |                |    
+| 	CmdEntryEffect                   | "ENTRY_EFFECT"                      | 进场特效           |    
+| 	CmdUserToastMsg                  | "USER_TOAST_MSG"                    |                |    
+| 	CmdHeartBeatReply                | "HEARTBEAT_REPLY"                   | [自定义] 心跳包回复    |    
+| 	CmdPopularityRedPocketNew        | "POPULARITY_RED_POCKET_NEW"         |                |    
+| 	CmdAreaRankChanged               | "AREA_RANK_CHANGED"                 | 直播间所在分区的排名改变   |    
+| 	CmdSuperChatEntrance             | "SUPER_CHAT_ENTRANCE"               |                |    
+| 	CmdPlayTogether                  | "PLAY_TOGETHER"                     |                |    
+| 	CmdComboSend                     | "COMBO_SEND"                        | 礼物连击           |    
+| 	CmdPopularityRedPocketStart      | "POPULARITY_RED_POCKET_START"       | 直播间发红包         |    
+| 	CmdPkBattleProcess               | "PK_BATTLE_PROCESS"                 | [存疑] PK相关      |    
+| 	CmdPopularRankChanged            | "POPULAR_RANK_CHANGED"              |                |    
+| 	CmdPkBattleStartNew              | "PK_BATTLE_START_NEW"               | [存疑] PK相关      |    
+| 	CmdDanMuAggregation              | "DANMU_AGGREGATION"                 |                |    
+| 	CmdLiveInteractiveGame           | "LIVE_INTERACTIVE_GAME"             |                |    
+| 	CmdRecommendCard                 | "RECOMMEND_CARD"                    |                |    
+| 	CmdPkBattleProcessNew            | "PK_BATTLE_PROCESS_NEW"             | [存疑] PK相关      |    
+| 	CmdPkBattlePreNew                | "PK_BATTLE_PRE_NEW"                 | [存疑] PK相关      |    
+| 	CmdPkBattlePre                   | "PK_BATTLE_PRE"                     | [存疑] PK相关      |    
+| 	CmdPkBattleFinalProcess          | "PK_BATTLE_FINAL_PROCESS"           | [存疑] PK相关      |    
+| 	CmdPkBattleStart                 | "PK_BATTLE_START"                   | [存疑] PK相关      |    
+| 	CmdWidgetGiftStarProcess         | "WIDGET_GIFT_STAR_PROCESS"          |                |    
+| 	CmdPopularityRedPocketWinnerList | "POPULARITY_RED_POCKET_WINNER_LIST" | 抢到红包的人的信息      |    
+| 	CmdGotoBuyFlow                   | "GOTO_BUY_FLOW"                     | [存疑] 购物车提示消息   |    
+| 	CmdPkBattleEnd                   | "PK_BATTLE_END"                     | [存疑] PK相关      |    
+| 	CmdPkBattleSettleUser            | "PK_BATTLE_SETTLE_USER"             | [存疑] PK相关      |    
+| 	CmdAnchorLotStart                | "ANCHOR_LOT_START"                  |                |    
+| 	CmdPkBattleSettleV2              | "PK_BATTLE_SETTLE_V2"               | [存疑] PK相关      |    
+| 	CmdPkBattleSettle                | "PK_BATTLE_SETTLE"                  | [存疑] PK相关      |    
+| 	CmdHotRoomNotify                 | "HOT_ROOM_NOTIFY"                   |                |    
+| 	CmdLiveOpenPlatformGame          | "LIVE_OPEN_PLATFORM_GAME"           |                |    
+| 	CmdLivePanelChangeContent        | "LIVE_PANEL_CHANGE_CONTENT"         |                |    
+| 	CmdGiftPanelPlan                 | "GIFT_PANEL_PLAN"                   |                |    
+| 	CmdShoppingExplainCard           | "SHOPPING_EXPLAIN_CARD"             | [存疑] 购物车相关     |    
+| 	CmdAnchorLotCheckStatus          | "ANCHOR_LOT_CHECK_STATUS"           |                |    
+| 	CmdPkBattlePunishEnd             | "PK_BATTLE_PUNISH_END"              | [存疑] PK相关      |    
+| 	CmdAnchorLotEnd                  | "ANCHOR_LOT_END"                    |                |    
+| 	CmdAnchorLotAward                | "ANCHOR_LOT_AWARD"                  |                |    
+| 	CmdSpecialGift                   | "SPECIAL_GIFT"                      | [存疑] 特殊礼物      |    
+| 	CmdSuperChatMessageDelete        | "SUPER_CHAT_MESSAGE_DELETE"         | [存疑] 醒目留言被删除   |    
+| 	CmdVoiceJoinRoomCountInfo        | "VOICE_JOIN_ROOM_COUNT_INFO"        | [存疑] 语音连线相关    |    
+| 	CmdVoiceJoinList                 | "VOICE_JOIN_LIST"                   | [存疑] 语音连线相关    |    
+| 	CmdVoiceJoinStatus               | "VOICE_JOIN_STATUS"                 | [存疑] 语音连线相关    |    
+| 	CmdWarning                       | "WARNING"                           | 超管警告           |    
+| 	CmdPkBattleRankChange            | "PK_BATTLE_RANK_CHANGE"             | [存疑] PK相关      |    
+| 	CmdPkBattleSettleNew             | "PK_BATTLE_SETTLE_NEW"              | [存疑] PK相关      |    
+| 	CmdHotBuyNum                     | "HOT_BUY_NUM"                       |                |    
+| 	CmdShoppingCartShow              | "SHOPPING_CART_SHOW"                |                |    
+| 	CmdVoiceJoinSwitch               | "VOICE_JOIN_SWITCH"                 | [存疑] 语音连线相关    |    
+| 	CmdCutOff                        | "CUT_OFF"                           | 被切断直播          |    
+| 	CmdRoomAdminRevoke               | "ROOM_ADMIN_REVOKE"                 | 房管撤销           |    
+| 	CmdRoomSilentOff                 | "ROOM_SILENT_OFF"                   | [存疑] 直播禁言相关    |    
+| 	CmdRoomSilentOn                  | "ROOM_SILENT_ON"                    | [存疑] 直播禁言相关    |    
+| 	CmdRoomAdminEntrance             | "room_admin_entrance"               | 修改房管           |    
+| 	CmdRoomAdmins                    | "ROOM_ADMINS"                       | 房管列表更新         |    
+| 	CmdVideoConnectionJoinStart      | "VIDEO_CONNECTION_JOIN_START"       | [存疑] 视频连线相关    |    
+| 	CmdVideoConnectionMsg            | "VIDEO_CONNECTION_MSG"              | [存疑] 视频连线相关    |    
+| 	CmdVideoConnectionJoinEnd        | "VIDEO_CONNECTION_JOIN_END"         | [存疑] 视频连线相关    |    
+| 	CmdRingStatusChange              | "RING_STATUS_CHANGE"                |                |    
+| 	CmdRingStatusChangeV2            | "RING_STATUS_CHANGE_V2"             |                |    
+| 	CmdRoomLock                      | "ROOM_LOCK"                         |                |    
+| 	CmdShoppingBubblesStyle          | "SHOPPING_BUBBLES_STYLE"            | [存疑] 购物车相关     |    
+| 	CmdMultiVoiceOperating           | "MULTI_VOICE_OPERATING"             | [存疑] 视频连线相关    |    
+| 	CmdMultiVoiceApplicationUser     | "MULTI_VOICE_APPLICATION_USER"      | [存疑] 视频连线相关    |    
+| 	CmdPkBattleMatchTimeout          | "PK_BATTLE_MATCH_TIMEOUT"           | [存疑] PK相关      |    
+| 	CmdChangeRoomInfo                | "CHANGE_ROOM_INFO"                  |                |    
+| 	CmdLiveMultiViewChange           | "LIVE_MULTI_VIEW_CHANGE"            |                |    
+| 	CmdGuardAchievementRoom          | "GUARD_ACHIEVEMENT_ROOM"            |                |
+| CmdSysMsg                         | "SYS_MSG"                           |                | 
+| CmdMvRoleChange                   | "MV_ROLE_CHANGE"                    |                |
+| CmdSelectedGoodsInfo              | "SELECTED_GOODS_INFO"               |                |
+| CmdMultiVoiceOperatin             | "MULTI_VOICE_OPERATING"             |                |
+| CmdPanelInteractiveNotifyChange   | "PANEL_INTERACTIVE_NOTIFY_CHANGE"   |                |
+| CmdInteractiveUser                | "INTERACTIVE_USER"                  |                |
+| CmdUserVirtualMvp                 | "USER_VIRTUAL_MVP"                  |                |
+| CmdWidgetWishList                 | "WIDGET_WISH_LIST"                  |                |
+| CmdCheckSingStatus                | "CHECK_SING_STATUS"                 |                |
+| CmdRoomModuleDisplay              | "ROOM_MODULE_DISPLAY"               |                |
+| CmdVoiceChatUpdate                | "VOICE_CHAT_UPDATE"                 |                |
+| CmdReenterLiveRoom                | "REENTER_LIVE_ROOM"                 |                |
+| CmdOfficialRoomEvent              | "OFFICIAL_ROOM_EVENT"               | 官方房间事件         |
+| CmdActivityBannerChangeV2         | "ACTIVITY_BANNER_CHANGE_V2"         |                |
+| CmdActivityBannerChange           | "ACTIVITY_BANNER_CHANGE"            |                |
+| CmdVideoConnectionStart           | "VIDEO_CONNECTION_START"            |                |
+| CmdGuideInfoStatus                | "GUIDE_INFO_STATUS"                 |                |
+| CmdObsShieldStatusUpdate          | "OBS_SHIELD_STATUS_UPDATE"          |                |
 
 由于我也不是很明白b站的命令, 所以这里只是列出了我知道的命令, 如果有人知道更多的命令, 请在issue中提出, 我会及时更新。
 

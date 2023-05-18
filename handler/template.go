@@ -107,6 +107,12 @@ const (
 	CmdRoomModuleDisplay             = "ROOM_MODULE_DISPLAY"
 	CmdVoiceChatUpdate               = "VOICE_CHAT_UPDATE"
 	CmdReenterLiveRoom               = "REENTER_LIVE_ROOM"
+	CmdOfficialRoomEvent             = "OFFICIAL_ROOM_EVENT"
+	CmdActivityBannerChangeV2        = "ACTIVITY_BANNER_CHANGE_V2"
+	CmdActivityBannerChange          = "ACTIVITY_BANNER_CHANGE"
+	CmdVideoConnectionStart          = "VIDEO_CONNECTION_START"
+	CmdGuideInfoStatus               = "GUIDE_INFO_STATUS"
+	CmdObsShieldStatusUpdate         = "OBS_SHIELD_STATUS_UPDATE"
 )
 
 var CmdName = map[string]string{
@@ -217,6 +223,12 @@ var CmdName = map[string]string{
 	"ROOM_MODULE_DISPLAY":               "RoomModuleDisplay",
 	"VOICE_CHAT_UPDATE":                 "VoiceChatUpdate",
 	"REENTER_LIVE_ROOM":                 "ReenterLiveRoom",
+	"OFFICIAL_ROOM_EVENT":               "OfficialRoomEvent",
+	"ACTIVITY_BANNER_CHANGE_V2":         "ActivityBannerChangeV2",
+	"ACTIVITY_BANNER_CHANGE":            "ActivityBannerChange",
+	"VIDEO_CONNECTION_START":            "VideoConnectionStart",
+	"GUIDE_INFO_STATUS":                 "GuideInfoStatus",
+	"OBS_SHIELD_STATUS_UPDATE":          "ObsShieldStatusUpdate",
 }
 
 type MsgEvent struct {
@@ -328,6 +340,12 @@ type MsgEvent struct {
 	RoomModuleDisplay             *RoomModuleDisplay
 	VoiceChatUpdate               *VoiceChatUpdate
 	ReenterLiveRoom               *ReenterLiveRoom
+	OfficialRoomEvent             *OfficialRoomEvent
+	ActivityBannerChangeV2        *ActivityBannerChangeV2
+	ActivityBannerChange          *ActivityBannerChange
+	VideoConnectionStart          *VideoConnectionStart
+	GuideInfoStatus               *GuideInfoStatus
+	ObsShieldStatusUpdate         *ObsShieldStatusUpdate
 }
 
 type FansMedal struct {
@@ -2549,4 +2567,102 @@ type ReenterLiveRoom struct {
 		Reason                int `json:"reason"`
 	} `json:"data"`
 	Roomid int `json:"roomid"`
+}
+
+type OfficialRoomEvent struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		EventType        int    `json:"event_type"`
+		RoomId           int    `json:"room_id"`
+		OfficialRoomId   int    `json:"official_room_id"`
+		OfficialAnchorId int    `json:"official_anchor_id"`
+		Countdown        int    `json:"countdown"`
+		ScatterTime      int    `json:"scatter_time"`
+		SubTitle         string `json:"sub_title"`
+		Desc             string `json:"desc"`
+		OfficialBaseInfo struct {
+			Uid          int    `json:"uid"`
+			Title        string `json:"title"`
+			Uname        string `json:"uname"`
+			Face         string `json:"face"`
+			Gender       string `json:"gender"`
+			OfficialInfo struct {
+				Role  int    `json:"role"`
+				Title string `json:"title"`
+				Desc  string `json:"desc"`
+				Type  int    `json:"type"`
+			} `json:"official_info"`
+		} `json:"official_base_info"`
+		CurrentRoomStatus int `json:"current_room_status"`
+	} `json:"data"`
+}
+
+type ActivityBannerChangeV2 struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Timestamp int `json:"timestamp"`
+		List      []struct {
+			Id            int    `json:"id"`
+			Position      string `json:"position"`
+			Type          int    `json:"type"`
+			ActivityTitle string `json:"activity_title"`
+			Cover         string `json:"cover"`
+			JumpUrl       string `json:"jump_url"`
+			IsClose       int    `json:"is_close"`
+			Action        string `json:"action"`
+			PlatformInfo  []struct {
+				Platform  string `json:"platform"`
+				Condition int    `json:"condition"`
+				Build     int    `json:"build"`
+			} `json:"platform_info"`
+			ExtData string `json:"ext_data"`
+		} `json:"list"`
+	} `json:"data"`
+}
+
+type ActivityBannerChange struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		List []struct {
+			Id            int    `json:"id"`
+			Timestamp     int    `json:"timestamp"`
+			Position      string `json:"position"`
+			ActivityTitle string `json:"activity_title"`
+			Cover         string `json:"cover"`
+			JumpUrl       string `json:"jump_url"`
+			IsClose       int    `json:"is_close"`
+			Action        string `json:"action"`
+		} `json:"list"`
+	} `json:"data"`
+}
+
+type VideoConnectionStart struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Uid         int    `json:"uid"`
+		Type        int    `json:"type"`
+		Uname       string `json:"uname"`
+		Face        string `json:"face"`
+		ChannelId   string `json:"channel_id"`
+		RoomId      int    `json:"room_id"`
+		Toast       string `json:"toast"`
+		StartAt     int    `json:"start_at"`
+		CurrentTime int    `json:"current_time"`
+		VirtualId   int    `json:"virtual_id"`
+	} `json:"data"`
+	Roomid int `json:"roomid"`
+}
+
+type GuideInfoStatus struct {
+	BizType string `json:"biz_type"`
+	Cmd     string `json:"cmd"`
+	Status  int    `json:"status"`
+}
+
+type ObsShieldStatusUpdate struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Change int `json:"change"`
+	} `json:"data"`
+	Roomid string `json:"roomid"`
 }
