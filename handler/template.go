@@ -95,6 +95,24 @@ const (
 	CmdChangeRoomInfo                = "CHANGE_ROOM_INFO"
 	CmdLiveMultiViewChange           = "LIVE_MULTI_VIEW_CHANGE"
 	CmdGuardAchievementRoom          = "GUARD_ACHIEVEMENT_ROOM"
+	CmdSysMsg                        = "SYS_MSG"
+	CmdMvRoleChange                  = "MV_ROLE_CHANGE"
+	CmdSelectedGoodsInfo             = "SELECTED_GOODS_INFO"
+	CmdMultiVoiceOperatin            = "MULTI_VOICE_OPERATING"
+	CmdPanelInteractiveNotifyChange  = "PANEL_INTERACTIVE_NOTIFY_CHANGE"
+	CmdInteractiveUser               = "INTERACTIVE_USER"
+	CmdUserVirtualMvp                = "USER_VIRTUAL_MVP"
+	CmdWidgetWishList                = "WIDGET_WISH_LIST"
+	CmdCheckSingStatus               = "CHECK_SING_STATUS"
+	CmdRoomModuleDisplay             = "ROOM_MODULE_DISPLAY"
+	CmdVoiceChatUpdate               = "VOICE_CHAT_UPDATE"
+	CmdReenterLiveRoom               = "REENTER_LIVE_ROOM"
+	CmdOfficialRoomEvent             = "OFFICIAL_ROOM_EVENT"
+	CmdActivityBannerChangeV2        = "ACTIVITY_BANNER_CHANGE_V2"
+	CmdActivityBannerChange          = "ACTIVITY_BANNER_CHANGE"
+	CmdVideoConnectionStart          = "VIDEO_CONNECTION_START"
+	CmdGuideInfoStatus               = "GUIDE_INFO_STATUS"
+	CmdObsShieldStatusUpdate         = "OBS_SHIELD_STATUS_UPDATE"
 )
 
 var CmdName = map[string]string{
@@ -193,6 +211,24 @@ var CmdName = map[string]string{
 	"CHANGE_ROOM_INFO":                  "ChangeRoomInfo",
 	"LIVE_MULTI_VIEW_CHANGE":            "LiveMultiViewChange",
 	"GUARD_ACHIEVEMENT_ROOM":            "GuardAchievementRoom",
+	"SYS_MSG":                           "SysMsg",
+	"MVROLECHANGE":                      "MvRoleChange",
+	"SELECTED_GOODS_INFO":               "SelectedGoodsInfo",
+	"MULTI_VOICE_OPERATIN":              "MultiVoiceOperatin",
+	"PANEL_INTERACTIVE_NOTIFY_CHANGE":   "PanelInteractiveNotifyChange",
+	"INTERACTIVE_USER":                  "InteractiveUser",
+	"USER_VIRTUAL_MVP":                  "UserVirtualMvp",
+	"WIDGET_WISH_LIST":                  "WidgetWishList",
+	"CHECK_SING_STATUS":                 "CheckSingStatus",
+	"ROOM_MODULE_DISPLAY":               "RoomModuleDisplay",
+	"VOICE_CHAT_UPDATE":                 "VoiceChatUpdate",
+	"REENTER_LIVE_ROOM":                 "ReenterLiveRoom",
+	"OFFICIAL_ROOM_EVENT":               "OfficialRoomEvent",
+	"ACTIVITY_BANNER_CHANGE_V2":         "ActivityBannerChangeV2",
+	"ACTIVITY_BANNER_CHANGE":            "ActivityBannerChange",
+	"VIDEO_CONNECTION_START":            "VideoConnectionStart",
+	"GUIDE_INFO_STATUS":                 "GuideInfoStatus",
+	"OBS_SHIELD_STATUS_UPDATE":          "ObsShieldStatusUpdate",
 }
 
 type MsgEvent struct {
@@ -292,6 +328,24 @@ type MsgEvent struct {
 	ChangeRoomInfo                *ChangeRoomInfo
 	LiveMultiViewChange           *LiveMultiViewChange
 	GuardAchievementRoom          *GuardAchievementRoom
+	SysMsg                        *SysMsg
+	MvRoleChange                  *MvRoleChange
+	SelectedGoodsInfo             *SelectedGoodsInfo
+	MultiVoiceOperatin            *MultiVoiceOperatin
+	PanelInteractiveNotifyChange  *PanelInteractiveNotifyChange
+	InteractiveUser               *InteractiveUser
+	UserVirtualMvp                *UserVirtualMvp
+	WidgetWishList                *WidgetWishList
+	CheckSingStatus               *CheckSingStatus
+	RoomModuleDisplay             *RoomModuleDisplay
+	VoiceChatUpdate               *VoiceChatUpdate
+	ReenterLiveRoom               *ReenterLiveRoom
+	OfficialRoomEvent             *OfficialRoomEvent
+	ActivityBannerChangeV2        *ActivityBannerChangeV2
+	ActivityBannerChange          *ActivityBannerChange
+	VideoConnectionStart          *VideoConnectionStart
+	GuideInfoStatus               *GuideInfoStatus
+	ObsShieldStatusUpdate         *ObsShieldStatusUpdate
 }
 
 type FansMedal struct {
@@ -429,63 +483,90 @@ type RoomRealTimeMessageUpdate struct {
 	} `json:"data"`
 }
 
+type BlindGift struct {
+	BlindGiftConfigId int    `json:"blind_gift_config_id"`
+	From              int    `json:"from"`
+	GiftAction        string `json:"gift_action"`
+	GiftTipPrice      int    `json:"gift_tip_price"`
+	OriginalGiftId    int    `json:"original_gift_id"`
+	OriginalGiftName  string `json:"original_gift_name"`
+	OriginalGiftPrice int    `json:"original_gift_price"`
+}
+
+type ReceiveUserInfo struct {
+	Uid   int    `json:"uid"`
+	Uname string `json:"uname"`
+}
+
 type SendGift struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
-		UID               int64       `json:"uid"`
-		Name              string      `json:"uname"`
-		NameColor         string      `json:"name_color"`
-		Action            string      `json:"action"`
-		BatchComboID      string      `json:"batch_combo_id"`
-		BatchComboSend    interface{} `json:"batch_combo_send"`
-		BeatID            string      `json:"beatId"`
-		BizSource         string      `json:"biz_source"`
-		BlindGift         interface{} `json:"blind_gift"`
-		BroadcastID       int         `json:"broadcast_id"`
-		CoinType          string      `json:"coin_type"`
-		ComboResourcesID  int         `json:"combo_resources_id"`
-		ComboSend         interface{} `json:"combo_send"`
-		ComboStayTime     int         `json:"combo_stay_time"`
-		ComboTotalCoin    int         `json:"combo_total_coin"`
-		CritProb          int         `json:"crit_prob"`
-		Demarcation       int         `json:"demarcation"`
-		DiscountPrice     int         `json:"discount_price"`
-		Dmscore           int         `json:"dmscore"`
-		Draw              int         `json:"draw"`
-		Effect            int         `json:"effect"`
-		EffectBlock       int         `json:"effect_block"`
-		Face              string      `json:"face"`
-		FaceEffectID      int         `json:"face_effect_id"`
-		FaceEffectType    int         `json:"face_effect_type"`
-		FloatScResourceID int         `json:"float_sc_resource_id"`
-		GiftID            int         `json:"giftId"`
-		GiftName          string      `json:"giftName"`
-		GiftType          int         `json:"giftType"`
-		Gold              int         `json:"gold"`
-		GuardLevel        int         `json:"guard_level"`
-		IsFirst           bool        `json:"is_first"`
-		IsNaming          bool        `json:"is_naming"`
-		IsSpecialBatch    int         `json:"is_special_batch"`
-		Magnification     float64     `json:"magnification"`
-		Num               int         `json:"num"`
-		OriginalGiftName  string      `json:"original_gift_name"`
-		Price             int         `json:"price"`
-		Rcost             int         `json:"rcost"`
-		Remain            int         `json:"remain"`
-		Rnd               string      `json:"rnd"`
-		SendMaster        interface{} `json:"send_master"`
-		Silver            int         `json:"silver"`
-		Super             int         `json:"super"`
-		SuperBatchGiftNum int         `json:"super_batch_gift_num"`
-		SuperGiftNum      int         `json:"super_gift_num"`
-		SvgaBlock         int         `json:"svga_block"`
-		Switch            bool        `json:"switch"`
-		TagImage          string      `json:"tag_image"`
-		Tid               string      `json:"tid"`
-		Timestamp         int         `json:"timestamp"`
-		TopList           interface{} `json:"top_list"`
-		TotalCoin         int         `json:"total_coin"`
-		FansMedal         FansMedal   `json:"medal_info"`
+		UID            int64  `json:"uid"`
+		Name           string `json:"uname"`
+		NameColor      string `json:"name_color"`
+		Action         string `json:"action"`
+		BatchComboID   string `json:"batch_combo_id"`
+		BatchComboSend struct {
+			Action        string      `json:"action"`
+			BatchComboId  string      `json:"batch_combo_id"`
+			BatchComboNum int         `json:"batch_combo_num"`
+			BlindGift     *BlindGift  `json:"blind_gift"`
+			GiftId        int         `json:"gift_id"`
+			GiftName      string      `json:"gift_name"`
+			GiftNum       int         `json:"gift_num"`
+			SendMaster    interface{} `json:"send_master"`
+			Uid           int         `json:"uid"`
+			Uname         string      `json:"uname"`
+		} `json:"batch_combo_send"`
+		BeatID            string          `json:"beatId"`
+		BizSource         string          `json:"biz_source"`
+		BlindGift         *BlindGift      `json:"blind_gift"`
+		BroadcastID       int             `json:"broadcast_id"`
+		CoinType          string          `json:"coin_type"`
+		ComboResourcesID  int             `json:"combo_resources_id"`
+		ComboSend         interface{}     `json:"combo_send"`
+		ComboStayTime     int             `json:"combo_stay_time"`
+		ComboTotalCoin    int             `json:"combo_total_coin"`
+		CritProb          int             `json:"crit_prob"`
+		Demarcation       int             `json:"demarcation"`
+		DiscountPrice     int             `json:"discount_price"`
+		Dmscore           int             `json:"dmscore"`
+		Draw              int             `json:"draw"`
+		Effect            int             `json:"effect"`
+		EffectBlock       int             `json:"effect_block"`
+		Face              string          `json:"face"`
+		FaceEffectID      int             `json:"face_effect_id"`
+		FaceEffectType    int             `json:"face_effect_type"`
+		FloatScResourceID int             `json:"float_sc_resource_id"`
+		GiftID            int             `json:"giftId"`
+		GiftName          string          `json:"giftName"`
+		GiftType          int             `json:"giftType"`
+		Gold              int             `json:"gold"`
+		GuardLevel        int             `json:"guard_level"`
+		IsFirst           bool            `json:"is_first"`
+		IsNaming          bool            `json:"is_naming"`
+		IsSpecialBatch    int             `json:"is_special_batch"`
+		Magnification     float64         `json:"magnification"`
+		Num               int             `json:"num"`
+		OriginalGiftName  string          `json:"original_gift_name"`
+		Price             int             `json:"price"`
+		Rcost             int             `json:"rcost"`
+		ReceiveUserInfo   ReceiveUserInfo `json:"receive_user_info"`
+		Remain            int             `json:"remain"`
+		Rnd               string          `json:"rnd"`
+		SendMaster        interface{}     `json:"send_master"`
+		Silver            int             `json:"silver"`
+		Super             int             `json:"super"`
+		SuperBatchGiftNum int             `json:"super_batch_gift_num"`
+		SuperGiftNum      int             `json:"super_gift_num"`
+		SvgaBlock         int             `json:"svga_block"`
+		Switch            bool            `json:"switch"`
+		TagImage          string          `json:"tag_image"`
+		Tid               string          `json:"tid"`
+		Timestamp         int             `json:"timestamp"`
+		TopList           interface{}     `json:"top_list"`
+		TotalCoin         int             `json:"total_coin"`
+		FansMedal         FansMedal       `json:"medal_info"`
 	} `json:"data"`
 }
 
@@ -2326,4 +2407,262 @@ type GuardAchievementRoom struct {
 		ShowTime                 int    `json:"show_time"`
 		WebBasemapUrl            string `json:"web_basemap_url"`
 	} `json:"data"`
+}
+
+type SysMsg struct {
+	Cmd string `json:"cmd"`
+	Msg string `json:"msg"`
+	Url string `json:"url"`
+}
+
+type MvRoleChange struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ChangeUid int64 `json:"change_uid"`
+		Role      int   `json:"role"`
+		RoomId    int   `json:"room_id"`
+		Ts        int   `json:"ts"`
+	} `json:"data"`
+}
+
+type SelectedGoodsInfo struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ChangeType int `json:"change_type"`
+		Item       []struct {
+			GoodsId             string      `json:"goods_id"`
+			GoodsName           string      `json:"goods_name"`
+			Source              int         `json:"source"`
+			GoodsIcon           string      `json:"goods_icon"`
+			IsPreSale           int         `json:"is_pre_sale"`
+			ActivityInfo        interface{} `json:"activity_info"`
+			PreSaleInfo         interface{} `json:"pre_sale_info"`
+			EarlyBirdInfo       interface{} `json:"early_bird_info"`
+			CouponDiscountPrice string      `json:"coupon_discount_price"`
+			SelectedText        string      `json:"selected_text"`
+			IsGiftBuy           int         `json:"is_gift_buy"`
+			GoodsPrice          string      `json:"goods_price"`
+			GoodsMaxPrice       string      `json:"goods_max_price"`
+			RewardInfo          interface{} `json:"reward_info"`
+			GoodsTagList        interface{} `json:"goods_tag_list"`
+		} `json:"item"`
+		Title string `json:"title"`
+	} `json:"data"`
+}
+
+type MultiVoiceOperatin struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Uid        int64 `json:"uid"`
+		TotalPrice int   `json:"total_price"`
+		Ts         int64 `json:"ts"`
+	} `json:"data"`
+}
+
+type PanelInteractiveNotifyChange struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		BizId    int    `json:"biz_id"`
+		EndTime  int    `json:"end_time"`
+		Icon     string `json:"icon"`
+		LastTime int    `json:"last_time"`
+		Level    int    `json:"level"`
+		Text     string `json:"text"`
+	} `json:"data"`
+}
+
+type InteractiveUser struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Type  int `json:"type"`
+		Value struct {
+			Delay         int    `json:"delay"`
+			DmMsg         string `json:"dm_msg"`
+			ProphetStatus int    `json:"prophet_status"`
+			SendMsg       int    `json:"send_msg"`
+		} `json:"value"`
+	} `json:"data"`
+}
+
+type UserVirtualMvp struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		GoodsId        int    `json:"goods_id"`
+		EffectId       int    `json:"effect_id"`
+		EffectQueue    int    `json:"effect_queue"`
+		Uid            int64  `json:"uid"`
+		Uname          string `json:"uname"`
+		UnameColor     string `json:"uname_color"`
+		UserGuardLevel int    `json:"user_guard_level"`
+		GoodsName      string `json:"goods_name"`
+		GoodsNum       int    `json:"goods_num"`
+		GoodsPrice     int    `json:"goods_price"`
+		GoodsIcon      string `json:"goods_icon"`
+		Action         string `json:"action"`
+		OrderId        string `json:"order_id"`
+		Timestamp      int    `json:"timestamp"`
+		SuccessToast   string `json:"success_toast"`
+		AnimationBlock int    `json:"animation_block"`
+	} `json:"data"`
+}
+
+type WidgetWishList struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Wish []struct {
+			Type       int    `json:"type"`
+			GiftId     int    `json:"gift_id"`
+			GiftName   string `json:"gift_name"`
+			GiftImg    string `json:"gift_img"`
+			GiftPrice  int    `json:"gift_price"`
+			TargetNum  int    `json:"target_num"`
+			CurrentNum int    `json:"current_num"`
+		} `json:"wish"`
+		WishStatus     int `json:"wish_status"`
+		Sid            int `json:"sid"`
+		WishStatusInfo []struct {
+			WishStatusMsg string `json:"wish_status_msg"`
+			WishStatusImg string `json:"wish_status_img"`
+			WishStatus    int    `json:"wish_status"`
+		} `json:"wish_status_info"`
+		WishName string `json:"wish_name"`
+	} `json:"data"`
+}
+
+type CheckSingStatus struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		ShortTimeSize int   `json:"ShortTimeSize"`
+		ShortTimeSing int   `json:"ShortTimeSing"`
+		LongTimeSize  int   `json:"LongTimeSize"`
+		LongTimeSing  int   `json:"LongTimeSing"`
+		OpenArea      []int `json:"OpenArea"`
+	} `json:"data"`
+}
+
+type RoomModuleDisplay struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Timestamp int `json:"timestamp"`
+		Modules   struct {
+			BottomBanner int `json:"bottom_banner"`
+			TopBanner    int `json:"top_banner"`
+			WidgetBanner int `json:"widget_banner"`
+		} `json:"modules"`
+	} `json:"data"`
+}
+
+type VoiceChatUpdate struct {
+	Data struct {
+		Url string `json:"url"`
+	} `json:"data"`
+	Cmd string `json:"cmd"`
+}
+
+type ReenterLiveRoom struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		RoomId                int `json:"room_id"`
+		RequestRandomSecRange int `json:"request_random_sec_range"`
+		Reason                int `json:"reason"`
+	} `json:"data"`
+	Roomid int `json:"roomid"`
+}
+
+type OfficialRoomEvent struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		EventType        int    `json:"event_type"`
+		RoomId           int    `json:"room_id"`
+		OfficialRoomId   int    `json:"official_room_id"`
+		OfficialAnchorId int    `json:"official_anchor_id"`
+		Countdown        int    `json:"countdown"`
+		ScatterTime      int    `json:"scatter_time"`
+		SubTitle         string `json:"sub_title"`
+		Desc             string `json:"desc"`
+		OfficialBaseInfo struct {
+			Uid          int    `json:"uid"`
+			Title        string `json:"title"`
+			Uname        string `json:"uname"`
+			Face         string `json:"face"`
+			Gender       string `json:"gender"`
+			OfficialInfo struct {
+				Role  int    `json:"role"`
+				Title string `json:"title"`
+				Desc  string `json:"desc"`
+				Type  int    `json:"type"`
+			} `json:"official_info"`
+		} `json:"official_base_info"`
+		CurrentRoomStatus int `json:"current_room_status"`
+	} `json:"data"`
+}
+
+type ActivityBannerChangeV2 struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Timestamp int `json:"timestamp"`
+		List      []struct {
+			Id            int    `json:"id"`
+			Position      string `json:"position"`
+			Type          int    `json:"type"`
+			ActivityTitle string `json:"activity_title"`
+			Cover         string `json:"cover"`
+			JumpUrl       string `json:"jump_url"`
+			IsClose       int    `json:"is_close"`
+			Action        string `json:"action"`
+			PlatformInfo  []struct {
+				Platform  string `json:"platform"`
+				Condition int    `json:"condition"`
+				Build     int    `json:"build"`
+			} `json:"platform_info"`
+			ExtData string `json:"ext_data"`
+		} `json:"list"`
+	} `json:"data"`
+}
+
+type ActivityBannerChange struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		List []struct {
+			Id            int    `json:"id"`
+			Timestamp     int    `json:"timestamp"`
+			Position      string `json:"position"`
+			ActivityTitle string `json:"activity_title"`
+			Cover         string `json:"cover"`
+			JumpUrl       string `json:"jump_url"`
+			IsClose       int    `json:"is_close"`
+			Action        string `json:"action"`
+		} `json:"list"`
+	} `json:"data"`
+}
+
+type VideoConnectionStart struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Uid         int    `json:"uid"`
+		Type        int    `json:"type"`
+		Uname       string `json:"uname"`
+		Face        string `json:"face"`
+		ChannelId   string `json:"channel_id"`
+		RoomId      int    `json:"room_id"`
+		Toast       string `json:"toast"`
+		StartAt     int    `json:"start_at"`
+		CurrentTime int    `json:"current_time"`
+		VirtualId   int    `json:"virtual_id"`
+	} `json:"data"`
+	Roomid int `json:"roomid"`
+}
+
+type GuideInfoStatus struct {
+	BizType string `json:"biz_type"`
+	Cmd     string `json:"cmd"`
+	Status  int    `json:"status"`
+}
+
+type ObsShieldStatusUpdate struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Change int `json:"change"`
+	} `json:"data"`
+	Roomid string `json:"roomid"`
 }
