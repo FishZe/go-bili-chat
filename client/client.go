@@ -84,7 +84,7 @@ func (c *Client) heartBeat() {
 }
 
 func (c *Client) sendConnect() error {
-	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{UID: 0, Roomid: c.RoomId, Protover: 3, Platform: "web", Type: 2}}
+	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{Roomid: c.RoomId, Protover: 3}}
 	// No CDN Mode
 	if PriorityMode == NoCDNPriority {
 		u := url.URL{Scheme: "wss", Host: MainWsUrl, Path: "/sub"}
