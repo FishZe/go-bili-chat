@@ -113,6 +113,19 @@ const (
 	CmdVideoConnectionStart          = "VIDEO_CONNECTION_START"
 	CmdGuideInfoStatus               = "GUIDE_INFO_STATUS"
 	CmdObsShieldStatusUpdate         = "OBS_SHIELD_STATUS_UPDATE"
+	CmdAnchorNormalNotify            = "ANCHOR_NORMAL_NOTIFY"
+	CmdBlinkStickerTitleRejected     = "BLINK_STICKER_TITLE_REJECTED"
+	CmdDanmuTagChanged               = "DANMU_TAG_CHANGED"
+	CmdHourRankAwards                = "HOUR_RANK_AWARDS"
+	CmdLivePanelChange               = "LIVE_PANEL_CHANGE"
+	CmdLiveRoomToastMessage          = "LIVE_ROOM_TOAST_MESSAGE"
+	CmdLogInNotice                   = "LOG_IN_NOTICE"
+	CmdPkBattleAbnormal              = "PK_BATTLE_ABNORMAL"
+	CmdPkBattleEntrance              = "PK_BATTLE_ENTRANCE"
+	CmdPkBattleVideoPunishBegin      = "PK_BATTLE_VIDEO_PUNISH_BEGIN"
+	CmdPkBattleVideoPunishEnd        = "PK_BATTLE_VIDEO_PUNISH_END"
+	CmdStudioRoomClose               = "STUDIO_ROOM_CLOSE"
+	CmdWinActivity                   = "WIN_ACTIVITY"
 )
 
 var CmdName = map[string]string{
@@ -229,6 +242,19 @@ var CmdName = map[string]string{
 	"VIDEO_CONNECTION_START":            "VideoConnectionStart",
 	"GUIDE_INFO_STATUS":                 "GuideInfoStatus",
 	"OBS_SHIELD_STATUS_UPDATE":          "ObsShieldStatusUpdate",
+	"ANCHOR_NORMAL_NOTIFY":              "AnchorNormalNotify",
+	"BLINK_STICKER_TITLE_REJECTED":      "BlinkStickerTitleRejected",
+	"DANMU_TAG_CHANGE":                  "DanmuTagChange",
+	"HOUR_RANK_AWARDS":                  "HourRankAwards",
+	"LIVE_PANEL_CHANGE":                 "LivePanelChange",
+	"LIVE_ROOM_TOAST_MESSAGE":           "LiveRoomToastMessage",
+	"LOG_IN_NOTICE":                     "LogInNotice",
+	"PK_BATTLE_ABNORMAL":                "PkBattleAbnormal",
+	"PK_BATTLE_ENTRANCE":                "PkBattleEntrance",
+	"PK_BATTLE_VIDEO_PUNISH_BEGIN":      "PkBattleVideoPunishBegin",
+	"PK_BATTLE_VIDEO_PUNISH_END":        "PkBattleVideoPunishEnd",
+	"STUDIO_ROOM_CLOSE":                 "StudioRoomClose",
+	"WIN_ACTIVITY":                      "WinActivity",
 }
 
 type MsgEvent struct {
@@ -346,6 +372,19 @@ type MsgEvent struct {
 	VideoConnectionStart          *VideoConnectionStart
 	GuideInfoStatus               *GuideInfoStatus
 	ObsShieldStatusUpdate         *ObsShieldStatusUpdate
+	AnchorNormalNotify            *AnchorNormalNotify
+	BlinkStickerTitleRejected     *BlinkStickerTitleRejected
+	DanmuTagChange                *DanmuTagChange
+	HourRankAwards                *HourRankAwards
+	LivePanelChange               *LivePanelChange
+	LiveRoomToastMessage          *LiveRoomToastMessage
+	LogInNotice                   *LogInNotice
+	PkBattleAbnormal              *PkBattleAbnormal
+	PkBattleEntrance              *PkBattleEntrance
+	PkBattleVideoPunishBegin      *PkBattleVideoPunishBegin
+	PkBattleVideoPunishEnd        *PkBattleVideoPunishEnd
+	StudioRoomClose               *StudioRoomClose
+	WinActivity                   *WinActivity
 }
 
 type cmdInterface interface {
@@ -3126,4 +3165,253 @@ type ObsShieldStatusUpdate struct {
 
 func (*ObsShieldStatusUpdate) New() interface{} {
 	return &ObsShieldStatusUpdate{}
+}
+
+type AnchorNormalNotify struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Type     int `json:"type"`
+		ShowType int `json:"show_type"`
+		Info     struct {
+			Icon    string `json:"icon"`
+			Title   string `json:"title"`
+			Content string `json:"content"`
+		} `json:"info"`
+	} `json:"data"`
+}
+
+func (*AnchorNormalNotify) New() interface{} {
+	return &AnchorNormalNotify{}
+}
+
+type BlinkStickerTitleRejected struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		RoomId      int    `json:"room_id"`
+		StickerId   int    `json:"sticker_id"`
+		DefaultText string `json:"default_text"`
+		OriginText  string `json:"origin_text"`
+	} `json:"data"`
+}
+
+func (*BlinkStickerTitleRejected) New() interface{} {
+	return &BlinkStickerTitleRejected{}
+}
+
+type DanmuTagChange struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		RoomId              int    `json:"room_id"`
+		DmTag               int    `json:"dm_tag"`
+		DmMode              []int  `json:"dm_mode"`
+		Platform            []int  `json:"platform"`
+		Extra               string `json:"extra"`
+		DmChronosExtra      string `json:"dm_chronos_extra"`
+		DmChronosScreenType int    `json:"dm_chronos_screen_type"`
+		DmSettingSwitch     int    `json:"dm_setting_switch"`
+		MaterialConf        []struct {
+			DmMode                int    `json:"dm_mode"`
+			ActivityType          int    `json:"activity_type"`
+			MainStateDmColor      string `json:"main_state_dm_color"`
+			ObjectiveStateDmColor string `json:"objective_state_dm_color"`
+			WebMaterial           string `json:"web_material"`
+			ActivityTestMaterial  string `json:"activity_test_material"`
+			CustomizedMaterial    int    `json:"customized_material"`
+			MaterialMode          []struct {
+				AppKey       string `json:"app_key"`
+				ChronosApply int    `json:"chronos_apply"`
+				MobiMaterial struct {
+					MobiPool           string `json:"mobi_pool"`
+					MobiModule         string `json:"mobi_module"`
+					MobiModuleFile     string `json:"mobi_module_file"`
+					MobiModuleFileName string `json:"mobi_module_file_name"`
+					MobiModuleVersion  int    `json:"mobi_module_version"`
+				} `json:"mobi_material"`
+			} `json:"material_mode"`
+		} `json:"material_conf"`
+		ChronosMode struct {
+			MobiPool           string `json:"mobi_pool"`
+			MobiModule         string `json:"mobi_module"`
+			MobiModuleFile     string `json:"mobi_module_file"`
+			MobiModuleFileName string `json:"mobi_module_file_name"`
+		} `json:"chronos_mode"`
+	} `json:"data"`
+}
+
+func (*DanmuTagChange) New() interface{} {
+	return &DanmuTagChange{}
+}
+
+type HourRankAwards struct {
+	Action string `json:"action"`
+	Cmd    string `json:"cmd"`
+	Data   struct {
+		AwardDesc     string `json:"award_desc"`
+		AwardUrl      string `json:"award_url"`
+		AwardWarn     string `json:"award_warn"`
+		ButtonContent string `json:"button_content"`
+		JumpContent   string `json:"jump_content"`
+		JumpUrl       string `json:"jump_url"`
+		RankContent   string `json:"rank_content"`
+		Roomid        int    `json:"roomid"`
+		Ruid          int    `json:"ruid"`
+		Title         string `json:"title"`
+		WebJumpUrl    string `json:"web_jump_url"`
+	} `json:"data"`
+}
+
+func (*HourRankAwards) New() interface{} {
+	return &HourRankAwards{}
+}
+
+type LivePanelChange struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Type    int `json:"type"`
+		Scatter struct {
+			Max int `json:"max"`
+			Min int `json:"min"`
+		} `json:"scatter"`
+	} `json:"data"`
+}
+
+func (*LivePanelChange) New() interface{} {
+	return &LivePanelChange{}
+}
+
+type LiveRoomToastMessage struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		Message   string `json:"message"`
+		Timestamp int    `json:"timestamp"`
+	} `json:"data"`
+	IsReport  bool   `json:"is_report"`
+	MsgId     string `json:"msg_id"`
+	SendTime  int64  `json:"send_time"`
+	Timestamp int    `json:"timestamp"`
+}
+
+func (*LiveRoomToastMessage) New() interface{} {
+	return &LiveRoomToastMessage{}
+}
+
+type LogInNotice struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		NoticeMsg string `json:"notice_msg"`
+		ImageWeb  string `json:"image_web"`
+		ImageApp  string `json:"image_app"`
+	} `json:"data"`
+}
+
+func (*LogInNotice) New() interface{} {
+	return &LogInNotice{}
+}
+
+type PkBattleAbnormal struct {
+	Cmd       string        `json:"cmd"`
+	PkId      int           `json:"pk_id"`
+	PkStatus  int           `json:"pk_status"`
+	Timestamp int           `json:"timestamp"`
+	Data      []interface{} `json:"data"`
+}
+
+func (*PkBattleAbnormal) New() interface{} {
+	return &PkBattleAbnormal{}
+}
+
+type PkBattleEntrance struct {
+	Cmd       string `json:"cmd"`
+	Timestamp int    `json:"timestamp"`
+	Data      struct {
+		IsOpen bool `json:"is_open"`
+	} `json:"data"`
+}
+
+func (*PkBattleEntrance) New() interface{} {
+	return &PkBattleEntrance{}
+}
+
+type PkBattleVideoPunishBegin struct {
+	Cmd  string `json:"cmd"`
+	Data struct {
+		BattleType int `json:"battle_type"`
+		InitInfo   struct {
+			BestUname  string `json:"best_uname"`
+			RoomId     int    `json:"room_id"`
+			Votes      int    `json:"votes"`
+			WinnerType int    `json:"winner_type"`
+		} `json:"init_info"`
+		MatchInfo struct {
+			BestUname  string `json:"best_uname"`
+			RoomId     int    `json:"room_id"`
+			Votes      int    `json:"votes"`
+			WinnerType int    `json:"winner_type"`
+		} `json:"match_info"`
+		VideoPunish struct {
+			Duration   int    `json:"duration"`
+			PunishName string `json:"punish_name"`
+		} `json:"video_punish"`
+	} `json:"data"`
+	IsReport  bool   `json:"is_report"`
+	MsgId     string `json:"msg_id"`
+	PkId      string `json:"pk_id"`
+	PkStatus  int    `json:"pk_status"`
+	SendTime  int64  `json:"send_time"`
+	Timestamp int    `json:"timestamp"`
+}
+
+func (*PkBattleVideoPunishBegin) New() interface{} {
+	return &PkBattleVideoPunishBegin{}
+}
+
+type PkBattleVideoPunishEnd struct {
+	Cmd       string `json:"cmd"`
+	IsReport  bool   `json:"is_report"`
+	MsgId     string `json:"msg_id"`
+	PkId      string `json:"pk_id"`
+	PkStatus  int    `json:"pk_status"`
+	SendTime  int64  `json:"send_time"`
+	Timestamp int    `json:"timestamp"`
+}
+
+func (*PkBattleVideoPunishEnd) New() interface{} {
+	return &PkBattleVideoPunishEnd{}
+}
+
+type StudioRoomClose struct {
+	Msg    string `json:"msg"`
+	Cmd    string `json:"cmd"`
+	Roomid string `json:"roomid"`
+}
+
+func (*StudioRoomClose) New() interface{} {
+	return &StudioRoomClose{}
+}
+
+type WinActivity struct {
+	Cmd    string `json:"cmd"`
+	Number int    `json:"number"`
+	Data   struct {
+		DelayTimeMin int    `json:"delay_time_min"`
+		DelayTimeMax int    `json:"delay_time_max"`
+		ActivityId   int    `json:"activity_id"`
+		JumpUrl      string `json:"jump_url"`
+		Weight       int    `json:"weight"`
+		Closeable    int    `json:"closeable"`
+		Title        string `json:"title"`
+		TitleColor   string `json:"title_color"`
+		ActivityPic  string `json:"activity_pic"`
+		Background   string `json:"background"`
+		CurrentRound int    `json:"current_round"`
+		TypeB        []struct {
+			JoinStartTime int `json:"join_start_time"`
+			JoinEndTime   int `json:"join_end_time"`
+			RoundNum      int `json:"round_num"`
+		} `json:"typeB"`
+	} `json:"data"`
+}
+
+func (*WinActivity) New() interface{} {
+	return &WinActivity{}
 }
