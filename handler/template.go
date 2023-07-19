@@ -348,6 +348,10 @@ type MsgEvent struct {
 	ObsShieldStatusUpdate         *ObsShieldStatusUpdate
 }
 
+type cmdInterface interface {
+	New() interface{}
+}
+
 type FansMedal struct {
 	AnchorRoomId     int    `json:"anchor_roomid"`
 	GuardLevel       int    `json:"guard_level"`
@@ -380,6 +384,10 @@ type DanMuMsg struct {
 	}
 }
 
+func (*DanMuMsg) New() interface{} {
+	return &DanMuMsg{}
+}
+
 type OnlineRankV2 struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -395,6 +403,10 @@ type OnlineRankV2 struct {
 	} `json:"data"`
 }
 
+func (*OnlineRankV2) New() interface{} {
+	return &OnlineRankV2{}
+}
+
 type OnlineRankTop3 struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -406,11 +418,19 @@ type OnlineRankTop3 struct {
 	} `json:"data"`
 }
 
+func (*OnlineRankTop3) New() interface{} {
+	return &OnlineRankTop3{}
+}
+
 type StopLiveRoomList struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		RoomIDList []int `json:"room_id_list"`
 	} `json:"data"`
+}
+
+func (*StopLiveRoomList) New() interface{} {
+	return &StopLiveRoomList{}
 }
 
 type WatchedChange struct {
@@ -422,11 +442,19 @@ type WatchedChange struct {
 	} `json:"data"`
 }
 
+func (*WatchedChange) New() interface{} {
+	return &WatchedChange{}
+}
+
 type OnlineRankCount struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		Count int `json:"count"`
 	} `json:"data"`
+}
+
+func (*OnlineRankCount) New() interface{} {
+	return &OnlineRankCount{}
 }
 
 type LikeInfoV3Click struct {
@@ -446,6 +474,10 @@ type LikeInfoV3Click struct {
 			Grade int `json:"grade"`
 		} `json:"contribution_info"`
 	} `json:"data"`
+}
+
+func (*LikeInfoV3Click) New() interface{} {
+	return &LikeInfoV3Click{}
 }
 
 type InteractWord struct {
@@ -473,6 +505,10 @@ type InteractWord struct {
 	} `json:"data"`
 }
 
+func (*InteractWord) New() interface{} {
+	return &InteractWord{}
+}
+
 type RoomRealTimeMessageUpdate struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -481,6 +517,10 @@ type RoomRealTimeMessageUpdate struct {
 		RedNotice int `json:"red_notice"`
 		FansClub  int `json:"fans_club"`
 	} `json:"data"`
+}
+
+func (*RoomRealTimeMessageUpdate) New() interface{} {
+	return &RoomRealTimeMessageUpdate{}
 }
 
 type BlindGift struct {
@@ -493,9 +533,17 @@ type BlindGift struct {
 	OriginalGiftPrice int    `json:"original_gift_price"`
 }
 
+func (*BlindGift) New() interface{} {
+	return &BlindGift{}
+}
+
 type ReceiveUserInfo struct {
 	Uid   int    `json:"uid"`
 	Uname string `json:"uname"`
+}
+
+func (*ReceiveUserInfo) New() interface{} {
+	return &ReceiveUserInfo{}
 }
 
 type SendGift struct {
@@ -570,6 +618,10 @@ type SendGift struct {
 	} `json:"data"`
 }
 
+func (*SendGift) New() interface{} {
+	return &SendGift{}
+}
+
 type SuperChatMessage struct {
 	RoomID int    `json:"RoomId"`
 	Cmd    string `json:"cmd"`
@@ -622,11 +674,19 @@ type SuperChatMessage struct {
 	} `json:"data"`
 }
 
+func (*SuperChatMessage) New() interface{} {
+	return &SuperChatMessage{}
+}
+
 type LikeInfoV3Update struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		ClickCount int `json:"click_count"`
 	} `json:"data"`
+}
+
+func (*LikeInfoV3Update) New() interface{} {
+	return &LikeInfoV3Update{}
 }
 
 type HotRankChange struct {
@@ -646,6 +706,11 @@ type HotRankChange struct {
 		RankDesc    string `json:"rank_desc"`
 	} `json:"data"`
 }
+
+func (*HotRankChange) New() interface{} {
+	return &HotRankChange{}
+}
+
 type NoticeMsg struct {
 	Cmd  string `json:"cmd"`
 	ID   int    `json:"id"`
@@ -694,6 +759,10 @@ type NoticeMsg struct {
 	NoticeType int    `json:"notice_type"`
 }
 
+func (*NoticeMsg) New() interface{} {
+	return &NoticeMsg{}
+}
+
 type WidgetBanner struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -722,6 +791,10 @@ type WidgetBanner struct {
 	} `json:"data"`
 }
 
+func (*WidgetBanner) New() interface{} {
+	return &WidgetBanner{}
+}
+
 type HotRankChangedV2 struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -740,12 +813,20 @@ type HotRankChangedV2 struct {
 	} `json:"data"`
 }
 
+func (*HotRankChangedV2) New() interface{} {
+	return &HotRankChangedV2{}
+}
+
 type GuardHonorThousand struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		Add []interface{} `json:"add"`
 		Del []int         `json:"del"`
 	} `json:"data"`
+}
+
+func (*GuardHonorThousand) New() interface{} {
+	return &GuardHonorThousand{}
 }
 
 type Live struct {
@@ -757,6 +838,10 @@ type Live struct {
 	LiveModel       int    `json:"live_model"`
 	LiveTime        int    `json:"live_time"`
 	Roomid          int    `json:"roomid"`
+}
+
+func (*Live) New() interface{} {
+	return &Live{}
 }
 
 type RoomChange struct {
@@ -772,6 +857,10 @@ type RoomChange struct {
 	} `json:"data"`
 }
 
+func (*RoomChange) New() interface{} {
+	return &RoomChange{}
+}
+
 type RoomBlockMsg struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -784,6 +873,10 @@ type RoomBlockMsg struct {
 	Name string `json:"uname"`
 }
 
+func (*RoomBlockMsg) New() interface{} {
+	return &RoomBlockMsg{}
+}
+
 type FullScreenSpecialEffect struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -792,6 +885,10 @@ type FullScreenSpecialEffect struct {
 		Queue      int   `json:"queue"`
 		PlatformIn []int `json:"platform_in"`
 	} `json:"data"`
+}
+
+func (*FullScreenSpecialEffect) New() interface{} {
+	return &FullScreenSpecialEffect{}
 }
 
 type CommonNoticeDanmaku struct {
@@ -810,6 +907,10 @@ type CommonNoticeDanmaku struct {
 	} `json:"data"`
 }
 
+func (*CommonNoticeDanmaku) New() interface{} {
+	return &CommonNoticeDanmaku{}
+}
+
 type TradingScore struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -822,9 +923,17 @@ type TradingScore struct {
 	} `json:"data"`
 }
 
+func (*TradingScore) New() interface{} {
+	return &TradingScore{}
+}
+
 type Preparing struct {
 	Cmd    string `json:"cmd"`
 	RoomId int    `json:"roomid"`
+}
+
+func (*Preparing) New() interface{} {
+	return &Preparing{}
 }
 
 type GuardBuy struct {
@@ -842,12 +951,20 @@ type GuardBuy struct {
 	} `json:"data"`
 }
 
+func (*GuardBuy) New() interface{} {
+	return &GuardBuy{}
+}
+
 type GiftStarProcess struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		Status int    `json:"status"`
 		Tip    string `json:"tip"`
 	} `json:"data"`
+}
+
+func (*GiftStarProcess) New() interface{} {
+	return &GiftStarProcess{}
 }
 
 type RoomSkinMsg struct {
@@ -899,6 +1016,10 @@ type RoomSkinMsg struct {
 	} `json:"skin_config"`
 }
 
+func (*RoomSkinMsg) New() interface{} {
+	return &RoomSkinMsg{}
+}
+
 type EntryEffect struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -933,6 +1054,10 @@ type EntryEffect struct {
 	} `json:"data"`
 }
 
+func (*EntryEffect) New() interface{} {
+	return &EntryEffect{}
+}
+
 type UserToastMsg struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -962,8 +1087,16 @@ type UserToastMsg struct {
 	} `json:"data"`
 }
 
+func (*UserToastMsg) New() interface{} {
+	return &UserToastMsg{}
+}
+
 type HeartBeatReply struct {
 	Sum int `json:"sum"`
+}
+
+func (*HeartBeatReply) New() interface{} {
+	return &HeartBeatReply{}
 }
 
 type PopularityRedPocketNew struct {
@@ -999,6 +1132,10 @@ type PopularityRedPocketNew struct {
 	} `json:"data"`
 }
 
+func (*PopularityRedPocketNew) New() interface{} {
+	return &PopularityRedPocketNew{}
+}
+
 type AreaRankChanged struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -1019,6 +1156,10 @@ type AreaRankChanged struct {
 	} `json:"data"`
 }
 
+func (*AreaRankChanged) New() interface{} {
+	return &AreaRankChanged{}
+}
+
 type SuperChatEntrance struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -1028,6 +1169,10 @@ type SuperChatEntrance struct {
 		BroadcastType int    `json:"broadcast_type"`
 	} `json:"data"`
 	Roomid string `json:"roomid"`
+}
+
+func (*SuperChatEntrance) New() interface{} {
+	return &SuperChatEntrance{}
 }
 
 type PlayTogether struct {
@@ -1047,6 +1192,10 @@ type PlayTogether struct {
 		CurFleetNum int    `json:"cur_fleet_num"`
 		MaxFleetNum int    `json:"max_fleet_num"`
 	} `json:"data"`
+}
+
+func (*PlayTogether) New() interface{} {
+	return &PlayTogether{}
 }
 
 type ComboSend struct {
@@ -1094,6 +1243,10 @@ type ComboSend struct {
 	} `json:"data"`
 }
 
+func (*ComboSend) New() interface{} {
+	return &ComboSend{}
+}
+
 type PopularityRedPocketStart struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -1124,6 +1277,10 @@ type PopularityRedPocketStart struct {
 	} `json:"data"`
 }
 
+func (*PopularityRedPocketStart) New() interface{} {
+	return &PopularityRedPocketStart{}
+}
+
 type PkBattleProcess struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -1146,6 +1303,10 @@ type PkBattleProcess struct {
 	Timestamp int `json:"timestamp"`
 }
 
+func (*PkBattleProcess) New() interface{} {
+	return &PkBattleProcess{}
+}
+
 type PopularRankChanged struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -1155,6 +1316,10 @@ type PopularRankChanged struct {
 		Timestamp int    `json:"timestamp"`
 		CacheKey  string `json:"cache_key"`
 	} `json:"data"`
+}
+
+func (*PopularRankChanged) New() interface{} {
+	return &PopularRankChanged{}
 }
 
 type PkBattleStartNew struct {
@@ -1190,6 +1355,10 @@ type PkBattleStartNew struct {
 	Roomid string `json:"roomid"`
 }
 
+func (*PkBattleStartNew) New() interface{} {
+	return &PkBattleStartNew{}
+}
+
 type DanMuAggregation struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -1205,6 +1374,10 @@ type DanMuAggregation struct {
 		ShowTime         int    `json:"show_time"`
 		Timestamp        int    `json:"timestamp"`
 	} `json:"data"`
+}
+
+func (*DanMuAggregation) New() interface{} {
+	return &DanMuAggregation{}
 }
 
 type LiveInteractiveGame struct {
@@ -1228,6 +1401,10 @@ type LiveInteractiveGame struct {
 		AnchorInfo     interface{} `json:"anchor_info"`
 		ComboInfo      interface{} `json:"combo_info"`
 	} `json:"data"`
+}
+
+func (*LiveInteractiveGame) New() interface{} {
+	return &LiveInteractiveGame{}
 }
 
 type RecommendCard struct {
@@ -1289,6 +1466,10 @@ type RecommendCard struct {
 	} `json:"data"`
 }
 
+func (*RecommendCard) New() interface{} {
+	return &RecommendCard{}
+}
+
 type PkBattleProcessNew struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -1316,6 +1497,10 @@ type PkBattleProcessNew struct {
 	Timestamp int `json:"timestamp"`
 }
 
+func (*PkBattleProcessNew) New() interface{} {
+	return &PkBattleProcessNew{}
+}
+
 type PkBattlePreNew struct {
 	Cmd       string `json:"cmd"`
 	PkStatus  int    `json:"pk_status"`
@@ -1334,6 +1519,10 @@ type PkBattlePreNew struct {
 		EndWinTask  interface{} `json:"end_win_task"`
 	} `json:"data"`
 	Roomid int `json:"roomid"`
+}
+
+func (*PkBattlePreNew) New() interface{} {
+	return &PkBattlePreNew{}
 }
 
 type PkBattlePre struct {
@@ -1356,6 +1545,10 @@ type PkBattlePre struct {
 	Roomid int `json:"roomid"`
 }
 
+func (*PkBattlePre) New() interface{} {
+	return &PkBattlePre{}
+}
+
 type PkBattleFinalProcess struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -1365,6 +1558,10 @@ type PkBattleFinalProcess struct {
 	PkId      int `json:"pk_id"`
 	PkStatus  int `json:"pk_status"`
 	Timestamp int `json:"timestamp"`
+}
+
+func (*PkBattleFinalProcess) New() interface{} {
+	return &PkBattleFinalProcess{}
 }
 
 type PkBattleStart struct {
@@ -1400,6 +1597,10 @@ type PkBattleStart struct {
 	Roomid string `json:"roomid"`
 }
 
+func (*PkBattleStart) New() interface{} {
+	return &PkBattleStart{}
+}
+
 type WidgetGiftStarProcess struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -1418,6 +1619,10 @@ type WidgetGiftStarProcess struct {
 		RewardGiftImg  string `json:"reward_gift_img"`
 		RewardGiftName string `json:"reward_gift_name"`
 	} `json:"data"`
+}
+
+func (*WidgetGiftStarProcess) New() interface{} {
+	return &WidgetGiftStarProcess{}
 }
 
 type PopularityRedPocketWinnerList struct {
@@ -1453,11 +1658,19 @@ type PopularityRedPocketWinnerList struct {
 	} `json:"data"`
 }
 
+func (*PopularityRedPocketWinnerList) New() interface{} {
+	return &PopularityRedPocketWinnerList{}
+}
+
 type GotoBuyFlow struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		Text string `json:"text"`
 	} `json:"data"`
+}
+
+func (*GotoBuyFlow) New() interface{} {
+	return &GotoBuyFlow{}
 }
 
 type PkBattleEnd struct {
@@ -1481,6 +1694,10 @@ type PkBattleEnd struct {
 			BestUname  string `json:"best_uname"`
 		} `json:"match_info"`
 	} `json:"data"`
+}
+
+func (*PkBattleEnd) New() interface{} {
+	return &PkBattleEnd{}
 }
 
 type PkBattleSettleUser struct {
@@ -1597,6 +1814,10 @@ type PkBattleSettleUser struct {
 	} `json:"data"`
 }
 
+func (*PkBattleSettleUser) New() interface{} {
+	return &PkBattleSettleUser{}
+}
+
 type AnchorLotStart struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -1640,6 +1861,10 @@ type AnchorLotStart struct {
 	} `json:"data"`
 }
 
+func (*AnchorLotStart) New() interface{} {
+	return &AnchorLotStart{}
+}
+
 type PkBattleSettleV2 struct {
 	Cmd          string `json:"cmd"`
 	PkId         int    `json:"pk_id"`
@@ -1672,6 +1897,10 @@ type PkBattleSettleV2 struct {
 		} `json:"assist_list"`
 		StarLightMsg string `json:"star_light_msg"`
 	} `json:"data"`
+}
+
+func (*PkBattleSettleV2) New() interface{} {
+	return &PkBattleSettleV2{}
 }
 
 type PkBattleSettle struct {
@@ -1788,6 +2017,10 @@ type PkBattleSettle struct {
 	} `json:"data"`
 }
 
+func (*PkBattleSettle) New() interface{} {
+	return &PkBattleSettle{}
+}
+
 type HotRoomNotify struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -1799,6 +2032,10 @@ type HotRoomNotify struct {
 			Delay int    `json:"delay"`
 		} `json:"random_delay_req_v2"`
 	} `json:"data"`
+}
+
+func (*HotRoomNotify) New() interface{} {
+	return &HotRoomNotify{}
 }
 
 type LiveOpenPlatformGame struct {
@@ -1816,6 +2053,10 @@ type LiveOpenPlatformGame struct {
 		Timestamp            int         `json:"timestamp"`
 		BlockUids            interface{} `json:"block_uids"`
 	} `json:"data"`
+}
+
+func (*LiveOpenPlatformGame) New() interface{} {
+	return &LiveOpenPlatformGame{}
 }
 
 type LivePanelChangeContent struct {
@@ -1886,6 +2127,10 @@ type LivePanelChangeContent struct {
 		MatchIcon     string      `json:"match_icon"`
 		MatchBgImage  string      `json:"match_bg_image"`
 	} `json:"data"`
+}
+
+func (*LivePanelChangeContent) New() interface{} {
+	return &LivePanelChangeContent{}
 }
 
 type GiftPanelPlan struct {
@@ -1960,6 +2205,10 @@ type GiftPanelPlan struct {
 	} `json:"data"`
 }
 
+func (*GiftPanelPlan) New() interface{} {
+	return &GiftPanelPlan{}
+}
+
 type ShoppingExplainCard struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2014,6 +2263,10 @@ type ShoppingExplainCard struct {
 	} `json:"data"`
 }
 
+func (*ShoppingExplainCard) New() interface{} {
+	return &ShoppingExplainCard{}
+}
+
 type AnchorLotCheckStatus struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2021,6 +2274,10 @@ type AnchorLotCheckStatus struct {
 		Status int   `json:"status"`
 		Uid    int64 `json:"uid"`
 	} `json:"data"`
+}
+
+func (*AnchorLotCheckStatus) New() interface{} {
+	return &AnchorLotCheckStatus{}
 }
 
 type PkBattlePunishEnd struct {
@@ -2034,11 +2291,19 @@ type PkBattlePunishEnd struct {
 	} `json:"data"`
 }
 
+func (*PkBattlePunishEnd) New() interface{} {
+	return &PkBattlePunishEnd{}
+}
+
 type AnchorLotEnd struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		Id int `json:"id"`
 	} `json:"data"`
+}
+
+func (*AnchorLotEnd) New() interface{} {
+	return &AnchorLotEnd{}
 }
 
 type AnchorLotAward struct {
@@ -2064,6 +2329,10 @@ type AnchorLotAward struct {
 	} `json:"data"`
 }
 
+func (*AnchorLotAward) New() interface{} {
+	return &AnchorLotAward{}
+}
+
 type SpecialGift struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2079,12 +2348,20 @@ type SpecialGift struct {
 	} `json:"data"`
 }
 
+func (*SpecialGift) New() interface{} {
+	return &SpecialGift{}
+}
+
 type SuperChatMessageDelete struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		Ids []int `json:"ids"`
 	} `json:"data"`
 	Roomid int `json:"roomid"`
+}
+
+func (*SuperChatMessageDelete) New() interface{} {
+	return &SuperChatMessageDelete{}
 }
 
 type VoiceJoinRoomCountInfo struct {
@@ -2101,6 +2378,10 @@ type VoiceJoinRoomCountInfo struct {
 	RoomId int `json:"room_id"`
 }
 
+func (*VoiceJoinRoomCountInfo) New() interface{} {
+	return &VoiceJoinRoomCountInfo{}
+}
+
 type VoiceJoinList struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2112,6 +2393,10 @@ type VoiceJoinList struct {
 		Refresh    int    `json:"refresh"`
 	} `json:"data"`
 	RoomId int `json:"room_id"`
+}
+
+func (*VoiceJoinList) New() interface{} {
+	return &VoiceJoinList{}
 }
 
 type VoiceJoinStatus struct {
@@ -2132,10 +2417,18 @@ type VoiceJoinStatus struct {
 	RoomId int `json:"room_id"`
 }
 
+func (*VoiceJoinStatus) New() interface{} {
+	return &VoiceJoinStatus{}
+}
+
 type Warning struct {
 	Cmd    string `json:"cmd"`
 	Roomid int    `json:"roomid"`
 	Msg    string `json:"msg"`
+}
+
+func (*Warning) New() interface{} {
+	return &Warning{}
 }
 
 type PkBattleRankChange struct {
@@ -2145,6 +2438,10 @@ type PkBattleRankChange struct {
 		FirstRankImgUrl string `json:"first_rank_img_url"`
 		RankName        string `json:"rank_name"`
 	} `json:"data"`
+}
+
+func (*PkBattleRankChange) New() interface{} {
+	return &PkBattleRankChange{}
 }
 
 type PkBattleSettleNew struct {
@@ -2189,6 +2486,10 @@ type PkBattleSettleNew struct {
 	Timestamp int `json:"timestamp"`
 }
 
+func (*PkBattleSettleNew) New() interface{} {
+	return &PkBattleSettleNew{}
+}
+
 type HotBuyNum struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2197,11 +2498,19 @@ type HotBuyNum struct {
 	} `json:"data"`
 }
 
+func (*HotBuyNum) New() interface{} {
+	return &HotBuyNum{}
+}
+
 type ShoppingCartShow struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		Status int `json:"status"`
 	} `json:"data"`
+}
+
+func (*ShoppingCartShow) New() interface{} {
+	return &ShoppingCartShow{}
 }
 
 type VoiceJoinSwitch struct {
@@ -2214,16 +2523,28 @@ type VoiceJoinSwitch struct {
 	Roomid int `json:"roomid"`
 }
 
+func (*VoiceJoinSwitch) New() interface{} {
+	return &VoiceJoinSwitch{}
+}
+
 type CutOff struct {
 	Cmd    string `json:"cmd"`
 	Msg    string `json:"msg"`
 	Roomid int    `json:"roomid"`
 }
 
+func (*CutOff) New() interface{} {
+	return &CutOff{}
+}
+
 type RoomAdminRevoke struct {
 	Cmd string `json:"cmd"`
 	Msg string `json:"msg"`
 	Uid int64  `json:"uid"`
+}
+
+func (*RoomAdminRevoke) New() interface{} {
+	return &RoomAdminRevoke{}
 }
 
 type RoomSilentOff struct {
@@ -2235,6 +2556,10 @@ type RoomSilentOff struct {
 	Cmd string `json:"cmd"`
 }
 
+func (*RoomSilentOff) New() interface{} {
+	return &RoomSilentOff{}
+}
+
 type RoomSilentOn struct {
 	Data struct {
 		Type   string `json:"type"`
@@ -2242,6 +2567,10 @@ type RoomSilentOn struct {
 		Second int    `json:"second"`
 	} `json:"data"`
 	Cmd string `json:"cmd"`
+}
+
+func (*RoomSilentOn) New() interface{} {
+	return &RoomSilentOn{}
 }
 
 type RoomAdminEntrance struct {
@@ -2252,9 +2581,17 @@ type RoomAdminEntrance struct {
 	Uid     int64  `json:"uid"`
 }
 
+func (*RoomAdminEntrance) New() interface{} {
+	return &RoomAdminEntrance{}
+}
+
 type RoomAdmins struct {
 	Cmd  string  `json:"cmd"`
 	Uids []int64 `json:"uids"`
+}
+
+func (*RoomAdmins) New() interface{} {
+	return &RoomAdmins{}
 }
 
 type VideoConnectionJoinStart struct {
@@ -2271,6 +2608,10 @@ type VideoConnectionJoinStart struct {
 	Roomid int `json:"roomid"`
 }
 
+func (*VideoConnectionJoinStart) New() interface{} {
+	return &VideoConnectionJoinStart{}
+}
+
 type VideoConnectionMsg struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2279,6 +2620,10 @@ type VideoConnectionMsg struct {
 		Dmscore     int    `json:"dmscore"`
 		Toast       string `json:"toast"`
 	} `json:"data"`
+}
+
+func (*VideoConnectionMsg) New() interface{} {
+	return &VideoConnectionMsg{}
 }
 
 type VideoConnectionJoinEnd struct {
@@ -2292,11 +2637,19 @@ type VideoConnectionJoinEnd struct {
 	Roomid int `json:"roomid"`
 }
 
+func (*VideoConnectionJoinEnd) New() interface{} {
+	return &VideoConnectionJoinEnd{}
+}
+
 type RingStatusChange struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		Status int `json:"status"`
 	} `json:"data"`
+}
+
+func (*RingStatusChange) New() interface{} {
+	return &RingStatusChange{}
 }
 
 type RingStatusChangeV2 struct {
@@ -2306,10 +2659,18 @@ type RingStatusChangeV2 struct {
 	} `json:"data"`
 }
 
+func (*RingStatusChangeV2) New() interface{} {
+	return &RingStatusChangeV2{}
+}
+
 type RoomLock struct {
 	Cmd    string `json:"cmd"`
 	Expire string `json:"expire"`
 	Roomid int    `json:"roomid"`
+}
+
+func (*RoomLock) New() interface{} {
+	return &RoomLock{}
 }
 
 type ShoppingBubblesStyle struct {
@@ -2330,6 +2691,10 @@ type ShoppingBubblesStyle struct {
 	} `json:"data"`
 }
 
+func (*ShoppingBubblesStyle) New() interface{} {
+	return &ShoppingBubblesStyle{}
+}
+
 type MultiVoiceOperating struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2337,6 +2702,10 @@ type MultiVoiceOperating struct {
 		TotalPrice int   `json:"total_price"`
 		Ts         int64 `json:"ts"`
 	} `json:"data"`
+}
+
+func (*MultiVoiceOperating) New() interface{} {
+	return &MultiVoiceOperating{}
 }
 
 type MultiVoiceApplicationUser struct {
@@ -2355,6 +2724,10 @@ type MultiVoiceApplicationUser struct {
 	} `json:"data"`
 }
 
+func (*MultiVoiceApplicationUser) New() interface{} {
+	return &MultiVoiceApplicationUser{}
+}
+
 type PkBattleMatchTimeout struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2362,10 +2735,18 @@ type PkBattleMatchTimeout struct {
 	} `json:"data"`
 }
 
+func (*PkBattleMatchTimeout) New() interface{} {
+	return &PkBattleMatchTimeout{}
+}
+
 type ChangeRoomInfo struct {
 	Cmd        string `json:"cmd"`
 	Background string `json:"background"`
 	Roomid     int    `json:"roomid"`
+}
+
+func (*ChangeRoomInfo) New() interface{} {
+	return &ChangeRoomInfo{}
 }
 
 type LiveMultiViewChange struct {
@@ -2376,6 +2757,10 @@ type LiveMultiViewChange struct {
 			Min int `json:"min"`
 		} `json:"scatter"`
 	} `json:"data"`
+}
+
+func (*LiveMultiViewChange) New() interface{} {
+	return &LiveMultiViewChange{}
 }
 
 type GuardAchievementRoom struct {
@@ -2409,10 +2794,18 @@ type GuardAchievementRoom struct {
 	} `json:"data"`
 }
 
+func (*GuardAchievementRoom) New() interface{} {
+	return &GuardAchievementRoom{}
+}
+
 type SysMsg struct {
 	Cmd string `json:"cmd"`
 	Msg string `json:"msg"`
 	Url string `json:"url"`
+}
+
+func (*SysMsg) New() interface{} {
+	return &SysMsg{}
 }
 
 type MvRoleChange struct {
@@ -2423,6 +2816,10 @@ type MvRoleChange struct {
 		RoomId    int   `json:"room_id"`
 		Ts        int   `json:"ts"`
 	} `json:"data"`
+}
+
+func (*MvRoleChange) New() interface{} {
+	return &MvRoleChange{}
 }
 
 type SelectedGoodsInfo struct {
@@ -2450,6 +2847,10 @@ type SelectedGoodsInfo struct {
 	} `json:"data"`
 }
 
+func (*SelectedGoodsInfo) New() interface{} {
+	return &SelectedGoodsInfo{}
+}
+
 type MultiVoiceOperatin struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2457,6 +2858,10 @@ type MultiVoiceOperatin struct {
 		TotalPrice int   `json:"total_price"`
 		Ts         int64 `json:"ts"`
 	} `json:"data"`
+}
+
+func (*MultiVoiceOperatin) New() interface{} {
+	return &MultiVoiceOperatin{}
 }
 
 type PanelInteractiveNotifyChange struct {
@@ -2471,6 +2876,10 @@ type PanelInteractiveNotifyChange struct {
 	} `json:"data"`
 }
 
+func (*PanelInteractiveNotifyChange) New() interface{} {
+	return &PanelInteractiveNotifyChange{}
+}
+
 type InteractiveUser struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2482,6 +2891,10 @@ type InteractiveUser struct {
 			SendMsg       int    `json:"send_msg"`
 		} `json:"value"`
 	} `json:"data"`
+}
+
+func (*InteractiveUser) New() interface{} {
+	return &InteractiveUser{}
 }
 
 type UserVirtualMvp struct {
@@ -2504,6 +2917,10 @@ type UserVirtualMvp struct {
 		SuccessToast   string `json:"success_toast"`
 		AnimationBlock int    `json:"animation_block"`
 	} `json:"data"`
+}
+
+func (*UserVirtualMvp) New() interface{} {
+	return &UserVirtualMvp{}
 }
 
 type WidgetWishList struct {
@@ -2529,6 +2946,10 @@ type WidgetWishList struct {
 	} `json:"data"`
 }
 
+func (*WidgetWishList) New() interface{} {
+	return &WidgetWishList{}
+}
+
 type CheckSingStatus struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2538,6 +2959,10 @@ type CheckSingStatus struct {
 		LongTimeSing  int   `json:"LongTimeSing"`
 		OpenArea      []int `json:"OpenArea"`
 	} `json:"data"`
+}
+
+func (*CheckSingStatus) New() interface{} {
+	return &CheckSingStatus{}
 }
 
 type RoomModuleDisplay struct {
@@ -2552,11 +2977,19 @@ type RoomModuleDisplay struct {
 	} `json:"data"`
 }
 
+func (*RoomModuleDisplay) New() interface{} {
+	return &RoomModuleDisplay{}
+}
+
 type VoiceChatUpdate struct {
 	Data struct {
 		Url string `json:"url"`
 	} `json:"data"`
 	Cmd string `json:"cmd"`
+}
+
+func (*VoiceChatUpdate) New() interface{} {
+	return &VoiceChatUpdate{}
 }
 
 type ReenterLiveRoom struct {
@@ -2567,6 +3000,10 @@ type ReenterLiveRoom struct {
 		Reason                int `json:"reason"`
 	} `json:"data"`
 	Roomid int `json:"roomid"`
+}
+
+func (*ReenterLiveRoom) New() interface{} {
+	return &ReenterLiveRoom{}
 }
 
 type OfficialRoomEvent struct {
@@ -2597,6 +3034,10 @@ type OfficialRoomEvent struct {
 	} `json:"data"`
 }
 
+func (*OfficialRoomEvent) New() interface{} {
+	return &OfficialRoomEvent{}
+}
+
 type ActivityBannerChangeV2 struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2620,6 +3061,10 @@ type ActivityBannerChangeV2 struct {
 	} `json:"data"`
 }
 
+func (*ActivityBannerChangeV2) New() interface{} {
+	return &ActivityBannerChangeV2{}
+}
+
 type ActivityBannerChange struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
@@ -2634,6 +3079,10 @@ type ActivityBannerChange struct {
 			Action        string `json:"action"`
 		} `json:"list"`
 	} `json:"data"`
+}
+
+func (*ActivityBannerChange) New() interface{} {
+	return &ActivityBannerChange{}
 }
 
 type VideoConnectionStart struct {
@@ -2653,10 +3102,18 @@ type VideoConnectionStart struct {
 	Roomid int `json:"roomid"`
 }
 
+func (*VideoConnectionStart) New() interface{} {
+	return &VideoConnectionStart{}
+}
+
 type GuideInfoStatus struct {
 	BizType string `json:"biz_type"`
 	Cmd     string `json:"cmd"`
 	Status  int    `json:"status"`
+}
+
+func (*GuideInfoStatus) New() interface{} {
+	return &GuideInfoStatus{}
 }
 
 type ObsShieldStatusUpdate struct {
@@ -2665,4 +3122,8 @@ type ObsShieldStatusUpdate struct {
 		Change int `json:"change"`
 	} `json:"data"`
 	Roomid string `json:"roomid"`
+}
+
+func (*ObsShieldStatusUpdate) New() interface{} {
+	return &ObsShieldStatusUpdate{}
 }
