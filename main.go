@@ -6,6 +6,7 @@ import (
 	"github.com/FishZe/go-bili-chat/handler"
 	log "github.com/sirupsen/logrus"
 	easy "github.com/t-tomalak/logrus-easy-formatter"
+	"net/http"
 	"sync"
 )
 
@@ -45,6 +46,14 @@ func ChangeLogLevel(level log.Level) {
 func SetClientPriorityMode(mode int) {
 	ClientPriorityMode = mode
 	client.ChangeSequenceMode(mode)
+}
+
+func SetHeader(header http.Header) {
+	client.Header = header
+}
+
+func SetUID(uid int) {
+	client.UID = uid
 }
 
 func GetNewHandler() *Handler {
