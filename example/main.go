@@ -20,14 +20,32 @@ func (j *Json) Marshal(v interface{}) ([]byte, error) {
 	return json.Marshal(v)
 }
 
-func main() {
-	// 可选: 修改日志等级 请删除import的注释
+func init() {
+	// 可选: 修改日志等级
 	// bili.ChangeLogLevel(log.DebugLevel)
 	// 修改Json解析器
-	bili.SetJsonCoder(&Json{})
-	// 修改客户端优先级模式
-	// bili.SetClientPriorityMode(bili.DelayClientPriority) // 优先使用延迟低的
-	bili.SetClientPriorityMode(bili.NoCDNClientPriority) // 优先使用无CDN
+	// bili.SetJsonCoder(&Json{})
+
+	/*
+		修改客户端优先级模式
+		bili.SetClientPriorityMode(bili.DelayClientPriority) // 优先使用延迟低的
+		bili.SetClientPriorityMode(bili.NoCDNClientPriority) // 优先使用无CDN
+	*/
+
+	// 修改连接时认证包的UID, 默认为1
+	// bili.SetUID(208259)
+
+	/*
+		修改连接时的header
+		header := http.Header{
+			"User-Agent": []string{"bilibili-live-tools"},
+		}
+		bili.SetHeader(header)
+	*/
+
+}
+
+func main() {
 	// 新建一个命令处理器
 	h := bili.GetNewHandler()
 	// 注册一个处理，将该直播间的弹幕消息绑定到这个函数
