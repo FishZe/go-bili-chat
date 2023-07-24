@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	log "github.com/sirupsen/logrus"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -15,6 +16,8 @@ type jsonCoder interface {
 }
 
 var JsonCoder jsonCoder
+var UID = 1
+var Header http.Header
 
 type Client struct {
 	// 一个直播间的状态: 关闭 / 已连接 / 连接中
@@ -25,9 +28,14 @@ type Client struct {
 	connect   *websocket.Conn
 }
 
+func init() {
+	Header = make(http.Header)
+	Header.Set("User-Agent", "bili-universal/73600200 CFNetwork/1335.0.3 Darwin/21.6.0 os/ios model/iPhone 14 Pro mobi_app/iphone build/73600200 osVer/16.6.3 network/2 channel/AppStore")
+}
+
 func (c *Client) biliChatConnect(url string) error {
 	var err error
-	c.connect, _, err = websocket.DefaultDialer.Dial(url, nil)
+	c.connect, _, err = websocket.DefaultDialer.Dial(url, Header)
 	if nil != err {
 		return err
 	}
@@ -84,7 +92,7 @@ func (c *Client) heartBeat() {
 }
 
 func (c *Client) sendConnect() error {
-	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{Roomid: c.RoomId, Protover: 3}}
+	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{Roomid: c.RoomId, Protover: 3, UID: UID}}
 	// No CDN Mode
 	if PriorityMode == NoCDNPriority {
 		u := url.URL{Scheme: "wss", Host: MainWsUrl, Path: "/sub"}
@@ -108,6 +116,7 @@ func (c *Client) sendConnect() error {
 		log.Warnf("get live room info error: %v", apiLiveAuth.Message)
 		return RespCodeNotError
 	}
+	// wsAuthMsg.Body.Key = apiLiveAuth.Data.Token
 	for nowSum, i := range apiLiveAuth.Data.HostList {
 		u := url.URL{Scheme: "wss", Host: i.Host + ":" + strconv.Itoa(i.WssPort), Path: "/sub"}
 		log.Debug("connect to blive websocket: ", u.String())

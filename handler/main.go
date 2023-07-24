@@ -74,7 +74,7 @@ func (handler *Handler) DelOption(p *Do) {
 func (handler *Handler) doHandler(f reflect.Value, msg map[string]interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Errorf("doHandler panic: %v, please make an issue to me!", err)
+			log.Errorf("do %v Handler panic: %v, please issue to me!", msg["cmd"].(string), err)
 		}
 	}()
 	res := f.Call([]reflect.Value{reflect.ValueOf(msg)})
@@ -85,12 +85,26 @@ func (handler *Handler) doHandler(f reflect.Value, msg map[string]interface{}) {
 			//房间号分发
 			for t := range handler.DoFunc[cmd][msgEvent.RoomId] {
 				log.Debugf("distribute %v cmd", msg["cmd"].(string))
-				go (*t)(msgEvent)
+				go func(t *Do, msgEvent MsgEvent) {
+					defer func() {
+						if err := recover(); err != nil {
+							log.Errorf("do Handler panic: %v, please issue to me!", err)
+						}
+					}()
+					(*t)(msgEvent)
+				}(t, msgEvent)
 			}
 			//全局分发
 			for t := range handler.DoFunc[cmd][0] {
 				log.Debugf("distribute %v cmd", msg["cmd"].(string))
-				go (*t)(msgEvent)
+				go func(t *Do, msgEvent MsgEvent) {
+					defer func() {
+						if err := recover(); err != nil {
+							log.Errorf("do Handler panic: %v, please issue to me!", err)
+						}
+					}()
+					(*t)(msgEvent)
+				}(t, msgEvent)
 			}
 		}
 	}
@@ -110,11 +124,18 @@ func (handler *Handler) CmdHandler() {
 						// 0 为所有房间
 						_, ok2 := dict[0]
 						if ok1 || ok2 {
-							setFunc := reflect.ValueOf(&Handler{}).MethodByName("Set" + CmdName[cmd])
-							if setFunc.IsValid() {
-								handler.doHandler(setFunc, msg)
-							} else {
-								log.Debug(CmdName[cmd] + " not found, please make an issue to me!")
+							if _, ok := CmdName[cmd]; ok {
+								var setFunc reflect.Value
+								if _, ok := cmdSetFunc.Load(cmd); ok {
+									setFunc = reflect.ValueOf(&Handler{}).MethodByName("Set" + CmdName[cmd])
+								} else {
+									setFunc = reflect.ValueOf(&Handler{}).MethodByName("DefaultCmd")
+								}
+								if setFunc.IsValid() {
+									handler.doHandler(setFunc, msg)
+								} else {
+									log.Debug(CmdName[cmd] + " not found, please make an issue to me!")
+								}
 							}
 						}
 					}

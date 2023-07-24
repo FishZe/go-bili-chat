@@ -248,6 +248,10 @@ h.AddOption(handle.CmdDanmuMsg, 21545805, func(event handle.MsgEvent) {
 | CmdPkBattleRankChange            | "PK_BATTLE_RANK_CHANGE"             | [存疑] PK相关             |
 | CmdPkBattleSettleNew             | "PK_BATTLE_SETTLE_NEW"              | [存疑] PK相关             |
 | CmdPkBattleMatchTimeout          | "PK_BATTLE_MATCH_TIMEOUT"           | [存疑] PK相关             |
+| CmdPkBattleAbnormal              | "PK_BATTLE_ABNORMAL"                | [存疑] PK相关             | 
+| CmdPkBattleEntrance              | "PK_BATTLE_ENTRANCE"                | [存疑] PK相关             | 
+| CmdPkBattleVideoPunishBegin      | "PK_BATTLE_VIDEO_PUNISH_BEGIN"      | [存疑] PK相关             | 
+| CmdPkBattleVideoPunishEnd        | "PK_BATTLE_VIDEO_PUNISH_END"        | [存疑] PK相关             | 
 | CmdGotoBuyFlow                   | "GOTO_BUY_FLOW"                     | [存疑] 购物车提示消息          |
 | CmdShoppingExplainCard           | "SHOPPING_EXPLAIN_CARD"             | [存疑] 购物车相关            |
 | CmdShoppingCartShow              | "SHOPPING_CART_SHOW"                | [存疑] 购物车显示状态          |
@@ -296,6 +300,15 @@ h.AddOption(handle.CmdDanmuMsg, 21545805, func(event handle.MsgEvent) {
 | CmdVideoConnectionStart          | "VIDEO_CONNECTION_START"            |                       |
 | CmdGuideInfoStatus               | "GUIDE_INFO_STATUS"                 |                       |
 | CmdObsShieldStatusUpdate         | "OBS_SHIELD_STATUS_UPDATE"          |                       |
+| CmdAnchorNormalNotify            | "ANCHOR_NORMAL_NOTIFY"              |                       | 
+| CmdBlinkStickerTitleRejected     | "BLINK_STICKER_TITLE_REJECTED"      |                       | 
+| CmdDanmuTagChanged               | "DANMU_TAG_CHANGED"                 |                       | 
+| CmdHourRankAwards                | "HOUR_RANK_AWARDS"                  |                       | 
+| CmdLivePanelChange               | "LIVE_PANEL_CHANGE"                 |                       | 
+| CmdLiveRoomToastMessage          | "LIVE_ROOM_TOAST_MESSAGE"           |                       | 
+| CmdLogInNotice                   | "LOG_IN_NOTICE"                     |                       |
+| CmdStudioRoomClose               | "STUDIO_ROOM_CLOSE"                 |                       | 
+| CmdWinActivity                   | "WIN_ACTIVITY"                      |                       | 
 
 由于我也不是很明白b站的命令, 所以这里只是列出了我知道的命令, 如果有人知道更多的命令, 请在issue中提出, 我会及时更新。
 
