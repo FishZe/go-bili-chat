@@ -16,7 +16,7 @@ type jsonCoder interface {
 }
 
 var JsonCoder jsonCoder
-var UID = 1
+var UID = int64(1)
 var Header http.Header
 
 type Client struct {

@@ -52,7 +52,7 @@ func SetHeader(header http.Header) {
 	client.Header = header
 }
 
-func SetUID(uid int) {
+func SetUID(uid int64) {
 	client.UID = uid
 }
 

@@ -75,7 +75,7 @@ type WsHeader struct {
 }
 
 type WsAuthBody struct {
-	UID      int    `json:"uid"`
+	UID      int64  `json:"uid"`
 	Roomid   int    `json:"roomid"`
 	Protover int    `json:"protover"`
 	Platform string `json:"platform"`
