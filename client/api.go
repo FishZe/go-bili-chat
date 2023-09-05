@@ -1,14 +1,15 @@
 package client
 
 import (
-	"github.com/go-ping/ping"
-	log "github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 	"net/url"
 	"sort"
 	"strconv"
 	"time"
+
+	"github.com/go-ping/ping"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -40,9 +41,7 @@ func getReq(data url.Values, getUrl string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header = http.Header{
-		"User-Agent": {UserAgent},
-	}
+	req.Header = Header
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err

@@ -2,12 +2,13 @@ package go_bili_chat
 
 import (
 	"errors"
+	"net/http"
+	"sync"
+
 	"github.com/FishZe/go-bili-chat/client"
 	"github.com/FishZe/go-bili-chat/handler"
 	log "github.com/sirupsen/logrus"
 	easy "github.com/t-tomalak/logrus-easy-formatter"
-	"net/http"
-	"sync"
 )
 
 const DefaultClientPriority = 1 << 0
@@ -50,6 +51,14 @@ func SetClientPriorityMode(mode int) {
 
 func SetHeader(header http.Header) {
 	client.Header = header
+}
+
+func SetHeaderUA(ua string) {
+	client.Header.Set("User-Agent", ua)
+}
+
+func SetHeaderCookie(cookie string) {
+	client.Header.Set("Cookie", cookie)
 }
 
 func SetUID(uid int64) {
