@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+
 	bili "github.com/FishZe/go-bili-chat"
 	handle "github.com/FishZe/go-bili-chat/handler"
 	log "github.com/sirupsen/logrus"
@@ -50,6 +51,9 @@ func main() {
 	h := bili.GetNewHandler()
 	// 注册一个处理，将该直播间的弹幕消息绑定到这个函数
 	RoomId := 22344968
+
+	bili.SetUID(45700000)
+	bili.SetHeaderCookie("DedeUserID__ckMd5=a08xxx; SESSDATA=6f867xxx; bili_jct=ab4af4xxx; DedeUserID=34xxxx")
 	// 弹幕
 	h.AddOption(handle.CmdDanmuMsg, RoomId, func(event handle.MsgEvent) {
 		fmt.Printf("[%v][弹幕] %v (%v): %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Medal.MedalName, event.DanMuMsg.Data.Content)

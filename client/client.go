@@ -2,13 +2,14 @@ package client
 
 import (
 	"context"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/fasthttp/websocket"
+	log "github.com/sirupsen/logrus"
 )
-import "github.com/fasthttp/websocket"
 
 type jsonCoder interface {
 	Unmarshal(data []byte, v interface{}) error
@@ -30,7 +31,7 @@ type Client struct {
 
 func init() {
 	Header = make(http.Header)
-	Header.Set("User-Agent", "bili-universal/73600200 CFNetwork/1335.0.3 Darwin/21.6.0 os/ios model/iPhone 14 Pro mobi_app/iphone build/73600200 osVer/16.6.3 network/2 channel/AppStore")
+	Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.62")
 }
 
 func (c *Client) biliChatConnect(url string) error {
