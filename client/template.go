@@ -78,6 +78,7 @@ type WsAuthBody struct {
 	UID      int64  `json:"uid"`
 	Roomid   int    `json:"roomid"`
 	Protover int    `json:"protover"`
+	Buvid    string `json:"buvid"`
 	Platform string `json:"platform"`
 	Type     int    `json:"type"`
 	Key      string `json:"key"`

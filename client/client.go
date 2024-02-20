@@ -19,6 +19,7 @@ type jsonCoder interface {
 var JsonCoder jsonCoder
 var UID = int64(1)
 var Header http.Header
+var Buvid = ""
 
 type Client struct {
 	// 一个直播间的状态: 关闭 / 已连接 / 连接中
@@ -32,6 +33,7 @@ type Client struct {
 func init() {
 	Header = make(http.Header)
 	Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.62")
+	Header.Set("Origin", "https://live.bilibili.com")
 }
 
 func (c *Client) biliChatConnect(url string) error {
@@ -93,7 +95,7 @@ func (c *Client) heartBeat() {
 }
 
 func (c *Client) sendConnect() error {
-	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{Roomid: c.RoomId, Protover: 3, UID: UID}}
+	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{Roomid: c.RoomId, Protover: 3, UID: UID, Buvid: Buvid, Type: 2, Platform: "web"}}
 	// No CDN Mode
 	if PriorityMode == NoCDNPriority {
 		u := url.URL{Scheme: "wss", Host: MainWsUrl, Path: "/sub"}
@@ -117,7 +119,7 @@ func (c *Client) sendConnect() error {
 		log.Warnf("get live room info error: %v", apiLiveAuth.Message)
 		return RespCodeNotError
 	}
-	// wsAuthMsg.Body.Key = apiLiveAuth.Data.Token
+	wsAuthMsg.Body.Key = apiLiveAuth.Data.Token
 	for nowSum, i := range apiLiveAuth.Data.HostList {
 		u := url.URL{Scheme: "wss", Host: i.Host + ":" + strconv.Itoa(i.WssPort), Path: "/sub"}
 		log.Debug("connect to blive websocket: ", u.String())
@@ -130,7 +132,6 @@ func (c *Client) sendConnect() error {
 		} else {
 			log.Debug("connect to blive websocket success")
 			if i.Host != MainWsUrl {
-				wsAuthMsg.Body.Key = apiLiveAuth.Data.Token
 				if PriorityMode == NoCDNPriority {
 					log.Debug("use no cdn mode failed")
 				}

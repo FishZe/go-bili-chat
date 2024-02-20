@@ -57,6 +57,10 @@ func SetHeaderUA(ua string) {
 	client.Header.Set("User-Agent", ua)
 }
 
+func SetBuvid(Buvid string) {
+	client.Buvid = Buvid
+}
+
 func SetHeaderCookie(cookie string) {
 	client.Header.Set("Cookie", cookie)
 }

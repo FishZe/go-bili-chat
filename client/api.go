@@ -63,6 +63,7 @@ func getLiveRoomAuth(roomId int) (ApiLiveAuth, error) {
 	getUrl := url.URL{Scheme: "https", Host: BiliLiveApiUrl, Path: "/xlive/web-room/v1/index/getDanmuInfo"}
 	data := url.Values{}
 	data.Set("id", strconv.Itoa(roomId))
+	data.Set("type", "0")
 	log.Debug("try to get live room info: ", roomId)
 	s, err := getReq(data, getUrl.String())
 	if err != nil {
