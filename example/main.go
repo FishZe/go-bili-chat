@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+
 	bili "github.com/FishZe/go-bili-chat"
 	handle "github.com/FishZe/go-bili-chat/handler"
 	log "github.com/sirupsen/logrus"
@@ -20,18 +21,39 @@ func (j *Json) Marshal(v interface{}) ([]byte, error) {
 	return json.Marshal(v)
 }
 
-func main() {
-	// 可选: 修改日志等级 请删除import的注释
+func init() {
+	// 可选: 修改日志等级
 	// bili.ChangeLogLevel(log.DebugLevel)
 	// 修改Json解析器
-	bili.SetJsonCoder(&Json{})
-	// 修改客户端优先级模式
-	bili.SetClientPriorityMode(bili.DelayClientPriority) // 优先使用延迟低的
-	// bili.SetClientPriorityMode(bili.NoCDNClientPriority) // 优先使用无CDN
+	// bili.SetJsonCoder(&Json{})
+
+	/*
+		修改客户端优先级模式
+		bili.SetClientPriorityMode(bili.DelayClientPriority) // 优先使用延迟低的
+		bili.SetClientPriorityMode(bili.NoCDNClientPriority) // 优先使用无CDN
+	*/
+
+	// 修改连接时认证包的UID, 默认为1
+	// bili.SetUID(208259)
+
+	/*
+		修改连接时的header
+		header := http.Header{
+			"User-Agent": []string{"bilibili-live-tools"},
+		}
+		bili.SetHeader(header)
+	*/
+
+}
+
+func main() {
 	// 新建一个命令处理器
 	h := bili.GetNewHandler()
 	// 注册一个处理，将该直播间的弹幕消息绑定到这个函数
-	RoomId := 23015128
+	RoomId := 22344968
+
+	bili.SetUID(45700000)
+	bili.SetHeaderCookie("DedeUserID__ckMd5=a08xxx; SESSDATA=6f867xxx; bili_jct=ab4af4xxx; DedeUserID=34xxxx")
 	// 弹幕
 	h.AddOption(handle.CmdDanmuMsg, RoomId, func(event handle.MsgEvent) {
 		fmt.Printf("[%v][弹幕] %v (%v): %v\n", event.RoomId, event.DanMuMsg.Data.Sender.Name, event.DanMuMsg.Data.Medal.MedalName, event.DanMuMsg.Data.Content)
