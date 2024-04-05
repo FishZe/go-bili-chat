@@ -23,6 +23,7 @@ import (
 	"fmt"
 	bili "github.com/FishZe/go-bili-chat"
 	handle "github.com/FishZe/go-bili-chat/handler"
+	client "github.com/FishZe/go-bili-chat/client"
 )
 
 func main() {
@@ -35,12 +36,25 @@ func main() {
 	})
 	// 连接到直播间
 	_ = h.AddRoom(26097368)
+	//
+	// 自定义AuthBody连接到直播间
+	//
+	//_ = h.AddRawRoom(client.WsAuthBody{
+	//	UID:      0,
+	//	Roomid:   26097368,
+	//	Protover: 3,
+	//	Platform: "web",
+	//	Type:     2,
+	//	Key:      "",
+	//})
+	//
 	// 启动处理器
 	h.Run()
 }
 
 ```
-特殊地, 绑定函数的直播间号为0时，绑定所有房间
+> 特殊地, 绑定函数的直播间号为0时，绑定所有房间
+
 
 #### 2. 也可以先运行命令处理器，再添加房间：
 
