@@ -79,6 +79,7 @@ func (c *Client) biliChatConnect(url string) error {
 			ServerContextTakeover: true,
 			ClientContextTakeover: true,
 		},
+		RequestHeader: Header,
 	})
 	if nil != err {
 		return err
