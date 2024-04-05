@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"encoding/binary"
 )
 
 func uint32ToByte4(num uint32) []byte {
@@ -61,11 +62,15 @@ func WsHeaderDecoder(headerBytes []byte) WsHeader {
 
 func (wsHeader *WsHeader) HeaderEncoder(bodyLen uint32) []byte {
 	var buffer bytes.Buffer
-	buffer.Write(uint32ToByte4(bodyLen + 16))
-	buffer.Write(uint16ToByte2(16))
-	buffer.Write(uint16ToByte2(wsHeader.ProtoVer))
-	buffer.Write(uint32ToByte4(wsHeader.OpCode))
-	buffer.Write(uint32ToByte4(wsHeader.Sequence))
+	_ = binary.Write(&buffer, binary.BigEndian, int32(bodyLen+16))
+	_ = binary.Write(&buffer, binary.BigEndian, int16(16))
+	_ = binary.Write(&buffer, binary.BigEndian, int16(1))
+	if bodyLen == 0 {
+		_ = binary.Write(&buffer, binary.BigEndian, int32(2))
+	} else {
+		_ = binary.Write(&buffer, binary.BigEndian, int32(7))
+	}
+	_ = binary.Write(&buffer, binary.BigEndian, int32(1))
 	return buffer.Bytes()
 }
 
