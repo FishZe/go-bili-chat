@@ -1,8 +1,8 @@
 package client
 
 import (
+	"context"
 	"crypto/tls"
-	"fmt"
 	"github.com/lxzan/gws"
 	"net/http"
 	"net/url"
@@ -24,23 +24,17 @@ var Header http.Header
 
 type Client struct {
 	// 一个直播间的状态: 关闭 / 已连接 / 连接中
-	RoomId  int
-	connect *gws.Conn
-	handler MsgHandler
+	RoomInfo WsAuthBody
+	connect  *gws.Conn
+	handler  MsgHandler
+	ctx      context.Context
+	cancel   context.CancelFunc
 }
 
 func (c *Client) OnOpen(socket *gws.Conn) {
-	wsAuthMsg := WsAuthMessage{Body: WsAuthBody{
-		Roomid:   c.RoomId,
-		Protover: 3,
-		UID:      UID,
-		Buvid:    Buvid,
-		Type:     2,
-		Platform: "web",
-		Key:      "hJLzABYiPe0mLR9mxK9wTcM1Q6BvNj-MFhvbcsnxd8E_MJ_TH434rhC1RvlZYhb-_sfgyq5_Jm5if-O4RRNexX9YY8lHgSITQ2qN1e8Qrdqw4XIGnVpOvk97YlZNt7IDRmj7sStUMgEeBQWVvwJ0Se9l6r_MRVsXHs92U9n5cH4ez5lPv4BcUO7PX-h_xt3H",
-	}}
+	wsAuthMsg := WsAuthMessage{Body: c.RoomInfo}
 	// 连接成功
-	log.Debug("connect to blive websocket success", "roomId", c.RoomId)
+	log.Debug("connect to blive websocket success")
 	if err := c.sendAuthMsg(wsAuthMsg); err != nil {
 		log.Warn("send auth msg to websocket error: ", err)
 		return
@@ -49,8 +43,11 @@ func (c *Client) OnOpen(socket *gws.Conn) {
 }
 
 func (c *Client) OnClose(socket *gws.Conn, err error) {
-	fmt.Println("disconnected to ", c.RoomId)
-	if err != nil {
+	log.Info("disconnected from blive: ", c.RoomInfo.Roomid)
+	select {
+	case <-c.ctx.Done():
+		return
+	default:
 		time.Sleep(2 * time.Second)
 		c.connectLoop()
 	}
@@ -102,12 +99,18 @@ func (c *Client) sendAuthMsg(wsAuthMsg WsAuthMessage) error {
 func (c *Client) heartBeat() {
 	t := time.NewTicker(time.Second * 30)
 	for {
-		<-t.C
-		heartBeatPackage := WsHeartBeatMessage{Body: []byte{}}
-		log.Debug("send heart beat to blive...")
-		err := c.connect.WriteMessage(gws.OpcodeBinary, heartBeatPackage.GetPackage())
-		if err != nil {
-			break
+		select {
+		case <-c.ctx.Done():
+			log.Debug("heartBeat exit...")
+			//_ = c.connect.Close()
+			return
+		case <-t.C:
+			heartBeatPackage := WsHeartBeatMessage{Body: []byte{}}
+			log.Debug("send heart beat to blive...")
+			err := c.connect.WriteMessage(gws.OpcodeBinary, heartBeatPackage.GetPackage())
+			if err != nil {
+				break
+			}
 		}
 	}
 }
@@ -126,12 +129,15 @@ func (c *Client) sendConnect() error {
 	// others MODE or No CDN Mode failed
 	default:
 		{
-			apiLiveAuth, err := getLiveRoomAuth(c.RoomId)
+			apiLiveAuth, err := getLiveRoomAuth(c.RoomInfo.Roomid)
 			if err != nil {
 				return err
 			} else if apiLiveAuth.Code != 0 {
 				log.Warnf("get live room info error: %v", apiLiveAuth.Message)
 				return RespCodeNotError
+			}
+			if c.RoomInfo.Key == "" {
+				c.RoomInfo.Key = apiLiveAuth.Data.Token
 			}
 			for nowSum, i := range apiLiveAuth.Data.HostList {
 				u := url.URL{Scheme: "wss", Host: i.Host + ":" + strconv.Itoa(i.WssPort), Path: "/sub"}
@@ -167,13 +173,14 @@ func (c *Client) connectLoop() {
 			log.Warn("connect to blive error: ", err)
 			time.Sleep(5 * time.Second)
 		} else {
-			log.Info("connected to blive success: ", c.RoomId)
+			log.Info("connected to blive success: ", c.RoomInfo.Roomid)
 			break
 		}
 	}
 }
 
 func (c *Client) Close() {
+	c.cancel()
 	c.connect.WriteClose(1000, nil)
 }
 
@@ -183,10 +190,11 @@ func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
 			log.Warnf("start blive panic: %v", err)
 		}
 	}()
-	c.handler = MsgHandler{RoomId: c.RoomId, CmdChan: CmdChan}
+	c.ctx, c.cancel = context.WithCancel(context.Background())
+	c.handler = MsgHandler{RoomId: c.RoomInfo.Roomid, CmdChan: CmdChan}
 	// Try to start websocket
 	c.connectLoop()
 	// Start websocket message loop
 	go c.connect.ReadLoop()
-	log.Debug("start blive success: ", c.RoomId)
+	log.Debug("start blive success: ", c.RoomInfo.Roomid)
 }
