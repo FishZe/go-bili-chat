@@ -97,6 +97,18 @@ func (h *Handler) DelOption(f *handler.Do) {
 	h.Handler.DelOption(f)
 }
 
+func (h *Handler) AddRawRoom(RawRoom client.WsAuthBody) error {
+	if _, ok := h.rooms.Load(RawRoom.Roomid); ok {
+		return RoomAlreadyExist
+	}
+	room := LiveRoom{}
+	room.RoomId = RawRoom.Roomid
+	room.Client.RoomInfo = RawRoom
+	room.Client.BiliChat(h.Handler.CmdChan)
+	h.rooms.Store(room.RoomId, room)
+	return nil
+}
+
 func (h *Handler) AddRoom(RoomId int) error {
 	if RoomId <= 10000 {
 		RealRoomId, err := client.GetRealRoomId(RoomId)
@@ -108,15 +120,15 @@ func (h *Handler) AddRoom(RoomId int) error {
 		log.Debug(RoomId, " is short roomid, the real roomid is: ", RealRoomId)
 		RoomId = RealRoomId
 	}
-	if _, ok := h.rooms.Load(RoomId); ok {
-		return RoomAlreadyExist
-	}
-	room := LiveRoom{}
-	room.RoomId = RoomId
-	room.Client.RoomId = room.RoomId
-	room.Client.BiliChat(h.Handler.CmdChan)
-	h.rooms.Store(room.RoomId, room)
-	return nil
+	return h.AddRawRoom(client.WsAuthBody{
+		Roomid:   RoomId,
+		Protover: 3,
+		UID:      client.UID,
+		Buvid:    client.Buvid,
+		Type:     2,
+		Platform: "web",
+		Key:      "",
+	})
 }
 
 func (h *Handler) DelRoom(RoomId int) error {
