@@ -97,6 +97,13 @@ func (h *Handler) DelOption(f *handler.Do) {
 	h.Handler.DelOption(f)
 }
 
+func (h *Handler) ExistRoom(RoomId int) bool {
+	if _, ok := h.rooms.Load(RoomId); ok {
+		return true
+	}
+	return false
+}
+
 func (h *Handler) AddRawRoom(RawRoom client.WsAuthBody) error {
 	if _, ok := h.rooms.Load(RawRoom.Roomid); ok {
 		return RoomAlreadyExist
