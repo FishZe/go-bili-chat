@@ -61,6 +61,7 @@ func (c *Client) OnPong(socket *gws.Conn, payload []byte) {
 }
 
 func (c *Client) OnMessage(socket *gws.Conn, message *gws.Message) {
+	defer message.Close()
 	c.handler.MsgHandler(message.Bytes())
 }
 
