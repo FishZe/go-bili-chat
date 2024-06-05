@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"crypto/tls"
+	"github.com/FishZe/go-bili-chat/v2/events"
 	"github.com/lxzan/gws"
 	"net/http"
 	"net/url"
@@ -17,7 +18,6 @@ type jsonCoder interface {
 	Marshal(v interface{}) ([]byte, error)
 }
 
-var JsonCoder jsonCoder
 var UID = int64(1)
 var Buvid = ""
 var Header http.Header
@@ -190,7 +190,7 @@ func (c *Client) Close() {
 	c.connect.WriteClose(1000, nil)
 }
 
-func (c *Client) BiliChat(CmdChan chan map[string]interface{}) {
+func (c *Client) BiliChat(CmdChan chan *events.BLiveEvent) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Warnf("start blive panic: %v", err)
