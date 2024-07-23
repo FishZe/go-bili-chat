@@ -72,7 +72,7 @@ func SetUID(uid int64) {
 func GetNewHandler() *Handler {
 	h := Handler{}
 	h.Handler.DoFunc = make(handler.CmdTable, 0)
-	h.Handler.CmdChan = make(chan map[string]interface{}, 10)
+	h.Handler.CmdChan = make(chan map[string]interface{}, 1024)
 	h.Handler.FuncPath = make(map[*handler.Do]handler.Path)
 	return &h
 }
