@@ -28,7 +28,7 @@ func (d *DanMuEvent) GetUserName() string {
 	return gjson.GetBytes(d.RawMessage, "info.2.1").String()
 }
 
-func (d *DanMuEvent) getFace() string {
+func (d *DanMuEvent) GetFace() string {
 	return gjson.GetBytes(d.RawMessage, "info.0.15.user.base.face").String()
 }
 
