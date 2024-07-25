@@ -171,14 +171,19 @@ func (c *Client) sendConnect() error {
 func (c *Client) connectLoop() {
 	c.done = make(chan struct{})
 	for {
-		err := c.sendConnect()
-		if err != nil {
-			log.Warn("connect to blive error: ", err)
-			time.Sleep(5 * time.Second)
-		} else {
-			// Start websocket message loop
-			go c.connect.ReadLoop()
-			break
+		select {
+		case <-c.done:
+			return
+		default:
+			err := c.sendConnect()
+			if err != nil {
+				log.Warn("connect to blive error: ", err)
+				time.Sleep(5 * time.Second)
+			} else {
+				// Start websocket message loop
+				go c.connect.ReadLoop()
+				break
+			}
 		}
 	}
 }
