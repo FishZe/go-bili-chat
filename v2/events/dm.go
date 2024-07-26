@@ -51,7 +51,7 @@ func (d *DanMuEvent) GetGuardLevel() int {
 }
 
 func (d *DanMuEvent) GetTimestamp() int {
-	return int(gjson.GetBytes(d.RawMessage, "info.9.st").Int())
+	return int(gjson.GetBytes(d.RawMessage, "info.9.ts").Int())
 }
 
 func (d *DanMuEvent) GetMilliTimestamp() int64 {
