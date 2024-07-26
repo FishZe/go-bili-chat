@@ -182,7 +182,7 @@ func (c *Client) connectLoop() {
 			} else {
 				// Start websocket message loop
 				go c.connect.ReadLoop()
-				break
+				return
 			}
 		}
 	}
