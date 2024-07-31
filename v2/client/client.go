@@ -1,7 +1,6 @@
 package client
 
 import (
-	"context"
 	"crypto/tls"
 	"github.com/FishZe/go-bili-chat/v2/events"
 	"github.com/lxzan/gws"
@@ -27,8 +26,7 @@ type Client struct {
 	RoomInfo WsAuthBody
 	connect  *gws.Conn
 	handler  MsgHandler
-	ctx      context.Context
-	cancel   context.CancelFunc
+	done     chan struct{}
 }
 
 func (c *Client) OnOpen(socket *gws.Conn) {
@@ -45,7 +43,7 @@ func (c *Client) OnOpen(socket *gws.Conn) {
 func (c *Client) OnClose(socket *gws.Conn, err error) {
 	log.Info("disconnected from blive: ", c.RoomInfo.Roomid)
 	select {
-	case <-c.ctx.Done():
+	case <-c.done:
 		return
 	default:
 		c.cancel()
@@ -103,7 +101,7 @@ func (c *Client) heartBeat() {
 	t := time.NewTicker(time.Second * 30)
 	for {
 		select {
-		case <-c.ctx.Done():
+		case <-c.done:
 			log.Debug("heartBeat exit...")
 			//_ = c.connect.Close()
 			return
@@ -171,18 +169,27 @@ func (c *Client) sendConnect() error {
 }
 
 func (c *Client) connectLoop() {
-	c.ctx, c.cancel = context.WithCancel(context.Background())
+	c.done = make(chan struct{})
 	for {
-		err := c.sendConnect()
-		if err != nil {
-			log.Warn("connect to blive error: ", err)
-			time.Sleep(5 * time.Second)
-		} else {
-			// Start websocket message loop
-			go c.connect.ReadLoop()
-			break
+		select {
+		case <-c.done:
+			return
+		default:
+			err := c.sendConnect()
+			if err != nil {
+				log.Warn("connect to blive error: ", err)
+				time.Sleep(5 * time.Second)
+			} else {
+				// Start websocket message loop
+				go c.connect.ReadLoop()
+				return
+			}
 		}
 	}
+}
+
+func (c *Client) cancel() {
+	close(c.done)
 }
 
 func (c *Client) Close() {
