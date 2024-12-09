@@ -284,7 +284,7 @@ type MsgEvent struct {
 	CommonNoticeDanmaku           *CommonNoticeDanmaku
 	TradingScore                  *TradingScore
 	Preparing                     *Preparing
-	GuardBuy                      *GuardBuy
+	GuardBuy                      *GuardBuyMsg
 	GiftStarProcess               *GiftStarProcess
 	RoomSkinMsg                   *RoomSkinMsg
 	EntryEffect                   *EntryEffect
@@ -937,7 +937,7 @@ type Preparing struct {
 	RoomId int    `json:"roomid"`
 }
 
-type GuardBuy struct {
+type GuardBuyMsg struct {
 	Cmd  string `json:"cmd"`
 	Data struct {
 		UID        int64  `json:"uid"`

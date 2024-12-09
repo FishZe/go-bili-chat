@@ -6,6 +6,7 @@ import (
 
 	bili "github.com/FishZe/go-bili-chat"
 	handle "github.com/FishZe/go-bili-chat/handler"
+	util "github.com/FishZe/go-bili-chat/utils"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -67,8 +68,8 @@ func main() {
 		fmt.Printf("[%v][礼物] %v: %v\n", event.RoomId, event.SendGift.Data.Name, event.SendGift.Data.GiftName)
 	})
 	// 大航海
-	h.AddOption(handle.CmdUserToastMsg, RoomId, func(event handle.MsgEvent) {
-		fmt.Printf("[%v][大航海] %v: %v\n", event.RoomId, event.UserToastMsg.Data.Username, event.UserToastMsg.Data.RoleName)
+	h.AddOption(handle.CmdGuardBuy, RoomId, func(event handle.MsgEvent) {
+		fmt.Printf("[%v][大航海] %v: %v\n", event.RoomId, event.UserToastMsg.Data.Username, util.GetGuardName(event.UserToastMsg.Data.GuardLevel))
 	})
 	// 进入直播间
 	h.AddOption(handle.CmdInteractWord, RoomId, func(event handle.MsgEvent) {

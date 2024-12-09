@@ -10,7 +10,7 @@ func NewDefaultEventHandler(cmd string, handler func(event *BLiveEvent)) *Defaul
 }
 
 func (d DefaultEventHandler) Cmd() string {
-	return CmdInteractWord
+	return d.cmd
 }
 
 func (d DefaultEventHandler) On(event *BLiveEvent) {

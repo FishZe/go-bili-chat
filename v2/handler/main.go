@@ -15,16 +15,11 @@ type RoomTable = map[int]FuncTable
 
 type CmdTable = map[string]RoomTable
 
-type Path struct {
-	Cmd    string
-	RoomId int
-}
-
 type Handler struct {
 	CmdChan chan *events.BLiveEvent
 	DoFunc  CmdTable
 	//函数反查表
-	FuncPath map[*events.BLiveEventHandler]Path
+	FuncPath map[*events.BLiveEventHandler]int
 }
 
 func (handler *Handler) AddOption(RoomId int, Do events.BLiveEventHandler) *events.BLiveEventHandler {
@@ -39,10 +34,7 @@ func (handler *Handler) AddOption(RoomId int, Do events.BLiveEventHandler) *even
 	//将函数添加进Set
 	handler.DoFunc[cmd][RoomId][addr] = struct{}{}
 	//函数反查表
-	handler.FuncPath[addr] = Path{
-		Cmd:    cmd,
-		RoomId: RoomId,
-	}
+	handler.FuncPath[addr] = RoomId
 	log.Debug("Add Option: ", cmd, RoomId)
 	return addr
 }
@@ -59,8 +51,8 @@ func (handler *Handler) DelRoomOption(roomId int) {
 
 func (handler *Handler) DelOption(p *events.BLiveEventHandler) {
 	if p != nil {
-		path := handler.FuncPath[p]
-		delete(handler.DoFunc[path.Cmd][path.RoomId], p)
+		roomId := handler.FuncPath[p]
+		delete(handler.DoFunc[(*p).Cmd()][roomId], p)
 		delete(handler.FuncPath, p)
 	}
 }

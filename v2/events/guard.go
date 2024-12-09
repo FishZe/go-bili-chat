@@ -5,26 +5,26 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type UserToastEvent struct {
+type GuardBuyEvent struct {
 	*BLiveEvent
-	UserToastMsg
+	GuardBuyMsg
 }
 
-type UserToastHandler func(event *UserToastEvent)
+type GuardBuyHandler func(event *GuardBuyEvent)
 
-func (d UserToastHandler) Cmd() string {
+func (d GuardBuyHandler) Cmd() string {
 	return CmdUserToastMsg
 }
 
-func (d UserToastHandler) On(event *BLiveEvent) {
-	var msg UserToastMsg
+func (d GuardBuyHandler) On(event *BLiveEvent) {
+	var msg GuardBuyMsg
 	err := serializer.JsonCoder.Unmarshal(event.RawMessage, &msg)
 	if err != nil {
 		log.Warnf("failed to deserialize %s message %s", d.Cmd(), err)
 		return
 	}
-	d(&UserToastEvent{
-		BLiveEvent:   event,
-		UserToastMsg: msg,
+	d(&GuardBuyEvent{
+		BLiveEvent:  event,
+		GuardBuyMsg: msg,
 	})
 }

@@ -74,7 +74,7 @@ func GetNewHandler() *Handler {
 	h := Handler{}
 	h.Handler.DoFunc = make(handler.CmdTable, 0)
 	h.Handler.CmdChan = make(chan *events.BLiveEvent, 1024)
-	h.Handler.FuncPath = make(map[*events.BLiveEventHandler]handler.Path)
+	h.Handler.FuncPath = make(map[*events.BLiveEventHandler]int)
 	return &h
 }
 
